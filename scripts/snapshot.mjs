@@ -20,6 +20,8 @@ const DUR = { STANDARD: "S", FLEXIBLE: "F", ANNUAL: "A" };
 const CONCURRENCY = 8;
 // Mirror app.js: DL's /clubs feed mis-tags Edinburgh Shawfair (156) as England.
 const COUNTRY_FIX = { 156: "Scotland" };
+// DL gives Windsor (70) placeholder coords (100,100); correct to the real club.
+const COORD_FIX = { 70: { lat: 51.490084, lng: -0.672438 } };
 
 const today = new Date().toISOString().slice(0, 10);
 
@@ -168,6 +170,7 @@ async function main() {
     if (Number.isFinite(lat) && Number.isFinite(lng) && lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180)
       locations[sid] = { lat, lng };
   }
+  for (const [sid, v] of Object.entries(COORD_FIX)) locations[sid] = v;
 
   const CLUBDIR = `${DATA}/clubs`;
   if (!existsSync(CLUBDIR)) mkdirSync(CLUBDIR, { recursive: true });

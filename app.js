@@ -31,6 +31,9 @@ const cacheSet = () => {};
 // live-fallback path too.
 const COUNTRY_FIX = { 156: "Scotland" };
 const fixCountry = c => COUNTRY_FIX[c.siteId] ? {...c, country: COUNTRY_FIX[c.siteId]} : c;
+// DL's /clubs/locations gives Windsor (70) a placeholder 100,100; correct it to
+// the real club location (Dedworth Road, SL4 5UR) so the map + "near me" work.
+const COORD_FIX = { 70: { lat: 51.490084, lng: -0.672438 } };
 
 /* ---- data ---- */
 // Club list comes from the committed snapshot (data/latest.json) so a normal
@@ -135,6 +138,7 @@ async function getLocations(){
         if(validLatLng(la,ln)) o[sid]={lat:la,lng:ln}; } LOCS=o; }
     catch{ LOCS={}; }
   }
+  for(const [k,v] of Object.entries(COORD_FIX)) LOCS[k]=v;   // correct known-bad coords
   return LOCS;
 }
 
