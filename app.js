@@ -15,7 +15,9 @@ const TYPES = ["INDIVIDUAL","COUPLE"];                          // column order
 const TYPE_LABEL = { INDIVIDUAL:"Individual", COUPLE:"Couple", FAMILY:"Family" };
 const TYPE_FIELD = { INDIVIDUAL:"individual", COUPLE:"couple", FAMILY:"family" };
 const DUR_ORDER  = ["STANDARD","FLEXIBLE","ANNUAL"];
-const DUR_LABEL  = { STANDARD:"Monthly rolling", FLEXIBLE:"Flexible", ANNUAL:"Paid annually" };
+// Match David Lloyd's own wording: Standard = 12-month term (best value),
+// Flexible = 3-month term, Annual = paid yearly.
+const DUR_LABEL  = { STANDARD:"Standard · 12-mo", FLEXIBLE:"Flexible · 3-mo", ANNUAL:"Annual · paid yearly" };
 
 const qs = s => document.querySelector(s);
 const cacheGet = k => { try{ const v=JSON.parse(localStorage.getItem(k)); if(v&&Date.now()-v.t<v.ttl) return v.d; }catch{} return null; };
@@ -37,6 +39,24 @@ async function getPackages(siteId){
   cacheSet(ck, j, DAY/2);
   return j;
 }
+async function getSettings(siteId){
+  const ck = `pb_set_${siteId}`; const c = cacheGet(ck); if(c) return c;
+  const r = await fetch(`${API}/clubs/${siteId}/membership-settings`);
+  if(!r.ok) throw new Error(`HTTP ${r.status}`);
+  const j = await r.json(); cacheSet(ck, j, DAY/2); return j;
+}
+async function getAccess(siteId, keys){                 // clubs each plan can visit
+  const ck = `pb_acc_${siteId}`; const c = cacheGet(ck); if(c) return c;
+  const r = await fetch(`${API}/accessible-clubs`,{method:"POST",headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({siteId:String(siteId),packageKeys:keys})});
+  if(!r.ok) throw new Error(`HTTP ${r.status}`);
+  const j = await r.json(); const map={};
+  // Accessible set = clubsInTheSameTierOrLower ONLY (higher/exclusive tiers are
+  // NOT accessible). Store the site IDs so we can list the clubs by name, 1:1
+  // with the site's "clubs I can access" list.
+  for(const e of (j.awayClubsByPackageKeys||[])) map[e.packageKey]=((e.awayClubs||{}).clubsInTheSameTierOrLower||[]);
+  cacheSet(ck, map, DAY/2); return map;
+}
 
 /* ---- helpers ---- */
 const fmt = (pennies,cur) => new Intl.NumberFormat("en-GB",{style:"currency",currency:cur,minimumFractionDigits:0,maximumFractionDigits:pennies%100?2:0}).format(pennies/100);
@@ -50,7 +70,7 @@ const planRank = p => p.startsWith("CLUB")?0 : p.startsWith("JUNIOR")?1 : p.star
 const slugify = s => s.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
 
 /* ---- state ---- */
-let CLUBS=[], CURRENT=null, DATA=null, CURDUR="STANDARD", token=0, LASTIMG=null;
+let CLUBS=[], CURRENT=null, DATA=null, CURDUR="STANDARD", token=0, LASTIMG=null, MOSTPOP=null, ACCESS={}, CLUBBY={};
 
 /* ---- search / dropdown ---- */
 const q=qs("#q"), dd=qs("#results-list");
@@ -111,6 +131,14 @@ async function selectClub(club, fromUrl){
     const data = await getPackages(club.siteId);
     if(my!==token) return;
     DATA = data;
+    const keys = (data.packages||[]).map(p=>p.packageKey);
+    const [settings, access] = await Promise.all([
+      getSettings(club.siteId).catch(()=>({})),
+      getAccess(club.siteId, keys).catch(()=>({})),
+    ]);
+    if(my!==token) return;
+    MOSTPOP = (settings.packageSettings||{}).standardMostPopularPackage || null;
+    ACCESS = access || {};
     const durs = DUR_ORDER.filter(d => (data.packages||[]).some(p=>p.prices&&p.prices[d]));
     if(!durs.includes(CURDUR)) CURDUR = durs[0] || "STANDARD";
     buildDurations(durs);
@@ -154,14 +182,22 @@ function renderTable(){
     const jf = p.prices[dur].joiningFee||0;
     const bens = benefitsOf(p);
     const benHtml = bens.length ? `<div class="benefits">${bens.map(b=>`<span class="ben">${b}</span>`).join("")}</div>` : "";
+    const acc = ACCESS[p.packageKey]||[];
+    let accHtml="";
+    if(acc.length>1){
+      const names=acc.map(id=>CLUBBY[id]).filter(Boolean).sort((a,b)=>a.localeCompare(b));
+      accHtml=`<details class="access"><summary>Clubs you can access · ${names.length}</summary>`+
+              `<div class="access-list">${names.join(" · ")}</div></details>`;
+    }
+    const pop = p.packageKey===MOSTPOP ? `<span class="pop">Most popular</span>` : "";
     const cells=activeTypes.map(t=>{
       const v=priceAt(p,t);
       if(v==null) return `<td class="cell na">—</td>`;
       return `<td class="cell"><div class="mo">${fmt(v,cur)}<span class="per">${unit}</span></div>`+
              `<div class="join">${jf?`+ ${fmt(jf,cur)} joining`:`no joining fee`}</div></td>`;
     }).join("");
-    return `<tr><td class="plan"><div class="pn">${prettyPlan(p.packageKey)}</div>`+
-           `<div class="pk">${p.packageKey}</div>${benHtml}</td>${cells}</tr>`;
+    return `<tr><td class="plan"><div class="pn">${prettyPlan(p.packageKey)}${pop}</div>`+
+           `<div class="pk">${p.packageKey}</div>${benHtml}${accHtml}</td>${cells}</tr>`;
   }).join("");
   table.hidden=false; empty.hidden=true;
 
@@ -182,7 +218,7 @@ function renderTable(){
     meta: `${CURRENT.country||"—"} · Site #${CURRENT.siteId} · ${cur} · ${DUR_LABEL[dur]||dur}`,
     cols: activeTypes.map(t=>({ label:TYPE_LABEL[t], pp:t!=="INDIVIDUAL" })),
     rows: pkgs.map(p=>{ const jf=p.prices[dur].joiningFee||0;
-      return { name:prettyPlan(p.packageKey), key:p.packageKey,
+      return { name:prettyPlan(p.packageKey), key:p.packageKey, pop:p.packageKey===MOSTPOP,
         cells: activeTypes.map(t=>{ const v=priceAt(p,t); if(v==null) return null;
           return { price:fmt(v,cur), unit, join: jf?`+ ${fmt(jf,cur)} joining`:"no joining fee" }; }) }; }),
     url: `dylnyko.github.io/davidlloyd-price-index/?club=${slugify(CURRENT.clubName)}`,
@@ -225,6 +261,7 @@ function drawShare(m){
   m.rows.forEach((r,ri)=>{
     const top=yRows+ri*RH;
     ctx.textAlign="left"; ctx.fillStyle=INK; ctx.font=`700 19px ${DISP}`; ctx.fillText(r.name, P, top+26);
+    if(r.pop){ const w=ctx.measureText(r.name).width; ctx.font=`700 9px ${MONO}`; ctx.fillStyle=ACCENT; ctx.fillText("★ MOST POPULAR", P+w+10, top+24); }
     ctx.fillStyle=MUTED; ctx.font=`400 11px ${MONO}`; ctx.fillText(r.key, P, top+45);
     r.cells.forEach((cell,i)=>{ const rx=colR(i);
       if(!cell){ ctx.textAlign="right"; ctx.fillStyle=MUTED; ctx.font=`400 18px ${MONO}`; ctx.fillText("—", rx, top+27); return; }
@@ -281,6 +318,7 @@ document.addEventListener("keydown", e=>{ if(e.key==="Escape" && !qs("#sharemoda
 (async function(){
   try{
     CLUBS=await getClubs();
+    CLUBBY=Object.fromEntries(CLUBS.map(c=>[c.siteId, c.clubName]));
     qs("#clubcount").textContent=`${CLUBS.length}`;
     const spec=qs("#spec-clubs"); if(spec) spec.textContent=`${CLUBS.length} clubs`;
     // Deep link: ?club=<slug> opens straight to that club (shareable URLs).

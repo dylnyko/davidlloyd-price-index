@@ -152,6 +152,17 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--disp);
 .plan{position:relative;text-align:left!important}
 .plan .pn{font-family:var(--disp);font-weight:700;font-size:1.06rem;line-height:1.12}
 .plan .pk{font-family:var(--mono);font-size:.62rem;letter-spacing:.05em;color:var(--muted);margin-top:4px}
+.pop{display:inline-block;margin-left:9px;font-family:var(--mono);font-size:.56rem;letter-spacing:.08em;
+  text-transform:uppercase;font-weight:700;background:var(--accent);color:var(--accent-ink);padding:2px 6px;vertical-align:middle}
+.access{margin-top:9px;font-family:var(--mono);font-size:.66rem}
+.access summary{cursor:pointer;color:var(--ink);text-transform:uppercase;letter-spacing:.05em;
+  border:1px solid var(--ink);display:inline-block;padding:4px 9px;list-style:none;user-select:none}
+.access summary::-webkit-details-marker{display:none}
+.access summary::after{content:" +"}
+.access[open] summary::after{content:" −"}
+.access summary:hover{background:var(--paper-2)}
+.access[open] summary{background:var(--ink);color:var(--paper)}
+.access-list{margin-top:9px;color:var(--muted);line-height:1.75;max-width:360px}
 .benefits{display:flex;flex-wrap:wrap;gap:5px;margin-top:9px;max-width:340px}
 .benefits .ben{font-family:var(--mono);font-size:.6rem;letter-spacing:.02em;color:var(--muted);
   border:1px solid var(--line-soft);padding:2px 6px;white-space:nowrap}
