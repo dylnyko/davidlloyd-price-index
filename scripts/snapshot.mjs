@@ -198,10 +198,22 @@ async function main() {
       writeFileSync(`${CLUBDIR}/${c.siteId}.json`, JSON.stringify(bundle));
       bundles++;
       ok++;
+      // Facility summary for the Facilities League (#facilities).
+      const courts = {};
+      for (const ct of (club.courts || [])) { const n = sports[ct.sportId]; if (n) courts[n] = (courts[n] || 0) + 1; }
+      const fac = {
+        siteId: c.siteId, name: c.clubName, country,
+        pool: !!club.swimmingEmailAddress, spa: !!club.spaBookingsEmailAddress,
+        blaze: !!club.isBlaze, adultOnly: !!club.isAdultOnly,
+        courts, totalCourts: Object.values(courts).reduce((a, b) => a + b, 0),
+      };
       return {
-        siteId: c.siteId, name: c.clubName, country, currency: c.currency,
-        mostPopular: bundle.settings.packageSettings.standardMostPopularPackage,
-        plans,
+        entry: {
+          siteId: c.siteId, name: c.clubName, country, currency: c.currency,
+          mostPopular: bundle.settings.packageSettings.standardMostPopularPackage,
+          plans,
+        },
+        fac,
       };
     } catch (e) {
       fail++;
@@ -211,7 +223,8 @@ async function main() {
   });
   console.log(`Wrote ${bundles} per-club bundles to data/clubs/.`);
 
-  const clubData = out.filter(Boolean);
+  const rows = out.filter(Boolean);
+  const clubData = rows.map((x) => x.entry);
   const latest = {
     generatedAt: new Date().toISOString(),
     date: today,
@@ -220,6 +233,11 @@ async function main() {
     clubs: clubData,
   };
   writeFileSync(`${DATA}/latest.json`, JSON.stringify(latest));
+  writeFileSync(`${DATA}/facilities.json`, JSON.stringify({
+    generatedAt: latest.generatedAt, date: today, count: rows.length,
+    sports, clubs: rows.map((x) => x.fac),
+  }));
+  console.log(`facilities.json: ${rows.length} clubs.`);
   writeFileSync(`${DATA}/locations.json`, JSON.stringify({ generatedAt: latest.generatedAt, locations }));
   console.log(`latest.json: ${ok} clubs, ${fail} skipped.`);
 

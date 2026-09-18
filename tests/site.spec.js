@@ -194,6 +194,22 @@ test("price league is URL-driven and deep-linkable (#6)", async ({ page }) => {
   await expect(page.locator("#lg-dur")).toHaveValue("A");
 });
 
+test("facilities league ranks clubs by racquet courts (#facilities)", async ({ page }) => {
+  await page.goto("/");
+  await page.locator('.nav button[data-view="facilities"]').click();
+  const table = page.locator("#fac-table");
+  await expect(table).toBeVisible();
+  expect(await table.locator("tbody tr").count()).toBeGreaterThan(20);
+  await expect(page).toHaveURL(/view=facilities/);
+  // court counts are non-increasing down the ranking
+  const vals = (await table.locator("tbody td.lg-price").allInnerTexts()).map((t) => parseInt(t, 10));
+  for (let i = 1; i < vals.length; i++) expect(vals[i]).toBeLessThanOrEqual(vals[i - 1]);
+  // deep link with a per-sport metric restores it
+  await page.goto("/?view=facilities&metric=Tennis");
+  await expect(page.locator("#fac-table")).toBeVisible();
+  await expect(page.locator("#fac-metric")).toHaveValue("Tennis");
+});
+
 test("ranks clubs by distance from a postcode (#1)", async ({ page }) => {
   await page.goto("/");
   await page.fill("#nm-pc", "G1 1AA");

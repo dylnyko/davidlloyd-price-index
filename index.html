@@ -28,7 +28,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Space+Mono:wght@400;700&display=swap" />
-<link rel="stylesheet" href="styles.css?v=26" />
+<link rel="stylesheet" href="styles.css?v=27" />
 </head>
 <body>
 <div class="frame">
@@ -38,6 +38,7 @@
     <nav class="nav" aria-label="Views">
       <button type="button" data-view="lookup" aria-selected="true">Club&nbsp;lookup</button>
       <button type="button" data-view="league" aria-selected="false">Price&nbsp;league</button>
+      <button type="button" data-view="facilities" aria-selected="false">Facilities</button>
     </nav>
   </header>
 
@@ -113,6 +114,17 @@
     <div class="tablewrap"><table id="league-table" class="pricetable league-table" hidden></table></div>
   </section>
 
+  <section id="facilities" class="league" hidden aria-label="Facilities league">
+    <div class="lg-head">
+      <h2>Facilities league</h2>
+      <p class="lg-lede">Every David&nbsp;Lloyd club ranked by its racquet courts. Every club also has a pool and a spa.</p>
+    </div>
+    <div id="fac-controls" class="league-controls"></div>
+    <p id="fac-sub" class="league-sub"></p>
+    <div id="fac-status" class="status"><span class="spin"></span><span>Building the league…</span></div>
+    <div class="tablewrap"><table id="fac-table" class="pricetable league-table" hidden></table></div>
+  </section>
+
   <footer class="sitefoot">
     <p><span class="fs-mk">UNOFFICIAL</span> Not affiliated with David&nbsp;Lloyd Leisure · indicative live rates, always confirm with the club · anonymous, cookieless analytics only.</p>
   </footer>
@@ -138,7 +150,7 @@
 </div>
 
 <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
-<script src="app.js?v=26"></script>
+<script src="app.js?v=27"></script>
 <!-- Cloudflare Web Analytics — cookieless, no personal data. Public site tag. -->
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "5661e49f2a504dd69734b894973090a0"}'></script>
 </body>

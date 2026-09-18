@@ -205,6 +205,7 @@ function buildURL(params){
 function syncURL(){
   let u;
   if(!qs("#league").hidden) u=leagueURL();
+  else if(!qs("#facilities").hidden) u=facURL();
   else if(CURRENT) u=buildURL({club:slugify(CURRENT.clubName)});
   else u=buildURL({});
   history.replaceState({},"",u);
@@ -268,6 +269,7 @@ async function afterLocation(boot){
   if(nm){ nm.innerHTML = `<span class="ok">◆</span> ${esc(USERLABEL)} — nearest is <b>${esc(nearest?nearest.clubName:"—")}</b>${nearest?` · ${fmtMiles(nearest._mi)}`:""} <button id="nm-clear" class="nm-clear" type="button">clear</button>`;
     qs("#nm-clear")?.addEventListener("click", clearNearMe); }
   if(!qs("#league").hidden) renderLeague();
+  if(!qs("#facilities").hidden) renderFacilities();
   if(!boot){ renderDropdown(filterClubs(q.value), q.value.trim()); q.focus(); }
 }
 async function setNearMeByPostcode(pc, boot){
@@ -557,15 +559,71 @@ function renderLeague(){
   });
 }
 
-/* ---- view switching (lookup <-> league) ---- */
+/* ---- facilities league (#facilities) — from committed facilities.json ---- */
+let FACS=null, FAC_METRIC="total";
+async function getFacilities(){
+  if(FACS) return FACS;
+  try{ const r=await fetch(`data/facilities.json?t=${Math.floor(Date.now()/36e5)}`); FACS=await r.json(); }
+  catch{ FACS={clubs:[]}; }
+  return FACS;
+}
+const facURL = () => buildURL({ view:"facilities", metric:FAC_METRIC });
+async function openFacilities(fromUrl){
+  setView("facilities");
+  qs("#fac-status").hidden=false; qs("#fac-table").hidden=true;
+  if(fromUrl) history.replaceState({},"",facURL()); else history.pushState({},"",facURL());
+  document.title="Facilities league — The Price Book";
+  await Promise.all([getFacilities(), USERLOC?applyDistances():null]);
+  buildFacControls();
+  renderFacilities();
+}
+function facMetrics(){
+  const s=new Set();
+  for(const c of (FACS.clubs||[])) for(const k of Object.keys(c.courts||{})) s.add(k);
+  return ["total", ...[...s].sort()];
+}
+function buildFacControls(){
+  const wrap=qs("#fac-controls"); if(!wrap) return;
+  const opts=facMetrics(); if(!opts.includes(FAC_METRIC)) FAC_METRIC="total";
+  const label=m=>m==="total"?"Total racquet courts":`${m} courts`;
+  wrap.innerHTML=`<label>Rank by <select id="fac-metric">${opts.map(m=>`<option value="${m}"${m===FAC_METRIC?" selected":""}>${esc(label(m))}</option>`).join("")}</select></label>`;
+  qs("#fac-metric").onchange=e=>{ FAC_METRIC=e.target.value; renderFacilities(); history.replaceState({},"",facURL()); };
+}
+function renderFacilities(){
+  const box=qs("#facilities"); if(!box || box.hidden) return;
+  const val = c => FAC_METRIC==="total" ? (c.totalCourts||0) : ((c.courts||{})[FAC_METRIC]||0);
+  const rows=(FACS.clubs||[]).map(c=>({ ...c, v:val(c),
+      mi: USERLOC ? (CLUBS.find(x=>x.siteId===c.siteId)?._mi ?? null) : null }))
+    .filter(r=>r.v>0).sort((a,b)=> (b.v-a.v) || a.name.localeCompare(b.name));
+  qs("#fac-status").hidden=true; const t=qs("#fac-table"); t.hidden=false;
+  const showMi = USERLOC && rows.some(r=>r.mi!=null);
+  const label = FAC_METRIC==="total"?"Racquet courts":`${FAC_METRIC} courts`;
+  qs("#fac-sub").textContent = `${rows.length} clubs ranked by ${label.toLowerCase()} — most is ${rows[0]?rows[0].v:0}. Every club also has a pool & spa.`;
+  const chips=c=>Object.entries(c.courts||{}).sort((a,b)=>b[1]-a[1]).map(([n,ct])=>`${ct} ${esc(n)}`).join(" · ");
+  t.innerHTML=
+    `<thead><tr><th>#</th><th>Club</th><th>Country</th>${showMi?`<th class="num">Distance</th>`:""}<th>Courts</th><th class="num">${esc(label)}</th></tr></thead>`+
+    `<tbody>`+rows.map((r,i)=>`<tr data-site="${r.siteId}">`+
+      `<td class="lg-rank">${i+1}</td><td class="lg-name">${esc(r.name)}</td><td class="lg-country">${esc(r.country||"")}</td>`+
+      `${showMi?`<td class="num">${r.mi!=null?fmtMiles(r.mi):"—"}</td>`:""}`+
+      `<td class="fac-courts">${chips(r)||"—"}</td>`+
+      `<td class="num lg-price">${r.v}</td></tr>`).join("")+
+    `</tbody>`;
+  t.querySelectorAll("tbody tr").forEach(tr=>tr.onclick=()=>{
+    const club=CLUBS.find(c=>c.siteId===+tr.dataset.site); if(club){ setView("lookup"); selectClub(club); }
+  });
+}
+
+/* ---- view switching (lookup / league / facilities) ---- */
 function setView(v){
-  const isLeague = v==="league";
+  const isLeague=v==="league", isFac=v==="facilities", isLookup=v==="lookup";
   qs("#league").hidden = !isLeague;
-  qs(".hero").hidden = isLeague;
-  qs(".search").hidden = isLeague;
-  const panel=qs("#panel"); if(isLeague) panel.hidden=true; else if(CURRENT) panel.hidden=false;
+  qs("#facilities").hidden = !isFac;
+  qs(".hero").hidden = !isLookup;
+  qs(".search").hidden = !isLookup;
+  qs("#panel").hidden = isLookup ? !CURRENT : true;
   document.querySelectorAll(".nav button").forEach(b=>b.setAttribute("aria-selected", b.dataset.view===v));
   if(isLeague) qs("#league").scrollIntoView({behavior:"smooth",block:"start"});
+  if(isFac) qs("#facilities").scrollIntoView({behavior:"smooth",block:"start"});
 }
 
 /* ---- shareable image (custom-drawn canvas in the site's style) ---- */
@@ -662,7 +720,8 @@ function gotoLookup(){
   document.title = CURRENT ? `${CURRENT.clubName} — The Price Book` : "The Price Book — unofficial David Lloyd price lookup";
 }
 document.querySelectorAll(".nav button").forEach(b=>b.addEventListener("click",()=>{
-  if(b.dataset.view==="league") openLeague(); else gotoLookup();
+  const v=b.dataset.view;
+  if(v==="league") openLeague(); else if(v==="facilities") openFacilities(); else gotoLookup();
 }));
 qs("#nm-geo")?.addEventListener("click", setNearMeByGeo);
 qs("#nm-form")?.addEventListener("submit", e=>{ e.preventDefault(); setNearMeByPostcode(qs("#nm-pc").value); });
@@ -676,6 +735,7 @@ window.addEventListener("popstate",()=>{
     if(p.get("term")) LEAGUE_METRIC.dur=p.get("term");
     openLeague(true); return;
   }
+  if(p.get("view")==="facilities"){ if(p.get("metric")) FAC_METRIC=p.get("metric"); openFacilities(true); return; }
   const cs=p.get("club");
   if(cs){ const m=CLUBS.find(c=>slugify(c.clubName)===cs); if(m){ setView("lookup"); selectClub(m,true); return; } }
   setView("lookup");
@@ -699,6 +759,7 @@ window.addEventListener("popstate",()=>{
       if(params.get("term")) LEAGUE_METRIC.dur=params.get("term");
       openLeague(true); return;
     }
+    if(params.get("view")==="facilities"){ if(params.get("metric")) FAC_METRIC=params.get("metric"); openFacilities(true); return; }
     const cslug=params.get("club");
     if(cslug){ const m=CLUBS.find(c=>slugify(c.clubName)===cslug); if(m){ selectClub(m,true); return; } }
     if(document.activeElement===q) renderDropdown(filterClubs(q.value),q.value.trim());
