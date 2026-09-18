@@ -198,7 +198,13 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--disp);
 @media (max-width:560px){
   .frame{margin:10px;box-shadow:3px 3px 0 var(--ink)}
   .panelhead{flex-direction:column;align-items:flex-start}
-  .durations{width:100%}.durations button{flex:1;text-align:center}
+  .head-actions{width:100%}
+  /* Stack the segmented control on mobile: equal columns can't fit the longest
+     label ("ANNUAL · PAID YEARLY") without overflowing, so go full-width rows. */
+  .durations{width:100%;flex-direction:column}
+  .durations button{width:100%;text-align:center;border-left:0;border-top:2px solid var(--ink)}
+  .durations button:first-child{border-top:0}
+  .share{width:100%;justify-content:center}
 }
 @media (prefers-reduced-motion:reduce){
   .hero-main>*,.spec-row{opacity:1;animation:none;transform:none}.spin{animation:none}
