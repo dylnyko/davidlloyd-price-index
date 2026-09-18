@@ -96,7 +96,7 @@ test("renders the price table 1:1 with the fixture", async ({ page }) => {
   await expect(page.locator("#thead-row th").filter({ hasText: "Family" })).toHaveCount(0);
 
   // most-popular plan with correct per-person prices + joining fee
-  const plat = page.locator("#tbody tr", { has: page.locator(".pn", { hasText: "Club Platinum" }) });
+  const plat = page.locator("#tbody tr", { has: page.locator(".pn-name", { hasText: "Club Platinum" }) });
   await expect(plat.locator(".pop")).toHaveText("Most popular");
   await expect(plat.locator("td.cell").nth(0)).toContainText("£159");
   await expect(plat.locator("td.cell").nth(0)).toContainText("/mo");
@@ -104,14 +104,25 @@ test("renders the price table 1:1 with the fixture", async ({ page }) => {
   await expect(plat).toContainText("+ £150 joining");
   // the raw plan key is no longer exposed on the frontend
   await expect(page.locator("#tbody .pk")).toHaveCount(0);
-  // the plan's description is available as a tooltip on its name
-  await expect(plat.locator(".pn-name")).toHaveAttribute("title", /.+/);
+  // each plan carries a "?" info button
+  await expect(plat.locator(".pn-info")).toBeVisible();
 
   // a plan with no couple rate shows an em dash, not a fabricated price
-  const club = page.locator("#tbody tr", { has: page.locator(".pn", { hasText: /^Club$/ }) });
+  const club = page.locator("#tbody tr", { has: page.locator(".pn-name", { hasText: /^Club$/ }) });
   await expect(club.locator("td.cell").nth(0)).toContainText("£114");
   await expect(club.locator("td").nth(2)).toHaveClass(/na/);
   await expect(club.locator("td").nth(2)).toContainText("—");
+});
+
+test("the plan ? button opens a details modal (description + benefits)", async ({ page }) => {
+  await openWestEnd(page);
+  const plat = page.locator("#tbody tr", { has: page.locator(".pn-name", { hasText: "Club Platinum" }) });
+  await plat.locator(".pn-info").click();
+  await expect(page.locator("#planmodal")).toBeVisible();
+  await expect(page.locator("#plantitle")).toContainText("Club Platinum");
+  await expect(page.locator("#planbens .ben").first()).toBeVisible();
+  await page.locator("#planmodal .modal-x").click();
+  await expect(page.locator("#planmodal")).toBeHidden();
 });
 
 test("lists accessible clubs from clubsInTheSameTierOrLower", async ({ page }) => {

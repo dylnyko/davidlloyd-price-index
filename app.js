@@ -203,6 +203,7 @@ const fmtDate = iso => { try{ return new Date(iso).toLocaleDateString("en-GB",{d
 /* ---- state ---- */
 let CLUBS=[], CURRENT=null, DATA=null, CURDUR="STANDARD", token=0, LASTIMG=null, MOSTPOP=null, ACCESS={}, CLUBBY={};
 let DETAIL=null, USERLOC=null, USERLABEL="", PC=null;   // club profile + "near me" origin (PC persists in the URL)
+let PLANINFO={};   // packageKey -> { name, desc, bens } for the plan-details modal
 
 // Build a URL for the current view, always carrying the postcode (?pc=) so a
 // refresh or shared link keeps "clubs near me" — no browser storage needed.
@@ -394,6 +395,7 @@ function renderTable(){
   pkgs.sort((a,b)=> (planRank(a.packageKey)-planRank(b.packageKey)) || (minAmt(a)-minAmt(b)) || a.packageKey.localeCompare(b.packageKey));
 
   thead.innerHTML=`<th>Plan</th>`+activeTypes.map(t=>`<th>${TYPE_LABEL[t]}${t==="INDIVIDUAL"?"":`<span class="th-sub">per person</span>`}</th>`).join("");
+  PLANINFO={};
   tbody.innerHTML=pkgs.map(p=>{
     const jf = p.prices[dur].joiningFee||0;
     const bens = benefitsOf(p);
@@ -418,11 +420,11 @@ function renderTable(){
              `<div class="join">${jf?`+ ${fmt(jf,cur)} joining`:`no joining fee`}</div></td>`;
     }).join("");
     const desc = descOf(p);
-    // Tooltip = DL's plan description plus the full benefit list.
-    const tipParts=[]; if(desc) tipParts.push(desc); if(bens.length) tipParts.push("Includes: "+bens.join(" · "));
-    const tip = tipParts.join("\n\n");
-    const nameHtml = `<span class="pn-name${tip?" has-desc":""}"${tip?` title="${esc(tip)}"`:""}>${prettyPlan(p.packageKey)}</span>`;
-    return `<tr><td class="plan"><div class="pn">${nameHtml}${pop}</div>`+
+    // A "?" opens a modal with the plan's description + benefits (works on touch, unlike a title tooltip).
+    if(desc || bens.length) PLANINFO[p.packageKey] = { name:prettyPlan(p.packageKey), desc, bens };
+    const info = (desc || bens.length)
+      ? `<button class="pn-info" type="button" data-key="${esc(p.packageKey)}" aria-label="About the ${esc(prettyPlan(p.packageKey))} plan">?</button>` : "";
+    return `<tr><td class="plan"><div class="pn"><span class="pn-name">${prettyPlan(p.packageKey)}</span>${info}${pop}</div>`+
            `${offerHtml}${trendHtml}${benHtml}${accHtml}</td>${cells}</tr>`;
   }).join("");
   table.hidden=false; empty.hidden=true;
@@ -949,7 +951,23 @@ qs("#sharemodal").addEventListener("click", e=>{ if(e.target.closest("[data-clos
 qs("#do-copy").addEventListener("click", copyImg);
 qs("#do-download").addEventListener("click", ()=>{ if(CURCANVAS) downloadCanvas(CURCANVAS); });
 qs("#do-link").addEventListener("click", copyLink);
-document.addEventListener("keydown", e=>{ if(e.key==="Escape" && !qs("#sharemodal").hidden) closeShare(); });
+/* ---- plan details modal (? icon on each plan) ---- */
+function openPlanModal(key){
+  const info=PLANINFO[key]; if(!info) return;
+  qs("#plantitle").textContent=info.name;
+  const d=qs("#plandesc"); d.textContent=info.desc||""; d.hidden=!info.desc;
+  qs("#planbens").innerHTML=info.bens.length ? info.bens.map(b=>`<span class="ben">${esc(b)}</span>`).join("") : "";
+  qs("#planmodal").hidden=false; document.body.style.overflow="hidden";
+}
+function closePlanModal(){ qs("#planmodal").hidden=true; document.body.style.overflow=""; }
+qs("#tbody").addEventListener("click", e=>{ const b=e.target.closest(".pn-info"); if(b) openPlanModal(b.dataset.key); });
+qs("#planmodal").addEventListener("click", e=>{ if(e.target.closest("[data-close]")) closePlanModal(); });
+
+document.addEventListener("keydown", e=>{
+  if(e.key!=="Escape") return;
+  if(!qs("#sharemodal").hidden) closeShare();
+  if(!qs("#planmodal").hidden) closePlanModal();
+});
 
 /* ---- nav + near-me wiring ---- */
 function gotoLookup(){
