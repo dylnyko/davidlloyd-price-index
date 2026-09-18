@@ -24,12 +24,16 @@ const cacheGet = k => { try{ const v=JSON.parse(localStorage.getItem(k)); if(v&&
 const cacheSet = (k,d,ttl) => { try{ localStorage.setItem(k,JSON.stringify({t:Date.now(),ttl,d})); }catch{} };
 
 /* ---- data ---- */
+// Corrections for known errors in David Lloyd's own /clubs data.
+// siteId -> correct country. (156 Edinburgh Shawfair is tagged "England" upstream.)
+const COUNTRY_FIX = { 156: "Scotland" };
+function fixClubs(clubs){ clubs.forEach(c=>{ const f=COUNTRY_FIX[c.siteId]; if(f) c.country=f; }); return clubs; }
 async function getClubs(){
-  const c = cacheGet("pb_clubs"); if(c) return c;
+  const c = cacheGet("pb_clubs"); if(c) return fixClubs(c);   // apply even to cached data
   const r = await fetch(`${API}/clubs`); const j = await r.json();
   const clubs = (j.clubs||[]).filter(c=>c.status==="active").sort((a,b)=>a.clubName.localeCompare(b.clubName));
   cacheSet("pb_clubs", clubs, DAY);
-  return clubs;
+  return fixClubs(clubs);
 }
 async function getPackages(siteId){
   const ck = `pb_pkg_${siteId}`; const c = cacheGet(ck); if(c) return c;
