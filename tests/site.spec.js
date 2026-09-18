@@ -281,6 +281,11 @@ test("biggest movers view loads with an empty state before history accrues (#16)
   await expect(page.locator("#mov-empty")).toBeVisible();
 });
 
+test("hides the Movers tab until there are movers (#16)", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.locator('.nav button[data-view="movers"]')).toBeHidden();
+});
+
 test("map view builds its controls (#14)", async ({ page }) => {
   await page.goto("/?view=map");
   await expect(page.locator("#map")).toBeVisible();

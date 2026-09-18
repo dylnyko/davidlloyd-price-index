@@ -237,14 +237,12 @@ async function main() {
     sports,
     clubs: clubData,
   };
-  writeFileSync(`${DATA}/latest.json`, JSON.stringify(latest));
   writeFileSync(`${DATA}/facilities.json`, JSON.stringify({
     generatedAt: latest.generatedAt, date: today, count: rows.length,
     sports, clubs: rows.map((x) => x.fac),
   }));
   console.log(`facilities.json: ${rows.length} clubs.`);
   writeFileSync(`${DATA}/locations.json`, JSON.stringify({ generatedAt: latest.generatedAt, locations }));
-  console.log(`latest.json: ${ok} clubs, ${fail} skipped.`);
 
   // ---- history: append headline prices only when they change ----
   let history = { updated: "", series: {} };
@@ -271,6 +269,16 @@ async function main() {
   history.updated = latest.generatedAt;
   writeFileSync(`${DATA}/history.json`, JSON.stringify(history));
   console.log(`history.json: ${changed} price point(s) recorded for ${today}.`);
+
+  // Count movers (series with >=2 points = a price actually changed) so the
+  // front-end can hide the Movers tab until there's something to show.
+  let moversCount = 0;
+  for (const plans of Object.values(history.series))
+    for (const fields of Object.values(plans))
+      for (const arr of Object.values(fields)) if (arr.length >= 2) moversCount++;
+  latest.moversCount = moversCount;
+  writeFileSync(`${DATA}/latest.json`, JSON.stringify(latest));
+  console.log(`latest.json: ${ok} clubs, ${fail} skipped, ${moversCount} movers.`);
 }
 
 main().catch((e) => { console.error(e); process.exit(1); });

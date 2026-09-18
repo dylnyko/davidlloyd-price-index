@@ -1003,6 +1003,8 @@ function maybeShowStale(){
     CLUBBY=Object.fromEntries(CLUBS.map(c=>[c.siteId, c.clubName]));
     qs("#clubcount").textContent=`${CLUBS.length}`;
     maybeShowStale();
+    // Reveal the Movers tab only once the history actually holds a price change.
+    if(LATEST && LATEST.moversCount>0) qs('.nav button[data-view="movers"]')?.removeAttribute("hidden");
     const spec=qs("#spec-clubs"); if(spec) spec.textContent=`${CLUBS.length} clubs`;
     // Deep links (shareable URLs): ?view=league[&plan&who&term] or ?club=<slug>,
     // plus ?pc=<postcode> which restores "clubs near me" across refresh/shares.
