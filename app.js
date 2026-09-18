@@ -680,8 +680,7 @@ function renderMovers(){
   const t=qs("#mov-table"), empty=qs("#mov-empty");
   if(!moves.length){
     t.hidden=true; empty.hidden=false;
-    const since = HISTORY && HISTORY.series && Object.keys(HISTORY.series).length ? "tracking has just begun" : "tracking has just begun";
-    empty.textContent=`No price changes recorded yet — ${since}. As the nightly snapshot runs, any club that changes a price will appear here.`;
+    empty.textContent="No price changes recorded yet.";
     qs("#mov-sub").textContent="";
     return;
   }
