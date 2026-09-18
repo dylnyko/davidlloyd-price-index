@@ -1,0 +1,869 @@
+{
+ "country": "Scotland",
+ "newMemberSurveyUrl": "https://online.avius.com/c6594f71-0e91-4c70-b4ee-db06673c915f?c1d91ed8-2a33-4fb1-b01a-cf26fd935a50.visible=FALSE&c1d91ed8-2a33-4fb1-b01a-cf26fd935a50.response=MembershipGuid&7e19ce05-2cbf-462c-878e-bd0d57d42fd7.response=SourceId",
+ "timezone": "Europe/London",
+ "clubName": "Glasgow West End",
+ "courts": [
+  {
+   "courtId": 1393,
+   "courtName": "Outdoor Court 1",
+   "courtSurfaceId": 12,
+   "courtSurface": "Synthetic Grass",
+   "courtSurfaceTranslationKey": "SURFACE_SYNTHETIC_GRASS",
+   "courtTypeId": 2,
+   "courtType": "Outdoor",
+   "courtTypeTranslationKey": "COURT_TYPE_OUTDOOR",
+   "sportId": 13
+  },
+  {
+   "courtId": 1548,
+   "courtName": "Indoor Court 1",
+   "courtSurfaceId": 8,
+   "courtSurface": "Carpet",
+   "courtSurfaceTranslationKey": "SURFACE_CARPET",
+   "courtTypeId": 1,
+   "courtType": "Indoor",
+   "courtTypeTranslationKey": "COURT_TYPE_INDOOR",
+   "sportId": 13
+  },
+  {
+   "courtId": 1549,
+   "courtName": "Indoor Court 2",
+   "courtSurfaceId": 8,
+   "courtSurface": "Carpet",
+   "courtSurfaceTranslationKey": "SURFACE_CARPET",
+   "courtTypeId": 1,
+   "courtType": "Indoor",
+   "courtTypeTranslationKey": "COURT_TYPE_INDOOR",
+   "sportId": 13
+  },
+  {
+   "courtId": 8458,
+   "courtName": "Outdoor Court 2",
+   "courtSurfaceId": 12,
+   "courtSurface": "Synthetic Grass",
+   "courtSurfaceTranslationKey": "SURFACE_SYNTHETIC_GRASS",
+   "courtTypeId": 2,
+   "courtType": "Outdoor",
+   "courtTypeTranslationKey": "COURT_TYPE_OUTDOOR",
+   "sportId": 13
+  },
+  {
+   "courtId": 1550,
+   "courtName": "Indoor Court 3",
+   "courtSurfaceId": 8,
+   "courtSurface": "Carpet",
+   "courtSurfaceTranslationKey": "SURFACE_CARPET",
+   "courtTypeId": 1,
+   "courtType": "Indoor",
+   "courtTypeTranslationKey": "COURT_TYPE_INDOOR",
+   "sportId": 13
+  },
+  {
+   "courtId": 8459,
+   "courtName": "Outdoor Court 3",
+   "courtSurfaceId": 12,
+   "courtSurface": "Synthetic Grass",
+   "courtSurfaceTranslationKey": "SURFACE_SYNTHETIC_GRASS",
+   "courtTypeId": 2,
+   "courtType": "Outdoor",
+   "courtTypeTranslationKey": "COURT_TYPE_OUTDOOR",
+   "sportId": 13
+  },
+  {
+   "courtId": 8461,
+   "courtName": "Outdoor Court 4",
+   "courtSurfaceId": 12,
+   "courtSurface": "Synthetic Grass",
+   "courtSurfaceTranslationKey": "SURFACE_SYNTHETIC_GRASS",
+   "courtTypeId": 2,
+   "courtType": "Outdoor",
+   "courtTypeTranslationKey": "COURT_TYPE_OUTDOOR",
+   "sportId": 13
+  },
+  {
+   "courtId": 8440,
+   "courtName": "Indoor Court 4",
+   "courtSurfaceId": 8,
+   "courtSurface": "Carpet",
+   "courtSurfaceTranslationKey": "SURFACE_CARPET",
+   "courtTypeId": 1,
+   "courtType": "Indoor",
+   "courtTypeTranslationKey": "COURT_TYPE_INDOOR",
+   "sportId": 13
+  },
+  {
+   "courtId": 8442,
+   "courtName": "Indoor Court 5",
+   "courtSurfaceId": 7,
+   "courtSurface": "Acrylic",
+   "courtSurfaceTranslationKey": "SURFACE_ACRYLIC",
+   "courtTypeId": 1,
+   "courtType": "Indoor",
+   "courtTypeTranslationKey": "COURT_TYPE_INDOOR",
+   "sportId": 13
+  },
+  {
+   "courtId": 8443,
+   "courtName": "Indoor Court 6",
+   "courtSurfaceId": 7,
+   "courtSurface": "Acrylic",
+   "courtSurfaceTranslationKey": "SURFACE_ACRYLIC",
+   "courtTypeId": 1,
+   "courtType": "Indoor",
+   "courtTypeTranslationKey": "COURT_TYPE_INDOOR",
+   "sportId": 13
+  },
+  {
+   "courtId": 8446,
+   "courtName": "Indoor Court 7",
+   "courtSurfaceId": 7,
+   "courtSurface": "Acrylic",
+   "courtSurfaceTranslationKey": "SURFACE_ACRYLIC",
+   "courtTypeId": 1,
+   "courtType": "Indoor",
+   "courtTypeTranslationKey": "COURT_TYPE_INDOOR",
+   "sportId": 13
+  },
+  {
+   "courtId": 8447,
+   "courtName": "Indoor Court 8",
+   "courtSurfaceId": 7,
+   "courtSurface": "Acrylic",
+   "courtSurfaceTranslationKey": "SURFACE_ACRYLIC",
+   "courtTypeId": 1,
+   "courtType": "Indoor",
+   "courtTypeTranslationKey": "COURT_TYPE_INDOOR",
+   "sportId": 13
+  },
+  {
+   "courtId": 19269,
+   "courtName": "Lane 1",
+   "courtSurfaceId": 170,
+   "courtSurface": "Pool",
+   "courtSurfaceTranslationKey": "SURFACE_POOL",
+   "courtTypeId": 171,
+   "courtType": "Lane",
+   "courtTypeTranslationKey": "COURT_TYPE_LANE",
+   "sportId": 16
+  },
+  {
+   "courtId": 19270,
+   "courtName": "Lane 2",
+   "courtSurfaceId": 170,
+   "courtSurface": "Pool",
+   "courtSurfaceTranslationKey": "SURFACE_POOL",
+   "courtTypeId": 171,
+   "courtType": "Lane",
+   "courtTypeTranslationKey": "COURT_TYPE_LANE",
+   "sportId": 16
+  },
+  {
+   "courtId": 19271,
+   "courtName": "Lane 3",
+   "courtSurfaceId": 170,
+   "courtSurface": "Pool",
+   "courtSurfaceTranslationKey": "SURFACE_POOL",
+   "courtTypeId": 171,
+   "courtType": "Lane",
+   "courtTypeTranslationKey": "COURT_TYPE_LANE",
+   "sportId": 16
+  },
+  {
+   "courtId": 19272,
+   "courtName": "Lane 4",
+   "courtSurfaceId": 170,
+   "courtSurface": "Pool",
+   "courtSurfaceTranslationKey": "SURFACE_POOL",
+   "courtTypeId": 171,
+   "courtType": "Lane",
+   "courtTypeTranslationKey": "COURT_TYPE_LANE",
+   "sportId": 16
+  },
+  {
+   "courtId": 30934,
+   "courtName": "Lane 5",
+   "courtSurfaceId": 170,
+   "courtSurface": "Pool",
+   "courtSurfaceTranslationKey": "SURFACE_POOL",
+   "courtTypeId": 171,
+   "courtType": "Lane",
+   "courtTypeTranslationKey": "COURT_TYPE_LANE",
+   "sportId": 16
+  },
+  {
+   "courtId": 30995,
+   "courtName": "Lane 6",
+   "courtSurfaceId": 170,
+   "courtSurface": "Pool",
+   "courtSurfaceTranslationKey": "SURFACE_POOL",
+   "courtTypeId": 171,
+   "courtType": "Lane",
+   "courtTypeTranslationKey": "COURT_TYPE_LANE",
+   "sportId": 16
+  },
+  {
+   "courtId": 737409,
+   "courtName": "Indoor Court Court 3 - Pickleball Only",
+   "courtSurfaceId": 8,
+   "courtSurface": "Carpet",
+   "courtSurfaceTranslationKey": "SURFACE_CARPET",
+   "courtTypeId": 179,
+   "courtType": "Indoor",
+   "courtTypeTranslationKey": "COURT_TYPE_INDOOR",
+   "sportId": 22
+  },
+  {
+   "courtId": 729137,
+   "courtName": "Indoor Court Court 4 - Pickleball Only",
+   "courtSurfaceId": 8,
+   "courtSurface": "Carpet",
+   "courtSurfaceTranslationKey": "SURFACE_CARPET",
+   "courtTypeId": 179,
+   "courtType": "Indoor",
+   "courtTypeTranslationKey": "COURT_TYPE_INDOOR",
+   "sportId": 22
+  },
+  {
+   "courtId": 28912,
+   "courtName": "Club Room 1",
+   "courtSurfaceId": 173,
+   "courtSurface": "N/A",
+   "courtSurfaceTranslationKey": "SURFACE_N/A",
+   "courtTypeId": 6,
+   "courtType": "Club Room",
+   "courtTypeTranslationKey": "COURT_TYPE_CLUB_ROOM",
+   "sportId": 18
+  },
+  {
+   "courtId": 28913,
+   "courtName": "Club Room 2",
+   "courtSurfaceId": 173,
+   "courtSurface": "N/A",
+   "courtSurfaceTranslationKey": "SURFACE_N/A",
+   "courtTypeId": 6,
+   "courtType": "Club Room",
+   "courtTypeTranslationKey": "COURT_TYPE_CLUB_ROOM",
+   "sportId": 18
+  },
+  {
+   "courtId": 28914,
+   "courtName": "Club Room 3",
+   "courtSurfaceId": 173,
+   "courtSurface": "N/A",
+   "courtSurfaceTranslationKey": "SURFACE_N/A",
+   "courtTypeId": 6,
+   "courtType": "Club Room",
+   "courtTypeTranslationKey": "COURT_TYPE_CLUB_ROOM",
+   "sportId": 18
+  },
+  {
+   "courtId": 405561,
+   "courtName": "Studio Blaze",
+   "courtSurfaceId": 173,
+   "courtSurface": "N/A",
+   "courtSurfaceTranslationKey": "SURFACE_N/A",
+   "courtTypeId": 5,
+   "courtType": "Studio",
+   "courtTypeTranslationKey": "COURT_TYPE_STUDIO",
+   "sportId": 18
+  },
+  {
+   "courtId": 652653,
+   "courtName": "Studio Car Park",
+   "courtSurfaceId": 173,
+   "courtSurface": "N/A",
+   "courtSurfaceTranslationKey": "SURFACE_N/A",
+   "courtTypeId": 5,
+   "courtType": "Studio",
+   "courtTypeTranslationKey": "COURT_TYPE_STUDIO",
+   "sportId": 18
+  },
+  {
+   "courtId": 674389,
+   "courtName": "Studio Creche Room 1",
+   "courtSurfaceId": 173,
+   "courtSurface": "N/A",
+   "courtSurfaceTranslationKey": "SURFACE_N/A",
+   "courtTypeId": 5,
+   "courtType": "Studio",
+   "courtTypeTranslationKey": "COURT_TYPE_STUDIO",
+   "sportId": 18
+  },
+  {
+   "courtId": 674391,
+   "courtName": "Studio Creche Room 2",
+   "courtSurfaceId": 173,
+   "courtSurface": "N/A",
+   "courtSurfaceTranslationKey": "SURFACE_N/A",
+   "courtTypeId": 5,
+   "courtType": "Studio",
+   "courtTypeTranslationKey": "COURT_TYPE_STUDIO",
+   "sportId": 18
+  },
+  {
+   "courtId": 674393,
+   "courtName": "Studio Creche Room 3",
+   "courtSurfaceId": 173,
+   "courtSurface": "N/A",
+   "courtSurfaceTranslationKey": "SURFACE_N/A",
+   "courtTypeId": 5,
+   "courtType": "Studio",
+   "courtTypeTranslationKey": "COURT_TYPE_STUDIO",
+   "sportId": 18
+  },
+  {
+   "courtId": 40796,
+   "courtName": "Studio Cycling Studio",
+   "courtSurfaceId": 173,
+   "courtSurface": "N/A",
+   "courtSurfaceTranslationKey": "SURFACE_N/A",
+   "courtTypeId": 5,
+   "courtType": "Studio",
+   "courtTypeTranslationKey": "COURT_TYPE_STUDIO",
+   "sportId": 18
+  },
+  {
+   "courtId": 489111,
+   "courtName": "Studio Function Suite",
+   "courtSurfaceId": 173,
+   "courtSurface": "N/A",
+   "courtSurfaceTranslationKey": "SURFACE_N/A",
+   "courtTypeId": 5,
+   "courtType": "Studio",
+   "courtTypeTranslationKey": "COURT_TYPE_STUDIO",
+   "sportId": 18
+  },
+  {
+   "courtId": 29089,
+   "courtName": "Studio GYM",
+   "courtSurfaceId": 173,
+   "courtSurface": "N/A",
+   "courtSurfaceTranslationKey": "SURFACE_N/A",
+   "courtTypeId": 5,
+   "courtType": "Studio",
+   "courtTypeTranslationKey": "COURT_TYPE_STUDIO",
+   "sportId": 18
+  },
+  {
+   "courtId": 30931,
+   "courtName": "Studio gym desk",
+   "courtSurfaceId": 173,
+   "courtSurface": "N/A",
+   "courtSurfaceTranslationKey": "SURFACE_N/A",
+   "courtTypeId": 5,
+   "courtType": "Studio",
+   "courtTypeTranslationKey": "COURT_TYPE_STUDIO",
+   "sportId": 18
+  },
+  {
+   "courtId": 30932,
+   "courtName": "Studio Gym Desk 2",
+   "courtSurfaceId": 173,
+   "courtSurface": "N/A",
+   "courtSurfaceTranslationKey": "SURFACE_N/A",
+   "courtTypeId": 5,
+   "courtType": "Studio",
+   "courtTypeTranslationKey": "COURT_TYPE_STUDIO",
+   "sportId": 18
+  },
+  {
+   "courtId": 30119,
+   "courtName": "Studio GYM1",
+   "courtSurfaceId": 173,
+   "courtSurface": "N/A",
+   "courtSurfaceTranslationKey": "SURFACE_N/A",
+   "courtTypeId": 5,
+   "courtType": "Studio",
+   "courtTypeTranslationKey": "COURT_TYPE_STUDIO",
+   "sportId": 18
+  },
+  {
+   "courtId": 28915,
+   "courtName": "Studio High Energy",
+   "courtSurfaceId": 173,
+   "courtSurface": "N/A",
+   "courtSurfaceTranslationKey": "SURFACE_N/A",
+   "courtTypeId": 5,
+   "courtType": "Studio",
+   "courtTypeTranslationKey": "COURT_TYPE_STUDIO",
+   "sportId": 18
+  },
+  {
+   "courtId": 655251,
+   "courtName": "Studio Home",
+   "courtSurfaceId": 173,
+   "courtSurface": "N/A",
+   "courtSurfaceTranslationKey": "SURFACE_N/A",
+   "courtTypeId": 5,
+   "courtType": "Studio",
+   "courtTypeTranslationKey": "COURT_TYPE_STUDIO",
+   "sportId": 18
+  },
+  {
+   "courtId": 741554,
+   "courtName": "Studio Indoor Court 1A",
+   "courtSurfaceId": 173,
+   "courtSurface": "N/A",
+   "courtSurfaceTranslationKey": "SURFACE_N/A",
+   "courtTypeId": 5,
+   "courtType": "Studio",
+   "courtTypeTranslationKey": "COURT_TYPE_STUDIO",
+   "sportId": 18
+  },
+  {
+   "courtId": 741555,
+   "courtName": "Studio Indoor Court 2A",
+   "courtSurfaceId": 173,
+   "courtSurface": "N/A",
+   "courtSurfaceTranslationKey": "SURFACE_N/A",
+   "courtTypeId": 5,
+   "courtType": "Studio",
+   "courtTypeTranslationKey": "COURT_TYPE_STUDIO",
+   "sportId": 18
+  },
+  {
+   "courtId": 741556,
+   "courtName": "Studio Indoor Court 3A",
+   "courtSurfaceId": 173,
+   "courtSurface": "N/A",
+   "courtSurfaceTranslationKey": "SURFACE_N/A",
+   "courtTypeId": 5,
+   "courtType": "Studio",
+   "courtTypeTranslationKey": "COURT_TYPE_STUDIO",
+   "sportId": 18
+  },
+  {
+   "courtId": 741557,
+   "courtName": "Studio Indoor Court 4A",
+   "courtSurfaceId": 173,
+   "courtSurface": "N/A",
+   "courtSurfaceTranslationKey": "SURFACE_N/A",
+   "courtTypeId": 5,
+   "courtType": "Studio",
+   "courtTypeTranslationKey": "COURT_TYPE_STUDIO",
+   "sportId": 18
+  },
+  {
+   "courtId": 741550,
+   "courtName": "Studio Indoor Court 5A",
+   "courtSurfaceId": 173,
+   "courtSurface": "N/A",
+   "courtSurfaceTranslationKey": "SURFACE_N/A",
+   "courtTypeId": 5,
+   "courtType": "Studio",
+   "courtTypeTranslationKey": "COURT_TYPE_STUDIO",
+   "sportId": 18
+  },
+  {
+   "courtId": 741551,
+   "courtName": "Studio Indoor Court 6A",
+   "courtSurfaceId": 173,
+   "courtSurface": "N/A",
+   "courtSurfaceTranslationKey": "SURFACE_N/A",
+   "courtTypeId": 5,
+   "courtType": "Studio",
+   "courtTypeTranslationKey": "COURT_TYPE_STUDIO",
+   "sportId": 18
+  },
+  {
+   "courtId": 741552,
+   "courtName": "Studio Indoor Court 7A",
+   "courtSurfaceId": 173,
+   "courtSurface": "N/A",
+   "courtSurfaceTranslationKey": "SURFACE_N/A",
+   "courtTypeId": 5,
+   "courtType": "Studio",
+   "courtTypeTranslationKey": "COURT_TYPE_STUDIO",
+   "sportId": 18
+  },
+  {
+   "courtId": 741553,
+   "courtName": "Studio Indoor Court 8A",
+   "courtSurfaceId": 173,
+   "courtSurface": "N/A",
+   "courtSurfaceTranslationKey": "SURFACE_N/A",
+   "courtTypeId": 5,
+   "courtType": "Studio",
+   "courtTypeTranslationKey": "COURT_TYPE_STUDIO",
+   "sportId": 18
+  },
+  {
+   "courtId": 29100,
+   "courtName": "Studio Indoor Pool",
+   "courtSurfaceId": 173,
+   "courtSurface": "N/A",
+   "courtSurfaceTranslationKey": "SURFACE_N/A",
+   "courtTypeId": 5,
+   "courtType": "Studio",
+   "courtTypeTranslationKey": "COURT_TYPE_STUDIO",
+   "sportId": 18
+  },
+  {
+   "courtId": 28916,
+   "courtName": "Studio Kids Zone",
+   "courtSurfaceId": 173,
+   "courtSurface": "N/A",
+   "courtSurfaceTranslationKey": "SURFACE_N/A",
+   "courtTypeId": 5,
+   "courtType": "Studio",
+   "courtTypeTranslationKey": "COURT_TYPE_STUDIO",
+   "sportId": 18
+  },
+  {
+   "courtId": 651945,
+   "courtName": "Studio Location 1 Outside Pitch",
+   "courtSurfaceId": 173,
+   "courtSurface": "N/A",
+   "courtSurfaceTranslationKey": "SURFACE_N/A",
+   "courtTypeId": 5,
+   "courtType": "Studio",
+   "courtTypeTranslationKey": "COURT_TYPE_STUDIO",
+   "sportId": 18
+  },
+  {
+   "courtId": 651947,
+   "courtName": "Studio Location 2 Outside Pitch",
+   "courtSurfaceId": 173,
+   "courtSurface": "N/A",
+   "courtSurfaceTranslationKey": "SURFACE_N/A",
+   "courtTypeId": 5,
+   "courtType": "Studio",
+   "courtTypeTranslationKey": "COURT_TYPE_STUDIO",
+   "sportId": 18
+  },
+  {
+   "courtId": 729809,
+   "courtName": "Studio Mind and Body",
+   "courtSurfaceId": 173,
+   "courtSurface": "N/A",
+   "courtSurfaceTranslationKey": "SURFACE_N/A",
+   "courtTypeId": 5,
+   "courtType": "Studio",
+   "courtTypeTranslationKey": "COURT_TYPE_STUDIO",
+   "sportId": 18
+  },
+  {
+   "courtId": 741558,
+   "courtName": "Studio Outdoor Court 1A",
+   "courtSurfaceId": 173,
+   "courtSurface": "N/A",
+   "courtSurfaceTranslationKey": "SURFACE_N/A",
+   "courtTypeId": 5,
+   "courtType": "Studio",
+   "courtTypeTranslationKey": "COURT_TYPE_STUDIO",
+   "sportId": 18
+  },
+  {
+   "courtId": 741559,
+   "courtName": "Studio Outdoor Court 2A",
+   "courtSurfaceId": 173,
+   "courtSurface": "N/A",
+   "courtSurfaceTranslationKey": "SURFACE_N/A",
+   "courtTypeId": 5,
+   "courtType": "Studio",
+   "courtTypeTranslationKey": "COURT_TYPE_STUDIO",
+   "sportId": 18
+  },
+  {
+   "courtId": 652383,
+   "courtName": "Studio Outdoor Pool",
+   "courtSurfaceId": 173,
+   "courtSurface": "N/A",
+   "courtSurfaceTranslationKey": "SURFACE_N/A",
+   "courtTypeId": 5,
+   "courtType": "Studio",
+   "courtTypeTranslationKey": "COURT_TYPE_STUDIO",
+   "sportId": 18
+  },
+  {
+   "courtId": 651949,
+   "courtName": "Studio Outdoor Spa Garden",
+   "courtSurfaceId": 173,
+   "courtSurface": "N/A",
+   "courtSurfaceTranslationKey": "SURFACE_N/A",
+   "courtTypeId": 5,
+   "courtType": "Studio",
+   "courtTypeTranslationKey": "COURT_TYPE_STUDIO",
+   "sportId": 18
+  },
+  {
+   "courtId": 45061,
+   "courtName": "Studio Reception",
+   "courtSurfaceId": 173,
+   "courtSurface": "N/A",
+   "courtSurfaceTranslationKey": "SURFACE_N/A",
+   "courtTypeId": 5,
+   "courtType": "Studio",
+   "courtTypeTranslationKey": "COURT_TYPE_STUDIO",
+   "sportId": 18
+  },
+  {
+   "courtId": 652651,
+   "courtName": "Studio Rhythm Cycling Studio",
+   "courtSurfaceId": 173,
+   "courtSurface": "N/A",
+   "courtSurfaceTranslationKey": "SURFACE_N/A",
+   "courtTypeId": 5,
+   "courtType": "Studio",
+   "courtTypeTranslationKey": "COURT_TYPE_STUDIO",
+   "sportId": 18
+  },
+  {
+   "courtId": 293981,
+   "courtName": "Studio Synrgy360",
+   "courtSurfaceId": 173,
+   "courtSurface": "N/A",
+   "courtSurfaceTranslationKey": "SURFACE_N/A",
+   "courtTypeId": 5,
+   "courtType": "Studio",
+   "courtTypeTranslationKey": "COURT_TYPE_STUDIO",
+   "sportId": 18
+  },
+  {
+   "courtId": 655179,
+   "courtName": "Indoor 1",
+   "courtSurfaceId": 196,
+   "courtSurface": "N/A",
+   "courtSurfaceTranslationKey": "SURFACE_N/A",
+   "courtTypeId": 1,
+   "courtType": "Indoor",
+   "courtTypeTranslationKey": "COURT_TYPE_INDOOR",
+   "sportId": 17
+  },
+  {
+   "courtId": 739563,
+   "courtName": "Indoor Buisness Hub",
+   "courtSurfaceId": 196,
+   "courtSurface": "N/A",
+   "courtSurfaceTranslationKey": "SURFACE_N/A",
+   "courtTypeId": 1,
+   "courtType": "Indoor",
+   "courtTypeTranslationKey": "COURT_TYPE_INDOOR",
+   "sportId": 17
+  },
+  {
+   "courtId": 735467,
+   "courtName": "Indoor Spa Retreat",
+   "courtSurfaceId": 196,
+   "courtSurface": "N/A",
+   "courtSurfaceTranslationKey": "SURFACE_N/A",
+   "courtTypeId": 1,
+   "courtType": "Indoor",
+   "courtTypeTranslationKey": "COURT_TYPE_INDOOR",
+   "sportId": 17
+  },
+  {
+   "courtId": 655181,
+   "courtName": "Indoor Studio Function 1",
+   "courtSurfaceId": 196,
+   "courtSurface": "N/A",
+   "courtSurfaceTranslationKey": "SURFACE_N/A",
+   "courtTypeId": 1,
+   "courtType": "Indoor",
+   "courtTypeTranslationKey": "COURT_TYPE_INDOOR",
+   "sportId": 17
+  },
+  {
+   "courtId": 655183,
+   "courtName": "Indoor Studio Function 2",
+   "courtSurfaceId": 196,
+   "courtSurface": "N/A",
+   "courtSurfaceTranslationKey": "SURFACE_N/A",
+   "courtTypeId": 1,
+   "courtType": "Indoor",
+   "courtTypeTranslationKey": "COURT_TYPE_INDOOR",
+   "sportId": 17
+  },
+  {
+   "courtId": 8448,
+   "courtName": "Indoor Court 1",
+   "courtSurfaceId": 53,
+   "courtSurface": "Carpet",
+   "courtSurfaceTranslationKey": "SURFACE_CARPET",
+   "courtTypeId": 1,
+   "courtType": "Indoor",
+   "courtTypeTranslationKey": "COURT_TYPE_INDOOR",
+   "sportId": 14
+  },
+  {
+   "courtId": 8451,
+   "courtName": "Indoor Court 2",
+   "courtSurfaceId": 53,
+   "courtSurface": "Carpet",
+   "courtSurfaceTranslationKey": "SURFACE_CARPET",
+   "courtTypeId": 1,
+   "courtType": "Indoor",
+   "courtTypeTranslationKey": "COURT_TYPE_INDOOR",
+   "sportId": 14
+  }
+ ],
+ "fitnessManagerEmailAddress": "fitnessmanager.anniesland@davidlloyd.co.uk",
+ "courtReleaseTime": null,
+ "salesManagerEmailAddress": "SalesManager.GlasgowWestEnd@davidlloyd.co.uk",
+ "clubTypeId": 1,
+ "sportIdsAvailable": [
+  13,
+  14,
+  16,
+  17,
+  18,
+  20,
+  22
+ ],
+ "swimmingEmailAddress": "swimming.anniesland@davidlloyd.co.uk",
+ "classReleaseTime": "19:30",
+ "isAdultOnly": false,
+ "defaultLanguage": "en-gb",
+ "spaBookingsEmailAddress": "GlasgowWestEnd@davidlloyd.co.uk",
+ "racquetsEmailAddress": "racquets.anniesland@davidlloyd.co.uk",
+ "receptionEmailAddress": "reception.anniesland@davidlloyd.co.uk",
+ "links": [
+  {
+   "type": "CAFE_MENU",
+   "label": "Clubroom menu",
+   "labelTranslationKey": "CLUBROOM_MENU",
+   "link": "https://menus.tenkites.com/davidlloyd/clubs"
+  }
+ ],
+ "currency": "GBP",
+ "brand": "david-lloyd",
+ "provisionalBookingPeriod": 72,
+ "referralEmailAddress": "Sales.GlasgowWestEnd@davidlloyd.co.uk",
+ "telephone": "0141 586 9090",
+ "adyenMerchantAccount": "DavidLloydECOM",
+ "memberFeedbackEmailAddress": "GlasgowWestEnd@davidlloyd.co.uk",
+ "feedbackUrl": "https://surveys.avius.com/player/survey/start/125a8428-a3e8-4e56-b8f7-fbb6707fa1d6%7cb4545e9f-11cb-4a61-a9e9-4caadba4f401?c1d91ed8-2a33-4fb1-b01a-cf26fd935a50.visible=FALSE&c1d91ed8-2a33-4fb1-b01a-cf26fd935a50.response=MembershipGuid&7e19ce05-2cbf-462c-878e-bd0d57d42fd7.response=SourceId",
+ "isBlaze": false,
+ "sportsPackageIdsAvailable": [
+  1,
+  3,
+  4,
+  5,
+  6,
+  7,
+  9,
+  10,
+  11,
+  13,
+  15,
+  16,
+  26,
+  27,
+  28,
+  29,
+  36,
+  38,
+  65,
+  71,
+  81,
+  87,
+  89,
+  101,
+  105,
+  118,
+  119,
+  123,
+  133,
+  139,
+  141,
+  143,
+  146,
+  147,
+  148
+ ],
+ "clubOpeningTimes": {
+  "weeklyOpeningTimes": {
+   "mon": [
+    {
+     "from": "06:00",
+     "to": "22:00"
+    }
+   ],
+   "tue": [
+    {
+     "from": "06:00",
+     "to": "22:00"
+    }
+   ],
+   "wed": [
+    {
+     "from": "06:00",
+     "to": "22:00"
+    }
+   ],
+   "thu": [
+    {
+     "from": "06:00",
+     "to": "22:00"
+    }
+   ],
+   "fri": [
+    {
+     "from": "06:00",
+     "to": "22:00"
+    }
+   ],
+   "sat": [
+    {
+     "from": "07:00",
+     "to": "21:00"
+    }
+   ],
+   "sun": [
+    {
+     "from": "07:00",
+     "to": "21:00"
+    }
+   ]
+  },
+  "specialOpeningTimes": [],
+  "closures": [],
+  "peakTimes": {
+   "mon": [
+    {
+     "from": "16:00",
+     "to": "00:00"
+    }
+   ],
+   "tue": [
+    {
+     "from": "16:00",
+     "to": "00:00"
+    }
+   ],
+   "wed": [
+    {
+     "from": "16:00",
+     "to": "00:00"
+    }
+   ],
+   "thu": [
+    {
+     "from": "16:00",
+     "to": "00:00"
+    }
+   ],
+   "fri": [
+    {
+     "from": "16:00",
+     "to": "00:00"
+    }
+   ],
+   "sat": [
+    {
+     "from": "00:00",
+     "to": "14:00"
+    }
+   ],
+   "sun": [
+    {
+     "from": "00:00",
+     "to": "14:00"
+    }
+   ]
+  }
+ },
+ "siteId": 75,
+ "personalTrainingEmailAddress": "GlasgowWestEnd@davidlloyd.co.uk"
+}

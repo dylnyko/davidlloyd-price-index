@@ -1,0 +1,21 @@
+{
+ "monthlyMembershipSettings": {
+  "collectRecurringPaymentDetails": true,
+  "alwaysCollectOneMonthFeeUpfront": false
+ },
+ "membershipStartDateSettings": {
+  "membershipStartDateBehaviour": "USER_SELECTED",
+  "allowedStartDate": "USER_SELECTED",
+  "fixedStartDate": null,
+  "isStartDateConfirmed": true
+ },
+ "clubStatusForJoiners": "OPEN",
+ "packageSettings": {
+  "standardMostPopularPackage": "CLUB_PLATINUM",
+  "corporateMostPopularPackage": "CORPORATE_PLATINUM",
+  "friendsAndFamilyMostPopularPackage": "TEAM_CORPORATE_PLATINUM",
+  "tdrCapitalMostPopularPackage": "CORPORATE_PLATINUM2",
+  "youngAdultMostPopularPackage": "YOUNG_ADULT_PLATINUM",
+  "familyMostPopularPackage": "FAMILY_PLATINUM"
+ }
+}

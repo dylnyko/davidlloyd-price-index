@@ -25,18 +25,21 @@ const cacheSet = (k,d,ttl) => { try{ localStorage.setItem(k,JSON.stringify({t:Da
 
 // David Lloyd's /clubs feed mis-tags a few clubs' country. Audited 18 Sep 2026:
 // only Edinburgh Shawfair (site 156) is wrong — it returns "England" while every
-// other Scottish club is correct. Override at load so Country is right everywhere.
+// other Scottish club is correct.
 const COUNTRY_FIX = { 156: "Scotland" };
+// Applied on EVERY return path (fresh AND cached) — a returning visitor may hold a
+// pre-fix club list in localStorage, so overriding only on fetch left it stale.
+const fixCountry = c => COUNTRY_FIX[c.siteId] ? {...c, country: COUNTRY_FIX[c.siteId]} : c;
 
 /* ---- data ---- */
 async function getClubs(){
-  const c = cacheGet("pb_clubs"); if(c) return c;
-  const r = await fetch(`${API}/clubs`); const j = await r.json();
-  const clubs = (j.clubs||[]).filter(c=>c.status==="active")
-    .map(c => COUNTRY_FIX[c.siteId] ? {...c, country: COUNTRY_FIX[c.siteId]} : c)
-    .sort((a,b)=>a.clubName.localeCompare(b.clubName));
-  cacheSet("pb_clubs", clubs, DAY);
-  return clubs;
+  let clubs = cacheGet("pb_clubs");
+  if(!clubs){
+    const r = await fetch(`${API}/clubs`); const j = await r.json();
+    clubs = (j.clubs||[]).filter(c=>c.status==="active").sort((a,b)=>a.clubName.localeCompare(b.clubName));
+    cacheSet("pb_clubs", clubs, DAY);
+  }
+  return clubs.map(fixCountry);
 }
 async function getPackages(siteId){
   const ck = `pb_pkg_${siteId}`; const c = cacheGet(ck); if(c) return c;

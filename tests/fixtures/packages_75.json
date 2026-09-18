@@ -1,0 +1,5364 @@
+{
+ "packages": [
+  {
+   "packageKey": "CORPORATE_PLATINUM2",
+   "prices": {},
+   "packageInformationGroupedByType": {
+    "BENEFIT": [
+     {
+      "packageInformationId": 3,
+      "iconKey": "clock",
+      "orderingPriority": 570,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Sin restricciones horarias",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Unrestricted hours",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Unbegrenzte Stunden",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Onbeperkte uren.",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Sense restricci\u00f3 hor\u00e0ria",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Heures libres",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Orario illimitato",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 5,
+      "iconKey": "discount",
+      "orderingPriority": 150,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "10% de ahorro en clases para ni\u00f1os",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "10% saving on kids courses",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "10% Ersparnis bei Kinderkursen",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "10% besparen op lessen voor kinderen",
+        "subtext": null
+       },
+       "ca": {
+        "text": "10% d'estalvi en cursos per a nens",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "\u00c9conomisez 10% sur les cours pour enfants",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "10% di sconto sui corsi per bambini a pagamento",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 7,
+      "iconKey": "guest",
+      "orderingPriority": 120,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Una invitaci\u00f3n mensual",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Monthly guest pass",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Monatlicher G\u00e4stepass",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Maandelijkse gastenpas",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Pass invit\u00e9 mensuel",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Una invitaci\u00f3 mensual",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Pass mensile per gli ospiti",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 9,
+      "iconKey": "shower",
+      "orderingPriority": 130,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Toalla ",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Fresh towel",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Handtuch Service",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Gratis handdoek",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Tovallola",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Serviette propre",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Asciugamani",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 10,
+      "iconKey": "stopwatch",
+      "orderingPriority": 90,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Blaze",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Blaze",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Blaze",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Blaze",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Blaze",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Blaze",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Blaze",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 14,
+      "iconKey": "dumbbell",
+      "orderingPriority": 20,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Gimnasio",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Gym",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Trainingsfl\u00e4che",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Gym",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Fitness",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Gimn\u00e0s",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Palestra",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 24,
+      "iconKey": "cardio",
+      "orderingPriority": 25,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Salas",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Studios",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Kurse",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Studio's",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Sales",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Studios",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Corsi di fitness",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 28,
+      "iconKey": "discount",
+      "orderingPriority": 140,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "10% de descuento en el Clubroom",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "10% Clubroom discount",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "10% Rabatt im Clubroom",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "10% korting voor de clubroom.",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "10% de r\u00e9duction pour le Clubroom",
+        "subtext": null
+       },
+       "ca": {
+        "text": "10% descompte al restaurant",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Sconto del 10% sul bar e ristorante",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 29,
+      "iconKey": "racquet",
+      "orderingPriority": 80,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Tenis y P\u00e1del",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Racquets",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Tennis",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Racketsporten",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Raquettes",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Raquetes",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Tennis e Paddle",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 38,
+      "iconKey": "spa",
+      "orderingPriority": 100,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Spa",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Spa",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Spa",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Spa",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Spa",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Spa",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Spa",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 123,
+      "iconKey": "pool",
+      "orderingPriority": 40,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Piscinas",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Swimming Pools",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Pools/Schwimmbecken",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Zwembaden",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Piscines",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Piscine",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Piscine",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 124,
+      "iconKey": "flower",
+      "orderingPriority": 545,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Accede al Spa en tu club local",
+        "subtext": null
+       },
+       "fr-fr": {
+        "text": "Acc\u00e8s au spa de votre club",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Access to Spa Retreat at home Club",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Zugang zum Spa Bereich bei Ihrem Home Club",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Toegang tot de spa van jouw club.",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Acc\u00e8s au spa de votre club",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Acc\u00e9s al spa del teu Club",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Accesso alla Spa nel tuo Club",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 177,
+      "iconKey": "mobile-phone",
+      "orderingPriority": 115,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "fr-fr": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "ca": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "On-Demand Content",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 182,
+      "iconKey": "club-tier",
+      "orderingPriority": 510,
+      "displayTextByLanguage": {
+       "en-gb": {
+        "text": "Multiple club access & Spa Retreat Access",
+        "subtext": null
+       }
+      },
+      "code": "MULTIPLE_CLUB_ACCESS_AND_SPA_RETREATS"
+     }
+    ],
+    "DESCRIPTION": [
+     {
+      "packageInformationId": 117,
+      "iconKey": null,
+      "orderingPriority": null,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Te da acceso a todas las instalaciones de tu Club principal, adem\u00e1s de acceso a otros Clubs y servicios seleccionados.",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Gives you access to all facilities at your home Club, plus access to selected other Clubs and facilities.",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Bietet dir Zugang zu allen Einrichtungen deines Heimatclubs sowie zu ausgew\u00e4hlten anderen Clubs und Anlagen.",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Geeft je toegang tot alle faciliteiten van je thuisclub, plus toegang tot geselecteerde andere Clubs en faciliteiten.",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Et dona acc\u00e9s a totes les instal\u00b7lacions del teu Club principal, a m\u00e9s d\u2019acc\u00e9s a altres Clubs i instal\u00b7lacions seleccionades.",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Vous donne acc\u00e8s \u00e0 toutes les installations de votre Club principal, ainsi qu\u2019\u00e0 une s\u00e9lection d\u2019autres Clubs et \u00e9quipements.",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Ti d\u00e0 accesso a tutte le strutture del tuo Club principale, oltre all\u2019accesso a una selezione di altri Club e servizi.",
+        "subtext": null
+       }
+      },
+      "code": null
+     }
+    ]
+   },
+   "rateCardOrdering": {},
+   "fixedFutureMembershipStartDate": null
+  },
+  {
+   "packageKey": "TEAM_CORPORATE_PLATINUM",
+   "prices": {},
+   "packageInformationGroupedByType": {
+    "BENEFIT": [
+     {
+      "packageInformationId": 3,
+      "iconKey": "clock",
+      "orderingPriority": 570,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Sin restricciones horarias",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Unrestricted hours",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Unbegrenzte Stunden",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Onbeperkte uren.",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Sense restricci\u00f3 hor\u00e0ria",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Heures libres",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Orario illimitato",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 5,
+      "iconKey": "discount",
+      "orderingPriority": 150,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "10% de ahorro en clases para ni\u00f1os",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "10% saving on kids courses",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "10% Ersparnis bei Kinderkursen",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "10% besparen op lessen voor kinderen",
+        "subtext": null
+       },
+       "ca": {
+        "text": "10% d'estalvi en cursos per a nens",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "\u00c9conomisez 10% sur les cours pour enfants",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "10% di sconto sui corsi per bambini a pagamento",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 7,
+      "iconKey": "guest",
+      "orderingPriority": 120,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Una invitaci\u00f3n mensual",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Monthly guest pass",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Monatlicher G\u00e4stepass",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Maandelijkse gastenpas",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Pass invit\u00e9 mensuel",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Una invitaci\u00f3 mensual",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Pass mensile per gli ospiti",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 9,
+      "iconKey": "shower",
+      "orderingPriority": 130,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Toalla ",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Fresh towel",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Handtuch Service",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Gratis handdoek",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Tovallola",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Serviette propre",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Asciugamani",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 10,
+      "iconKey": "stopwatch",
+      "orderingPriority": 90,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Blaze",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Blaze",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Blaze",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Blaze",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Blaze",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Blaze",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Blaze",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 14,
+      "iconKey": "dumbbell",
+      "orderingPriority": 20,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Gimnasio",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Gym",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Trainingsfl\u00e4che",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Gym",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Fitness",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Gimn\u00e0s",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Palestra",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 24,
+      "iconKey": "cardio",
+      "orderingPriority": 25,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Salas",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Studios",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Kurse",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Studio's",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Sales",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Studios",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Corsi di fitness",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 28,
+      "iconKey": "discount",
+      "orderingPriority": 140,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "10% de descuento en el Clubroom",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "10% Clubroom discount",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "10% Rabatt im Clubroom",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "10% korting voor de clubroom.",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "10% de r\u00e9duction pour le Clubroom",
+        "subtext": null
+       },
+       "ca": {
+        "text": "10% descompte al restaurant",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Sconto del 10% sul bar e ristorante",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 29,
+      "iconKey": "racquet",
+      "orderingPriority": 80,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Tenis y P\u00e1del",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Racquets",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Tennis",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Racketsporten",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Raquettes",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Raquetes",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Tennis e Paddle",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 38,
+      "iconKey": "spa",
+      "orderingPriority": 100,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Spa",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Spa",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Spa",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Spa",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Spa",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Spa",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Spa",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 123,
+      "iconKey": "pool",
+      "orderingPriority": 40,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Piscinas",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Swimming Pools",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Pools/Schwimmbecken",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Zwembaden",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Piscines",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Piscine",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Piscine",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 124,
+      "iconKey": "flower",
+      "orderingPriority": 545,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Accede al Spa en tu club local",
+        "subtext": null
+       },
+       "fr-fr": {
+        "text": "Acc\u00e8s au spa de votre club",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Access to Spa Retreat at home Club",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Zugang zum Spa Bereich bei Ihrem Home Club",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Toegang tot de spa van jouw club.",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Acc\u00e8s au spa de votre club",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Acc\u00e9s al spa del teu Club",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Accesso alla Spa nel tuo Club",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 182,
+      "iconKey": "club-tier",
+      "orderingPriority": 510,
+      "displayTextByLanguage": {
+       "en-gb": {
+        "text": "Multiple club access & Spa Retreat Access",
+        "subtext": null
+       }
+      },
+      "code": "MULTIPLE_CLUB_ACCESS_AND_SPA_RETREATS"
+     },
+     {
+      "packageInformationId": 177,
+      "iconKey": "mobile-phone",
+      "orderingPriority": 115,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "fr-fr": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "ca": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "On-Demand Content",
+        "subtext": null
+       }
+      },
+      "code": null
+     }
+    ],
+    "DESCRIPTION": [
+     {
+      "packageInformationId": 120,
+      "iconKey": null,
+      "orderingPriority": null,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Te da acceso a todas las instalaciones de tu Club principal, adem\u00e1s de acceso a otros Clubs y servicios seleccionados.",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Gives you access to all facilities at your home Club, plus access to selected other Clubs and facilities.",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Bietet dir Zugang zu allen Einrichtungen deines Heimatclubs sowie zu ausgew\u00e4hlten anderen Clubs und Anlagen.",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Geeft je toegang tot alle faciliteiten van je thuisclub, plus toegang tot geselecteerde andere Clubs en faciliteiten.",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Et dona acc\u00e9s a totes les instal\u00b7lacions del teu Club principal, a m\u00e9s d\u2019acc\u00e9s a altres Clubs i instal\u00b7lacions seleccionades.",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Vous donne acc\u00e8s \u00e0 toutes les installations de votre Club principal, ainsi qu\u2019\u00e0 une s\u00e9lection d\u2019autres Clubs et \u00e9quipements.",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Ti d\u00e0 accesso a tutte le strutture del tuo Club principale, oltre all\u2019accesso a una selezione di altri Club e servizi.",
+        "subtext": null
+       }
+      },
+      "code": null
+     }
+    ]
+   },
+   "rateCardOrdering": {},
+   "fixedFutureMembershipStartDate": null
+  },
+  {
+   "packageKey": "CLUB",
+   "prices": {
+    "FLEXIBLE": {
+     "individual": 14900,
+     "couple": null,
+     "family": null,
+     "joiningFee": 16000,
+     "promotions": [
+      {
+       "promotionId": 2846,
+       "name": "EXERP - Half Price Joining Fee (PROMO50)",
+       "endDate": "2026-12-01",
+       "inHiddenMenuInClub": false,
+       "promotionItems": [],
+       "textByLanguage": {
+        "es-es": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "en-gb": {
+         "name": "Half Price Joining Fee plus 3 Personal Training Sessions",
+         "rateCardBannerTitle": "Reduced joining fee on selected memberships, plus 3 personal training sessions included to help you get started.",
+         "rateCardBannerDescription": "when joining on a selected standard 12 month memberships. Joining fee includes 3 Personal Training sessions. A Personal Training  session lasts 45 minutes and typically retails at \u00a335 per session.",
+         "shortDescription": "Includes 3 Personal Training sessions",
+         "promotionalTermsAndConditionsTitle": "Important points about your Membership  ",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "Reduced joining fee on selected memberships, plus 3 personal training sessions included to help you get started.",
+         "bannerDescription": "when joining on a selected standard 12 month memberships. Joining fee includes 3 Personal Training sessions. A Personal Training  session lasts 45 minutes and typically retails at \u00a335 per session."
+        },
+        "de-de": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "nl-be": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "ca": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "fr-be": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "it-it": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        }
+       },
+       "termsAndConditionsItemsByLanguage": {
+        "en-gb": [
+         "The decision of the manager is final.",
+         "Under 18s must be accompanied by an adult.",
+         "Offer is not transferable between clubs.",
+         "Offer of half price joining fee is only applicable when joining on a 12 month standard packages.",
+         "Certain membership packages will be excluded from this offer.",
+         "Standard rules and membership regulations apply.",
+         "Offer is only available at selected David Lloyd Clubs.",
+         "This offer cannot be used in conjunction with any other offer.",
+         "Certain activities may incur additional fees.",
+         "You use the facilities at your own risk.",
+         "We recommend getting medical advice before doing any physical activity.",
+         "Facilities, fees, classes and membership contracts vary by club.",
+         "Management reserves the right to withdraw the offer at any time.",
+         "Personal Training sessions are non-refundable and can\u2019t be exchanged or swapped",
+         "Personal Training sessions must be booked and taken within 4 weeks of joining.",
+         "Personal Training sessions are subject to availability and will need to be taken at your home club"
+        ]
+       },
+       "promotionLastUpdated": "2026-09-03T19:17:01.608725"
+      }
+     ]
+    },
+    "STANDARD": {
+     "individual": 11400,
+     "couple": null,
+     "family": null,
+     "joiningFee": 15000,
+     "promotions": [
+      {
+       "promotionId": 2846,
+       "name": "EXERP - Half Price Joining Fee (PROMO50)",
+       "endDate": "2026-12-01",
+       "inHiddenMenuInClub": false,
+       "promotionItems": [],
+       "textByLanguage": {
+        "es-es": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "en-gb": {
+         "name": "Half Price Joining Fee plus 3 Personal Training Sessions",
+         "rateCardBannerTitle": "Reduced joining fee on selected memberships, plus 3 personal training sessions included to help you get started.",
+         "rateCardBannerDescription": "when joining on a selected standard 12 month memberships. Joining fee includes 3 Personal Training sessions. A Personal Training  session lasts 45 minutes and typically retails at \u00a335 per session.",
+         "shortDescription": "Includes 3 Personal Training sessions",
+         "promotionalTermsAndConditionsTitle": "Important points about your Membership  ",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "Reduced joining fee on selected memberships, plus 3 personal training sessions included to help you get started.",
+         "bannerDescription": "when joining on a selected standard 12 month memberships. Joining fee includes 3 Personal Training sessions. A Personal Training  session lasts 45 minutes and typically retails at \u00a335 per session."
+        },
+        "de-de": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "nl-be": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "ca": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "fr-be": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "it-it": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        }
+       },
+       "termsAndConditionsItemsByLanguage": {
+        "en-gb": [
+         "The decision of the manager is final.",
+         "Under 18s must be accompanied by an adult.",
+         "Offer is not transferable between clubs.",
+         "Offer of half price joining fee is only applicable when joining on a 12 month standard packages.",
+         "Certain membership packages will be excluded from this offer.",
+         "Standard rules and membership regulations apply.",
+         "Offer is only available at selected David Lloyd Clubs.",
+         "This offer cannot be used in conjunction with any other offer.",
+         "Certain activities may incur additional fees.",
+         "You use the facilities at your own risk.",
+         "We recommend getting medical advice before doing any physical activity.",
+         "Facilities, fees, classes and membership contracts vary by club.",
+         "Management reserves the right to withdraw the offer at any time.",
+         "Personal Training sessions are non-refundable and can\u2019t be exchanged or swapped",
+         "Personal Training sessions must be booked and taken within 4 weeks of joining.",
+         "Personal Training sessions are subject to availability and will need to be taken at your home club"
+        ]
+       },
+       "promotionLastUpdated": "2026-09-03T19:17:01.608725"
+      }
+     ]
+    },
+    "ANNUAL": {
+     "individual": 130000,
+     "couple": null,
+     "family": null,
+     "joiningFee": 15000,
+     "promotions": [
+      {
+       "promotionId": 2846,
+       "name": "EXERP - Half Price Joining Fee (PROMO50)",
+       "endDate": "2026-12-01",
+       "inHiddenMenuInClub": false,
+       "promotionItems": [],
+       "textByLanguage": {
+        "es-es": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "en-gb": {
+         "name": "Half Price Joining Fee plus 3 Personal Training Sessions",
+         "rateCardBannerTitle": "Reduced joining fee on selected memberships, plus 3 personal training sessions included to help you get started.",
+         "rateCardBannerDescription": "when joining on a selected standard 12 month memberships. Joining fee includes 3 Personal Training sessions. A Personal Training  session lasts 45 minutes and typically retails at \u00a335 per session.",
+         "shortDescription": "Includes 3 Personal Training sessions",
+         "promotionalTermsAndConditionsTitle": "Important points about your Membership  ",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "Reduced joining fee on selected memberships, plus 3 personal training sessions included to help you get started.",
+         "bannerDescription": "when joining on a selected standard 12 month memberships. Joining fee includes 3 Personal Training sessions. A Personal Training  session lasts 45 minutes and typically retails at \u00a335 per session."
+        },
+        "de-de": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "nl-be": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "ca": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "fr-be": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "it-it": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        }
+       },
+       "termsAndConditionsItemsByLanguage": {
+        "en-gb": [
+         "The decision of the manager is final.",
+         "Under 18s must be accompanied by an adult.",
+         "Offer is not transferable between clubs.",
+         "Offer of half price joining fee is only applicable when joining on a 12 month standard packages.",
+         "Certain membership packages will be excluded from this offer.",
+         "Standard rules and membership regulations apply.",
+         "Offer is only available at selected David Lloyd Clubs.",
+         "This offer cannot be used in conjunction with any other offer.",
+         "Certain activities may incur additional fees.",
+         "You use the facilities at your own risk.",
+         "We recommend getting medical advice before doing any physical activity.",
+         "Facilities, fees, classes and membership contracts vary by club.",
+         "Management reserves the right to withdraw the offer at any time.",
+         "Personal Training sessions are non-refundable and can\u2019t be exchanged or swapped",
+         "Personal Training sessions must be booked and taken within 4 weeks of joining.",
+         "Personal Training sessions are subject to availability and will need to be taken at your home club"
+        ]
+       },
+       "promotionLastUpdated": "2026-09-03T19:17:01.608725"
+      }
+     ]
+    }
+   },
+   "packageInformationGroupedByType": {
+    "BENEFIT": [
+     {
+      "packageInformationId": 14,
+      "iconKey": "dumbbell",
+      "orderingPriority": 20,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Gimnasio",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Gym",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Trainingsfl\u00e4che",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Gym",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Fitness",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Gimn\u00e0s",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Palestra",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 24,
+      "iconKey": "cardio",
+      "orderingPriority": 25,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Salas",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Studios",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Kurse",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Studio's",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Sales",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Studios",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Corsi di fitness",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 123,
+      "iconKey": "pool",
+      "orderingPriority": 40,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Piscinas",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Swimming Pools",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Pools/Schwimmbecken",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Zwembaden",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Piscines",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Piscine",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Piscine",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 177,
+      "iconKey": "mobile-phone",
+      "orderingPriority": 115,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "fr-fr": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "ca": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "On-Demand Content",
+        "subtext": null
+       }
+      },
+      "code": null
+     }
+    ],
+    "DRAWBACK": [
+     {
+      "packageInformationId": 26,
+      "iconKey": "cross",
+      "orderingPriority": 240,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Acceso restringido",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Restricted Access",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Begrenzter Zugang",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Beperkte toegang",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Acc\u00e9s restringit",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Acc\u00e8s limit\u00e9",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Accesso limitato",
+        "subtext": null
+       }
+      },
+      "code": null
+     }
+    ],
+    "DESCRIPTION": [
+     {
+      "packageInformationId": 119,
+      "iconKey": null,
+      "orderingPriority": null,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Te da acceso a nuestras instalaciones en horas de menor actividad del d\u00eda: 11h-16h entre semana y despu\u00e9s de las 14h los fines de semana.",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Gives you access to our facilities at off-peak times: 11am-4pm weekdays and after 2pm weekends.",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Erm\u00f6glicht Ihnen den Zugang zu unseren Einrichtungen zu Zeiten au\u00dferhalb der Sto\u00dfzeiten: 11-16 Uhr wochentags und nach 14 Uhr am Wochenende.",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Geeft u toegang tot onze faciliteiten tijdens de daluren overdag: 11.00-16.00 uur op weekdagen en na 14.00 uur in het weekend.",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Vous permet d'acc\u00e9der \u00e0 nos installations aux heures creuses de la journ\u00e9e : 11 h \u00e0 16 h en semaine et apr\u00e8s 14 h le week-end.",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Et d\u00f3na acc\u00e9s a les nostres instal\u00b7lacions en horari de baixa aflu\u00e8ncia: 11h a 16h els laborables i a partir de les 14h els caps de setmana.",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Consente l'accesso alle strutture al di fuori degli orari di punta: 11.00-16.00 durante la settimana e dopo le 14.00 nel weekend.",
+        "subtext": null
+       }
+      },
+      "code": null
+     }
+    ]
+   },
+   "rateCardOrdering": {},
+   "fixedFutureMembershipStartDate": null
+  },
+  {
+   "packageKey": "CLUB_PLATINUM",
+   "prices": {
+    "FLEXIBLE": {
+     "individual": 19400,
+     "couple": 17400,
+     "family": null,
+     "joiningFee": 16000,
+     "promotions": [
+      {
+       "promotionId": 2846,
+       "name": "EXERP - Half Price Joining Fee (PROMO50)",
+       "endDate": "2026-12-01",
+       "inHiddenMenuInClub": false,
+       "promotionItems": [],
+       "textByLanguage": {
+        "es-es": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "en-gb": {
+         "name": "Half Price Joining Fee plus 3 Personal Training Sessions",
+         "rateCardBannerTitle": "Reduced joining fee on selected memberships, plus 3 personal training sessions included to help you get started.",
+         "rateCardBannerDescription": "when joining on a selected standard 12 month memberships. Joining fee includes 3 Personal Training sessions. A Personal Training  session lasts 45 minutes and typically retails at \u00a335 per session.",
+         "shortDescription": "Includes 3 Personal Training sessions",
+         "promotionalTermsAndConditionsTitle": "Important points about your Membership  ",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "Reduced joining fee on selected memberships, plus 3 personal training sessions included to help you get started.",
+         "bannerDescription": "when joining on a selected standard 12 month memberships. Joining fee includes 3 Personal Training sessions. A Personal Training  session lasts 45 minutes and typically retails at \u00a335 per session."
+        },
+        "de-de": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "nl-be": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "ca": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "fr-be": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "it-it": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        }
+       },
+       "termsAndConditionsItemsByLanguage": {
+        "en-gb": [
+         "The decision of the manager is final.",
+         "Under 18s must be accompanied by an adult.",
+         "Offer is not transferable between clubs.",
+         "Offer of half price joining fee is only applicable when joining on a 12 month standard packages.",
+         "Certain membership packages will be excluded from this offer.",
+         "Standard rules and membership regulations apply.",
+         "Offer is only available at selected David Lloyd Clubs.",
+         "This offer cannot be used in conjunction with any other offer.",
+         "Certain activities may incur additional fees.",
+         "You use the facilities at your own risk.",
+         "We recommend getting medical advice before doing any physical activity.",
+         "Facilities, fees, classes and membership contracts vary by club.",
+         "Management reserves the right to withdraw the offer at any time.",
+         "Personal Training sessions are non-refundable and can\u2019t be exchanged or swapped",
+         "Personal Training sessions must be booked and taken within 4 weeks of joining.",
+         "Personal Training sessions are subject to availability and will need to be taken at your home club"
+        ]
+       },
+       "promotionLastUpdated": "2026-09-03T19:17:01.608725"
+      }
+     ]
+    },
+    "STANDARD": {
+     "individual": 15900,
+     "couple": 13900,
+     "family": null,
+     "joiningFee": 15000,
+     "promotions": [
+      {
+       "promotionId": 2846,
+       "name": "EXERP - Half Price Joining Fee (PROMO50)",
+       "endDate": "2026-12-01",
+       "inHiddenMenuInClub": false,
+       "promotionItems": [],
+       "textByLanguage": {
+        "es-es": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "en-gb": {
+         "name": "Half Price Joining Fee plus 3 Personal Training Sessions",
+         "rateCardBannerTitle": "Reduced joining fee on selected memberships, plus 3 personal training sessions included to help you get started.",
+         "rateCardBannerDescription": "when joining on a selected standard 12 month memberships. Joining fee includes 3 Personal Training sessions. A Personal Training  session lasts 45 minutes and typically retails at \u00a335 per session.",
+         "shortDescription": "Includes 3 Personal Training sessions",
+         "promotionalTermsAndConditionsTitle": "Important points about your Membership  ",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "Reduced joining fee on selected memberships, plus 3 personal training sessions included to help you get started.",
+         "bannerDescription": "when joining on a selected standard 12 month memberships. Joining fee includes 3 Personal Training sessions. A Personal Training  session lasts 45 minutes and typically retails at \u00a335 per session."
+        },
+        "de-de": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "nl-be": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "ca": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "fr-be": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "it-it": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        }
+       },
+       "termsAndConditionsItemsByLanguage": {
+        "en-gb": [
+         "The decision of the manager is final.",
+         "Under 18s must be accompanied by an adult.",
+         "Offer is not transferable between clubs.",
+         "Offer of half price joining fee is only applicable when joining on a 12 month standard packages.",
+         "Certain membership packages will be excluded from this offer.",
+         "Standard rules and membership regulations apply.",
+         "Offer is only available at selected David Lloyd Clubs.",
+         "This offer cannot be used in conjunction with any other offer.",
+         "Certain activities may incur additional fees.",
+         "You use the facilities at your own risk.",
+         "We recommend getting medical advice before doing any physical activity.",
+         "Facilities, fees, classes and membership contracts vary by club.",
+         "Management reserves the right to withdraw the offer at any time.",
+         "Personal Training sessions are non-refundable and can\u2019t be exchanged or swapped",
+         "Personal Training sessions must be booked and taken within 4 weeks of joining.",
+         "Personal Training sessions are subject to availability and will need to be taken at your home club"
+        ]
+       },
+       "promotionLastUpdated": "2026-09-03T19:17:01.608725"
+      }
+     ]
+    },
+    "ANNUAL": {
+     "individual": 181300,
+     "couple": 158500,
+     "family": null,
+     "joiningFee": 15000,
+     "promotions": [
+      {
+       "promotionId": 2846,
+       "name": "EXERP - Half Price Joining Fee (PROMO50)",
+       "endDate": "2026-12-01",
+       "inHiddenMenuInClub": false,
+       "promotionItems": [],
+       "textByLanguage": {
+        "es-es": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "en-gb": {
+         "name": "Half Price Joining Fee plus 3 Personal Training Sessions",
+         "rateCardBannerTitle": "Reduced joining fee on selected memberships, plus 3 personal training sessions included to help you get started.",
+         "rateCardBannerDescription": "when joining on a selected standard 12 month memberships. Joining fee includes 3 Personal Training sessions. A Personal Training  session lasts 45 minutes and typically retails at \u00a335 per session.",
+         "shortDescription": "Includes 3 Personal Training sessions",
+         "promotionalTermsAndConditionsTitle": "Important points about your Membership  ",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "Reduced joining fee on selected memberships, plus 3 personal training sessions included to help you get started.",
+         "bannerDescription": "when joining on a selected standard 12 month memberships. Joining fee includes 3 Personal Training sessions. A Personal Training  session lasts 45 minutes and typically retails at \u00a335 per session."
+        },
+        "de-de": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "nl-be": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "ca": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "fr-be": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "it-it": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        }
+       },
+       "termsAndConditionsItemsByLanguage": {
+        "en-gb": [
+         "The decision of the manager is final.",
+         "Under 18s must be accompanied by an adult.",
+         "Offer is not transferable between clubs.",
+         "Offer of half price joining fee is only applicable when joining on a 12 month standard packages.",
+         "Certain membership packages will be excluded from this offer.",
+         "Standard rules and membership regulations apply.",
+         "Offer is only available at selected David Lloyd Clubs.",
+         "This offer cannot be used in conjunction with any other offer.",
+         "Certain activities may incur additional fees.",
+         "You use the facilities at your own risk.",
+         "We recommend getting medical advice before doing any physical activity.",
+         "Facilities, fees, classes and membership contracts vary by club.",
+         "Management reserves the right to withdraw the offer at any time.",
+         "Personal Training sessions are non-refundable and can\u2019t be exchanged or swapped",
+         "Personal Training sessions must be booked and taken within 4 weeks of joining.",
+         "Personal Training sessions are subject to availability and will need to be taken at your home club"
+        ]
+       },
+       "promotionLastUpdated": "2026-09-03T19:17:01.608725"
+      }
+     ]
+    }
+   },
+   "packageInformationGroupedByType": {
+    "BENEFIT": [
+     {
+      "packageInformationId": 3,
+      "iconKey": "clock",
+      "orderingPriority": 570,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Sin restricciones horarias",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Unrestricted hours",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Unbegrenzte Stunden",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Onbeperkte uren.",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Sense restricci\u00f3 hor\u00e0ria",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Heures libres",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Orario illimitato",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 5,
+      "iconKey": "discount",
+      "orderingPriority": 150,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "10% de ahorro en clases para ni\u00f1os",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "10% saving on kids courses",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "10% Ersparnis bei Kinderkursen",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "10% besparen op lessen voor kinderen",
+        "subtext": null
+       },
+       "ca": {
+        "text": "10% d'estalvi en cursos per a nens",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "\u00c9conomisez 10% sur les cours pour enfants",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "10% di sconto sui corsi per bambini a pagamento",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 7,
+      "iconKey": "guest",
+      "orderingPriority": 120,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Una invitaci\u00f3n mensual",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Monthly guest pass",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Monatlicher G\u00e4stepass",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Maandelijkse gastenpas",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Pass invit\u00e9 mensuel",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Una invitaci\u00f3 mensual",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Pass mensile per gli ospiti",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 9,
+      "iconKey": "shower",
+      "orderingPriority": 130,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Toalla ",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Fresh towel",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Handtuch Service",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Gratis handdoek",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Tovallola",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Serviette propre",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Asciugamani",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 10,
+      "iconKey": "stopwatch",
+      "orderingPriority": 90,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Blaze",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Blaze",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Blaze",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Blaze",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Blaze",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Blaze",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Blaze",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 14,
+      "iconKey": "dumbbell",
+      "orderingPriority": 20,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Gimnasio",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Gym",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Trainingsfl\u00e4che",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Gym",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Fitness",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Gimn\u00e0s",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Palestra",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 24,
+      "iconKey": "cardio",
+      "orderingPriority": 25,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Salas",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Studios",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Kurse",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Studio's",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Sales",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Studios",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Corsi di fitness",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 28,
+      "iconKey": "discount",
+      "orderingPriority": 140,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "10% de descuento en el Clubroom",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "10% Clubroom discount",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "10% Rabatt im Clubroom",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "10% korting voor de clubroom.",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "10% de r\u00e9duction pour le Clubroom",
+        "subtext": null
+       },
+       "ca": {
+        "text": "10% descompte al restaurant",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Sconto del 10% sul bar e ristorante",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 29,
+      "iconKey": "racquet",
+      "orderingPriority": 80,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Tenis y P\u00e1del",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Racquets",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Tennis",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Racketsporten",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Raquettes",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Raquetes",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Tennis e Paddle",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 38,
+      "iconKey": "spa",
+      "orderingPriority": 100,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Spa",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Spa",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Spa",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Spa",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Spa",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Spa",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Spa",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 123,
+      "iconKey": "pool",
+      "orderingPriority": 40,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Piscinas",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Swimming Pools",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Pools/Schwimmbecken",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Zwembaden",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Piscines",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Piscine",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Piscine",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 124,
+      "iconKey": "flower",
+      "orderingPriority": 545,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Accede al Spa en tu club local",
+        "subtext": null
+       },
+       "fr-fr": {
+        "text": "Acc\u00e8s au spa de votre club",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Access to Spa Retreat at home Club",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Zugang zum Spa Bereich bei Ihrem Home Club",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Toegang tot de spa van jouw club.",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Acc\u00e8s au spa de votre club",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Acc\u00e9s al spa del teu Club",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Accesso alla Spa nel tuo Club",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 182,
+      "iconKey": "club-tier",
+      "orderingPriority": 510,
+      "displayTextByLanguage": {
+       "en-gb": {
+        "text": "Multiple club access & Spa Retreat Access",
+        "subtext": null
+       }
+      },
+      "code": "MULTIPLE_CLUB_ACCESS_AND_SPA_RETREATS"
+     },
+     {
+      "packageInformationId": 177,
+      "iconKey": "mobile-phone",
+      "orderingPriority": 115,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "fr-fr": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "ca": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "On-Demand Content",
+        "subtext": null
+       }
+      },
+      "code": null
+     }
+    ],
+    "DESCRIPTION": [
+     {
+      "packageInformationId": 117,
+      "iconKey": null,
+      "orderingPriority": null,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Te da acceso a todas las instalaciones de tu Club principal, adem\u00e1s de acceso a otros Clubs y servicios seleccionados.",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Gives you access to all facilities at your home Club, plus access to selected other Clubs and facilities.",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Bietet dir Zugang zu allen Einrichtungen deines Heimatclubs sowie zu ausgew\u00e4hlten anderen Clubs und Anlagen.",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Geeft je toegang tot alle faciliteiten van je thuisclub, plus toegang tot geselecteerde andere Clubs en faciliteiten.",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Et dona acc\u00e9s a totes les instal\u00b7lacions del teu Club principal, a m\u00e9s d\u2019acc\u00e9s a altres Clubs i instal\u00b7lacions seleccionades.",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Vous donne acc\u00e8s \u00e0 toutes les installations de votre Club principal, ainsi qu\u2019\u00e0 une s\u00e9lection d\u2019autres Clubs et \u00e9quipements.",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Ti d\u00e0 accesso a tutte le strutture del tuo Club principale, oltre all\u2019accesso a una selezione di altri Club e servizi.",
+        "subtext": null
+       }
+      },
+      "code": null
+     }
+    ]
+   },
+   "rateCardOrdering": {},
+   "fixedFutureMembershipStartDate": null
+  },
+  {
+   "packageKey": "CLUB_PLUS",
+   "prices": {
+    "FLEXIBLE": {
+     "individual": 17900,
+     "couple": 16400,
+     "family": null,
+     "joiningFee": 16000,
+     "promotions": [
+      {
+       "promotionId": 2846,
+       "name": "EXERP - Half Price Joining Fee (PROMO50)",
+       "endDate": "2026-12-01",
+       "inHiddenMenuInClub": false,
+       "promotionItems": [],
+       "textByLanguage": {
+        "es-es": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "en-gb": {
+         "name": "Half Price Joining Fee plus 3 Personal Training Sessions",
+         "rateCardBannerTitle": "Reduced joining fee on selected memberships, plus 3 personal training sessions included to help you get started.",
+         "rateCardBannerDescription": "when joining on a selected standard 12 month memberships. Joining fee includes 3 Personal Training sessions. A Personal Training  session lasts 45 minutes and typically retails at \u00a335 per session.",
+         "shortDescription": "Includes 3 Personal Training sessions",
+         "promotionalTermsAndConditionsTitle": "Important points about your Membership  ",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "Reduced joining fee on selected memberships, plus 3 personal training sessions included to help you get started.",
+         "bannerDescription": "when joining on a selected standard 12 month memberships. Joining fee includes 3 Personal Training sessions. A Personal Training  session lasts 45 minutes and typically retails at \u00a335 per session."
+        },
+        "de-de": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "nl-be": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "ca": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "fr-be": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "it-it": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        }
+       },
+       "termsAndConditionsItemsByLanguage": {
+        "en-gb": [
+         "The decision of the manager is final.",
+         "Under 18s must be accompanied by an adult.",
+         "Offer is not transferable between clubs.",
+         "Offer of half price joining fee is only applicable when joining on a 12 month standard packages.",
+         "Certain membership packages will be excluded from this offer.",
+         "Standard rules and membership regulations apply.",
+         "Offer is only available at selected David Lloyd Clubs.",
+         "This offer cannot be used in conjunction with any other offer.",
+         "Certain activities may incur additional fees.",
+         "You use the facilities at your own risk.",
+         "We recommend getting medical advice before doing any physical activity.",
+         "Facilities, fees, classes and membership contracts vary by club.",
+         "Management reserves the right to withdraw the offer at any time.",
+         "Personal Training sessions are non-refundable and can\u2019t be exchanged or swapped",
+         "Personal Training sessions must be booked and taken within 4 weeks of joining.",
+         "Personal Training sessions are subject to availability and will need to be taken at your home club"
+        ]
+       },
+       "promotionLastUpdated": "2026-09-03T19:17:01.608725"
+      }
+     ]
+    },
+    "STANDARD": {
+     "individual": 14400,
+     "couple": 12900,
+     "family": null,
+     "joiningFee": 15000,
+     "promotions": [
+      {
+       "promotionId": 2846,
+       "name": "EXERP - Half Price Joining Fee (PROMO50)",
+       "endDate": "2026-12-01",
+       "inHiddenMenuInClub": false,
+       "promotionItems": [],
+       "textByLanguage": {
+        "es-es": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "en-gb": {
+         "name": "Half Price Joining Fee plus 3 Personal Training Sessions",
+         "rateCardBannerTitle": "Reduced joining fee on selected memberships, plus 3 personal training sessions included to help you get started.",
+         "rateCardBannerDescription": "when joining on a selected standard 12 month memberships. Joining fee includes 3 Personal Training sessions. A Personal Training  session lasts 45 minutes and typically retails at \u00a335 per session.",
+         "shortDescription": "Includes 3 Personal Training sessions",
+         "promotionalTermsAndConditionsTitle": "Important points about your Membership  ",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "Reduced joining fee on selected memberships, plus 3 personal training sessions included to help you get started.",
+         "bannerDescription": "when joining on a selected standard 12 month memberships. Joining fee includes 3 Personal Training sessions. A Personal Training  session lasts 45 minutes and typically retails at \u00a335 per session."
+        },
+        "de-de": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "nl-be": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "ca": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "fr-be": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "it-it": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        }
+       },
+       "termsAndConditionsItemsByLanguage": {
+        "en-gb": [
+         "The decision of the manager is final.",
+         "Under 18s must be accompanied by an adult.",
+         "Offer is not transferable between clubs.",
+         "Offer of half price joining fee is only applicable when joining on a 12 month standard packages.",
+         "Certain membership packages will be excluded from this offer.",
+         "Standard rules and membership regulations apply.",
+         "Offer is only available at selected David Lloyd Clubs.",
+         "This offer cannot be used in conjunction with any other offer.",
+         "Certain activities may incur additional fees.",
+         "You use the facilities at your own risk.",
+         "We recommend getting medical advice before doing any physical activity.",
+         "Facilities, fees, classes and membership contracts vary by club.",
+         "Management reserves the right to withdraw the offer at any time.",
+         "Personal Training sessions are non-refundable and can\u2019t be exchanged or swapped",
+         "Personal Training sessions must be booked and taken within 4 weeks of joining.",
+         "Personal Training sessions are subject to availability and will need to be taken at your home club"
+        ]
+       },
+       "promotionLastUpdated": "2026-09-03T19:17:01.608725"
+      }
+     ]
+    },
+    "ANNUAL": {
+     "individual": 164200,
+     "couple": 147100,
+     "family": null,
+     "joiningFee": 15000,
+     "promotions": [
+      {
+       "promotionId": 2846,
+       "name": "EXERP - Half Price Joining Fee (PROMO50)",
+       "endDate": "2026-12-01",
+       "inHiddenMenuInClub": false,
+       "promotionItems": [],
+       "textByLanguage": {
+        "es-es": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "en-gb": {
+         "name": "Half Price Joining Fee plus 3 Personal Training Sessions",
+         "rateCardBannerTitle": "Reduced joining fee on selected memberships, plus 3 personal training sessions included to help you get started.",
+         "rateCardBannerDescription": "when joining on a selected standard 12 month memberships. Joining fee includes 3 Personal Training sessions. A Personal Training  session lasts 45 minutes and typically retails at \u00a335 per session.",
+         "shortDescription": "Includes 3 Personal Training sessions",
+         "promotionalTermsAndConditionsTitle": "Important points about your Membership  ",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "Reduced joining fee on selected memberships, plus 3 personal training sessions included to help you get started.",
+         "bannerDescription": "when joining on a selected standard 12 month memberships. Joining fee includes 3 Personal Training sessions. A Personal Training  session lasts 45 minutes and typically retails at \u00a335 per session."
+        },
+        "de-de": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "nl-be": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "ca": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "fr-be": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "it-it": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        }
+       },
+       "termsAndConditionsItemsByLanguage": {
+        "en-gb": [
+         "The decision of the manager is final.",
+         "Under 18s must be accompanied by an adult.",
+         "Offer is not transferable between clubs.",
+         "Offer of half price joining fee is only applicable when joining on a 12 month standard packages.",
+         "Certain membership packages will be excluded from this offer.",
+         "Standard rules and membership regulations apply.",
+         "Offer is only available at selected David Lloyd Clubs.",
+         "This offer cannot be used in conjunction with any other offer.",
+         "Certain activities may incur additional fees.",
+         "You use the facilities at your own risk.",
+         "We recommend getting medical advice before doing any physical activity.",
+         "Facilities, fees, classes and membership contracts vary by club.",
+         "Management reserves the right to withdraw the offer at any time.",
+         "Personal Training sessions are non-refundable and can\u2019t be exchanged or swapped",
+         "Personal Training sessions must be booked and taken within 4 weeks of joining.",
+         "Personal Training sessions are subject to availability and will need to be taken at your home club"
+        ]
+       },
+       "promotionLastUpdated": "2026-09-03T19:17:01.608725"
+      }
+     ]
+    }
+   },
+   "packageInformationGroupedByType": {
+    "BENEFIT": [
+     {
+      "packageInformationId": 3,
+      "iconKey": "clock",
+      "orderingPriority": 570,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Sin restricciones horarias",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Unrestricted hours",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Unbegrenzte Stunden",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Onbeperkte uren.",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Sense restricci\u00f3 hor\u00e0ria",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Heures libres",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Orario illimitato",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 14,
+      "iconKey": "dumbbell",
+      "orderingPriority": 20,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Gimnasio",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Gym",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Trainingsfl\u00e4che",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Gym",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Fitness",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Gimn\u00e0s",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Palestra",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 24,
+      "iconKey": "cardio",
+      "orderingPriority": 25,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Salas",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Studios",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Kurse",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Studio's",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Sales",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Studios",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Corsi di fitness",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 123,
+      "iconKey": "pool",
+      "orderingPriority": 40,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Piscinas",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Swimming Pools",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Pools/Schwimmbecken",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Zwembaden",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Piscines",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Piscine",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Piscine",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 177,
+      "iconKey": "mobile-phone",
+      "orderingPriority": 115,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "fr-fr": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "ca": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "On-Demand Content",
+        "subtext": null
+       }
+      },
+      "code": null
+     }
+    ],
+    "DESCRIPTION": [
+     {
+      "packageInformationId": 118,
+      "iconKey": null,
+      "orderingPriority": null,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Disfruta del acceso a nuestras instalaciones en cualquier momento, pero te perder\u00e1s del acceso a las raquetas, clases de Blaze e instalaciones de nuestro spa exclusivo.",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Enjoy access to our facilities at any time, but you\u2019ll miss out on access to racquets, exclusive spa facilities and Blaze classes.",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Sie haben jederzeit Zugang zum Club, allerdings enth\u00e4lt Ihre Mitgliedschaft kein Tennis, so wie keinen Zugang zum traumhaften Spa-Bereich und den beliebten BLAZE Kursen.",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Geniet op elk moment van toegang tot onze faciliteiten, maar je mist de toegang tot rackets, exclusieve spafaciliteiten en Blaze-lessen.",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Profitez de l'acc\u00e8s \u00e0 nos installations \u00e0 tout moment, mais vous ne pourrez pas acc\u00e9der aux raquettes, aux installations exclusives du spa et aux cours Blaze.",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Gaudeix d'acc\u00e9s a les notres instal\u00b7lacions en qualsevol horari, per\u00f2 no podr\u00e0s fer servir les pistes, l'exclusiu spa i les classes de Blaze.",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Puoi accedere a tutte le strutture in qualunque momento, esclusi i campi da tennis e padel, la spa e i corsi di Blaze",
+        "subtext": null
+       }
+      },
+      "code": null
+     }
+    ]
+   },
+   "rateCardOrdering": {},
+   "fixedFutureMembershipStartDate": null
+  },
+  {
+   "packageKey": "YOUNG_ADULT",
+   "prices": {
+    "FLEXIBLE": {
+     "individual": 14900,
+     "couple": null,
+     "family": null,
+     "joiningFee": 14000,
+     "promotions": [
+      {
+       "promotionId": 2846,
+       "name": "EXERP - Half Price Joining Fee (PROMO50)",
+       "endDate": "2026-12-01",
+       "inHiddenMenuInClub": false,
+       "promotionItems": [],
+       "textByLanguage": {
+        "es-es": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "en-gb": {
+         "name": "Half Price Joining Fee plus 3 Personal Training Sessions",
+         "rateCardBannerTitle": "Reduced joining fee on selected memberships, plus 3 personal training sessions included to help you get started.",
+         "rateCardBannerDescription": "when joining on a selected standard 12 month memberships. Joining fee includes 3 Personal Training sessions. A Personal Training  session lasts 45 minutes and typically retails at \u00a335 per session.",
+         "shortDescription": "Includes 3 Personal Training sessions",
+         "promotionalTermsAndConditionsTitle": "Important points about your Membership  ",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "Reduced joining fee on selected memberships, plus 3 personal training sessions included to help you get started.",
+         "bannerDescription": "when joining on a selected standard 12 month memberships. Joining fee includes 3 Personal Training sessions. A Personal Training  session lasts 45 minutes and typically retails at \u00a335 per session."
+        },
+        "de-de": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "nl-be": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "ca": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "fr-be": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "it-it": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        }
+       },
+       "termsAndConditionsItemsByLanguage": {
+        "en-gb": [
+         "The decision of the manager is final.",
+         "Under 18s must be accompanied by an adult.",
+         "Offer is not transferable between clubs.",
+         "Offer of half price joining fee is only applicable when joining on a 12 month standard packages.",
+         "Certain membership packages will be excluded from this offer.",
+         "Standard rules and membership regulations apply.",
+         "Offer is only available at selected David Lloyd Clubs.",
+         "This offer cannot be used in conjunction with any other offer.",
+         "Certain activities may incur additional fees.",
+         "You use the facilities at your own risk.",
+         "We recommend getting medical advice before doing any physical activity.",
+         "Facilities, fees, classes and membership contracts vary by club.",
+         "Management reserves the right to withdraw the offer at any time.",
+         "Personal Training sessions are non-refundable and can\u2019t be exchanged or swapped",
+         "Personal Training sessions must be booked and taken within 4 weeks of joining.",
+         "Personal Training sessions are subject to availability and will need to be taken at your home club"
+        ]
+       },
+       "promotionLastUpdated": "2026-09-03T19:17:01.608725"
+      }
+     ]
+    },
+    "STANDARD": {
+     "individual": 11400,
+     "couple": null,
+     "family": null,
+     "joiningFee": 13000,
+     "promotions": [
+      {
+       "promotionId": 2846,
+       "name": "EXERP - Half Price Joining Fee (PROMO50)",
+       "endDate": "2026-12-01",
+       "inHiddenMenuInClub": false,
+       "promotionItems": [],
+       "textByLanguage": {
+        "es-es": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "en-gb": {
+         "name": "Half Price Joining Fee plus 3 Personal Training Sessions",
+         "rateCardBannerTitle": "Reduced joining fee on selected memberships, plus 3 personal training sessions included to help you get started.",
+         "rateCardBannerDescription": "when joining on a selected standard 12 month memberships. Joining fee includes 3 Personal Training sessions. A Personal Training  session lasts 45 minutes and typically retails at \u00a335 per session.",
+         "shortDescription": "Includes 3 Personal Training sessions",
+         "promotionalTermsAndConditionsTitle": "Important points about your Membership  ",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "Reduced joining fee on selected memberships, plus 3 personal training sessions included to help you get started.",
+         "bannerDescription": "when joining on a selected standard 12 month memberships. Joining fee includes 3 Personal Training sessions. A Personal Training  session lasts 45 minutes and typically retails at \u00a335 per session."
+        },
+        "de-de": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "nl-be": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "ca": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "fr-be": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "it-it": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        }
+       },
+       "termsAndConditionsItemsByLanguage": {
+        "en-gb": [
+         "The decision of the manager is final.",
+         "Under 18s must be accompanied by an adult.",
+         "Offer is not transferable between clubs.",
+         "Offer of half price joining fee is only applicable when joining on a 12 month standard packages.",
+         "Certain membership packages will be excluded from this offer.",
+         "Standard rules and membership regulations apply.",
+         "Offer is only available at selected David Lloyd Clubs.",
+         "This offer cannot be used in conjunction with any other offer.",
+         "Certain activities may incur additional fees.",
+         "You use the facilities at your own risk.",
+         "We recommend getting medical advice before doing any physical activity.",
+         "Facilities, fees, classes and membership contracts vary by club.",
+         "Management reserves the right to withdraw the offer at any time.",
+         "Personal Training sessions are non-refundable and can\u2019t be exchanged or swapped",
+         "Personal Training sessions must be booked and taken within 4 weeks of joining.",
+         "Personal Training sessions are subject to availability and will need to be taken at your home club"
+        ]
+       },
+       "promotionLastUpdated": "2026-09-03T19:17:01.608725"
+      }
+     ]
+    },
+    "ANNUAL": {
+     "individual": 130000,
+     "couple": null,
+     "family": null,
+     "joiningFee": 13000,
+     "promotions": [
+      {
+       "promotionId": 2846,
+       "name": "EXERP - Half Price Joining Fee (PROMO50)",
+       "endDate": "2026-12-01",
+       "inHiddenMenuInClub": false,
+       "promotionItems": [],
+       "textByLanguage": {
+        "es-es": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "en-gb": {
+         "name": "Half Price Joining Fee plus 3 Personal Training Sessions",
+         "rateCardBannerTitle": "Reduced joining fee on selected memberships, plus 3 personal training sessions included to help you get started.",
+         "rateCardBannerDescription": "when joining on a selected standard 12 month memberships. Joining fee includes 3 Personal Training sessions. A Personal Training  session lasts 45 minutes and typically retails at \u00a335 per session.",
+         "shortDescription": "Includes 3 Personal Training sessions",
+         "promotionalTermsAndConditionsTitle": "Important points about your Membership  ",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "Reduced joining fee on selected memberships, plus 3 personal training sessions included to help you get started.",
+         "bannerDescription": "when joining on a selected standard 12 month memberships. Joining fee includes 3 Personal Training sessions. A Personal Training  session lasts 45 minutes and typically retails at \u00a335 per session."
+        },
+        "de-de": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "nl-be": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "ca": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "fr-be": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "it-it": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        }
+       },
+       "termsAndConditionsItemsByLanguage": {
+        "en-gb": [
+         "The decision of the manager is final.",
+         "Under 18s must be accompanied by an adult.",
+         "Offer is not transferable between clubs.",
+         "Offer of half price joining fee is only applicable when joining on a 12 month standard packages.",
+         "Certain membership packages will be excluded from this offer.",
+         "Standard rules and membership regulations apply.",
+         "Offer is only available at selected David Lloyd Clubs.",
+         "This offer cannot be used in conjunction with any other offer.",
+         "Certain activities may incur additional fees.",
+         "You use the facilities at your own risk.",
+         "We recommend getting medical advice before doing any physical activity.",
+         "Facilities, fees, classes and membership contracts vary by club.",
+         "Management reserves the right to withdraw the offer at any time.",
+         "Personal Training sessions are non-refundable and can\u2019t be exchanged or swapped",
+         "Personal Training sessions must be booked and taken within 4 weeks of joining.",
+         "Personal Training sessions are subject to availability and will need to be taken at your home club"
+        ]
+       },
+       "promotionLastUpdated": "2026-09-03T19:17:01.608725"
+      }
+     ]
+    }
+   },
+   "packageInformationGroupedByType": {
+    "BENEFIT": [
+     {
+      "packageInformationId": 3,
+      "iconKey": "clock",
+      "orderingPriority": 570,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Sin restricciones horarias",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Unrestricted hours",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Unbegrenzte Stunden",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Onbeperkte uren.",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Sense restricci\u00f3 hor\u00e0ria",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Heures libres",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Orario illimitato",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 14,
+      "iconKey": "dumbbell",
+      "orderingPriority": 20,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Gimnasio",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Gym",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Trainingsfl\u00e4che",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Gym",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Fitness",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Gimn\u00e0s",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Palestra",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 24,
+      "iconKey": "cardio",
+      "orderingPriority": 25,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Salas",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Studios",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Kurse",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Studio's",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Sales",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Studios",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Corsi di fitness",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 29,
+      "iconKey": "racquet",
+      "orderingPriority": 80,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Tenis y P\u00e1del",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Racquets",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Tennis",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Racketsporten",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Raquettes",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Raquetes",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Tennis e Paddle",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 123,
+      "iconKey": "pool",
+      "orderingPriority": 40,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Piscinas",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Swimming Pools",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Pools/Schwimmbecken",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Zwembaden",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Piscines",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Piscine",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Piscine",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 177,
+      "iconKey": "mobile-phone",
+      "orderingPriority": 115,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "fr-fr": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "ca": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "On-Demand Content",
+        "subtext": null
+       }
+      },
+      "code": null
+     }
+    ],
+    "DESCRIPTION": [
+     {
+      "packageInformationId": 184,
+      "iconKey": null,
+      "orderingPriority": null,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Disfruta del acceso a nuestras instalaciones en cualquier momento, pero perder\u00e1s el acceso a otros Clubs y a ciertos beneficios exclusivos de nuestro paquete Platinum.",
+        "subtext": null
+       },
+       "fr-fr": {
+        "text": "Profitez d\u2019un acc\u00e8s \u00e0 nos installations \u00e0 tout moment, mais vous n\u2019aurez pas acc\u00e8s aux autres Clubs ni \u00e0 certains avantages r\u00e9serv\u00e9s \u00e0 notre formule Platinum.",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Enjoy access to our facilities at any time, but you\u2019ll miss out on access to other Clubs and certain benefits exclusive to our Platinum package.",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Genie\u00dfen Sie jederzeit Zugang zu unseren Einrichtungen, aber Ihnen entgeht der Zugang zu anderen Clubs und bestimmten Vorteilen, die exklusiv im Platinum-Paket enthalten sind.",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Geniet op elk moment van toegang tot onze faciliteiten, maar je mist toegang tot andere Clubs en bepaalde voordelen die exclusief zijn voor ons Platinum-pakket.",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Gaudeix de l'acc\u00e9s a les nostres instal\u00b7lacions en qualsevol moment, per\u00f2 et perdr\u00e0s l'acc\u00e9s a altres Clubs i a certs avantatges exclusius del nostre paquet Platinum.",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Profitez d\u2019un acc\u00e8s \u00e0 nos installations \u00e0 tout moment, mais vous n\u2019aurez pas acc\u00e8s aux autres Clubs ni \u00e0 certains avantages r\u00e9serv\u00e9s \u00e0 notre formule Platinum.",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Goditi l\u2019accesso alle nostre strutture in qualsiasi momento, ma perderai l\u2019accesso ad altri Club e ad alcuni vantaggi esclusivi del nostro pacchetto Platinum.",
+        "subtext": null
+       }
+      },
+      "code": null
+     }
+    ]
+   },
+   "rateCardOrdering": {},
+   "fixedFutureMembershipStartDate": null
+  },
+  {
+   "packageKey": "TEAM_CORPORATE",
+   "prices": {},
+   "packageInformationGroupedByType": {
+    "BENEFIT": [
+     {
+      "packageInformationId": 3,
+      "iconKey": "clock",
+      "orderingPriority": 570,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Sin restricciones horarias",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Unrestricted hours",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Unbegrenzte Stunden",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Onbeperkte uren.",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Sense restricci\u00f3 hor\u00e0ria",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Heures libres",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Orario illimitato",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 14,
+      "iconKey": "dumbbell",
+      "orderingPriority": 20,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Gimnasio",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Gym",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Trainingsfl\u00e4che",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Gym",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Fitness",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Gimn\u00e0s",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Palestra",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 24,
+      "iconKey": "cardio",
+      "orderingPriority": 25,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Salas",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Studios",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Kurse",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Studio's",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Sales",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Studios",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Corsi di fitness",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 123,
+      "iconKey": "pool",
+      "orderingPriority": 40,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Piscinas",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Swimming Pools",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Pools/Schwimmbecken",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Zwembaden",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Piscines",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Piscine",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Piscine",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 177,
+      "iconKey": "mobile-phone",
+      "orderingPriority": 115,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "fr-fr": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "ca": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "On-Demand Content",
+        "subtext": null
+       }
+      },
+      "code": null
+     }
+    ],
+    "DESCRIPTION": [
+     {
+      "packageInformationId": 121,
+      "iconKey": null,
+      "orderingPriority": null,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Disfruta del acceso a nuestras instalaciones en cualquier momento, pero perderas el acceso a raquetas, clases de Blaze e instalaciones exclusivas de nuestro spa. Solo para membres\u00edas individuales.",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Enjoy access to our facilities at any time, but you\u2019ll miss out on access to racquets, exclusive spa facilities and Blaze classes. Individual memberships only.",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Sie haben jederzeit Zugang zu unseren Anlagen, allerdings ohne Tennis, Zugang zu exklusiven Spas und Blaze-Kursen. Nur Einzelmitgliedschaften.",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Geniet van toegang tot onze faciliteiten op elk gewenst moment, maar u mist toegang tot tennis, exclusieve spafaciliteiten en Blaze-lessen. Alleen individuele lidmaatschappen.",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Gaudeix d'acc\u00e9s a les nostres instal\u00b7lacions en qualsevol horari, no et perdis l'acc\u00e9s a les pistes, l'exclusiu spa i les classes de Blaze. Nom\u00e9s en quotes individuals.",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Profitez de l'acc\u00e8s \u00e0 nos installations \u00e0 tout moment, mais vous ne pourrez pas acc\u00e9der aux raquettes, aux installations exclusives du spa et aux cours Blaze. Adh\u00e9sion individuelle uniquement.",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Puoi accedere a tutte le strutture in qualunque momento, esclusi i campi da tennis e padel, la spa e i corsi di Blaze. Solo abbonamento individuale",
+        "subtext": null
+       }
+      },
+      "code": null
+     }
+    ]
+   },
+   "rateCardOrdering": {},
+   "fixedFutureMembershipStartDate": null
+  },
+  {
+   "packageKey": "CORPORATE_PLUS2",
+   "prices": {},
+   "packageInformationGroupedByType": {
+    "BENEFIT": [
+     {
+      "packageInformationId": 3,
+      "iconKey": "clock",
+      "orderingPriority": 570,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Sin restricciones horarias",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Unrestricted hours",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Unbegrenzte Stunden",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Onbeperkte uren.",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Sense restricci\u00f3 hor\u00e0ria",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Heures libres",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Orario illimitato",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 14,
+      "iconKey": "dumbbell",
+      "orderingPriority": 20,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Gimnasio",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Gym",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Trainingsfl\u00e4che",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Gym",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Fitness",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Gimn\u00e0s",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Palestra",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 24,
+      "iconKey": "cardio",
+      "orderingPriority": 25,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Salas",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Studios",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Kurse",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Studio's",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Sales",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Studios",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Corsi di fitness",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 123,
+      "iconKey": "pool",
+      "orderingPriority": 40,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Piscinas",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Swimming Pools",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Pools/Schwimmbecken",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Zwembaden",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Piscines",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Piscine",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Piscine",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 177,
+      "iconKey": "mobile-phone",
+      "orderingPriority": 115,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "fr-fr": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "ca": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "On-Demand Content",
+        "subtext": null
+       }
+      },
+      "code": null
+     }
+    ],
+    "DESCRIPTION": [
+     {
+      "packageInformationId": 118,
+      "iconKey": null,
+      "orderingPriority": null,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Disfruta del acceso a nuestras instalaciones en cualquier momento, pero te perder\u00e1s del acceso a las raquetas, clases de Blaze e instalaciones de nuestro spa exclusivo.",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Enjoy access to our facilities at any time, but you\u2019ll miss out on access to racquets, exclusive spa facilities and Blaze classes.",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Sie haben jederzeit Zugang zum Club, allerdings enth\u00e4lt Ihre Mitgliedschaft kein Tennis, so wie keinen Zugang zum traumhaften Spa-Bereich und den beliebten BLAZE Kursen.",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Geniet op elk moment van toegang tot onze faciliteiten, maar je mist de toegang tot rackets, exclusieve spafaciliteiten en Blaze-lessen.",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Profitez de l'acc\u00e8s \u00e0 nos installations \u00e0 tout moment, mais vous ne pourrez pas acc\u00e9der aux raquettes, aux installations exclusives du spa et aux cours Blaze.",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Gaudeix d'acc\u00e9s a les notres instal\u00b7lacions en qualsevol horari, per\u00f2 no podr\u00e0s fer servir les pistes, l'exclusiu spa i les classes de Blaze.",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Puoi accedere a tutte le strutture in qualunque momento, esclusi i campi da tennis e padel, la spa e i corsi di Blaze",
+        "subtext": null
+       }
+      },
+      "code": null
+     }
+    ]
+   },
+   "rateCardOrdering": {},
+   "fixedFutureMembershipStartDate": null
+  },
+  {
+   "packageKey": "JUNIOR",
+   "prices": {
+    "FLEXIBLE": {
+     "individual": 11900,
+     "couple": null,
+     "family": null,
+     "joiningFee": 14000,
+     "promotions": [
+      {
+       "promotionId": 2846,
+       "name": "EXERP - Half Price Joining Fee (PROMO50)",
+       "endDate": "2026-12-01",
+       "inHiddenMenuInClub": false,
+       "promotionItems": [],
+       "textByLanguage": {
+        "es-es": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "en-gb": {
+         "name": "Half Price Joining Fee plus 3 Personal Training Sessions",
+         "rateCardBannerTitle": "Reduced joining fee on selected memberships, plus 3 personal training sessions included to help you get started.",
+         "rateCardBannerDescription": "when joining on a selected standard 12 month memberships. Joining fee includes 3 Personal Training sessions. A Personal Training  session lasts 45 minutes and typically retails at \u00a335 per session.",
+         "shortDescription": "Includes 3 Personal Training sessions",
+         "promotionalTermsAndConditionsTitle": "Important points about your Membership  ",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "Reduced joining fee on selected memberships, plus 3 personal training sessions included to help you get started.",
+         "bannerDescription": "when joining on a selected standard 12 month memberships. Joining fee includes 3 Personal Training sessions. A Personal Training  session lasts 45 minutes and typically retails at \u00a335 per session."
+        },
+        "de-de": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "nl-be": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "ca": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "fr-be": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "it-it": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        }
+       },
+       "termsAndConditionsItemsByLanguage": {
+        "en-gb": [
+         "The decision of the manager is final.",
+         "Under 18s must be accompanied by an adult.",
+         "Offer is not transferable between clubs.",
+         "Offer of half price joining fee is only applicable when joining on a 12 month standard packages.",
+         "Certain membership packages will be excluded from this offer.",
+         "Standard rules and membership regulations apply.",
+         "Offer is only available at selected David Lloyd Clubs.",
+         "This offer cannot be used in conjunction with any other offer.",
+         "Certain activities may incur additional fees.",
+         "You use the facilities at your own risk.",
+         "We recommend getting medical advice before doing any physical activity.",
+         "Facilities, fees, classes and membership contracts vary by club.",
+         "Management reserves the right to withdraw the offer at any time.",
+         "Personal Training sessions are non-refundable and can\u2019t be exchanged or swapped",
+         "Personal Training sessions must be booked and taken within 4 weeks of joining.",
+         "Personal Training sessions are subject to availability and will need to be taken at your home club"
+        ]
+       },
+       "promotionLastUpdated": "2026-09-03T19:17:01.608725"
+      }
+     ]
+    },
+    "STANDARD": {
+     "individual": 8400,
+     "couple": null,
+     "family": null,
+     "joiningFee": 13000,
+     "promotions": [
+      {
+       "promotionId": 2846,
+       "name": "EXERP - Half Price Joining Fee (PROMO50)",
+       "endDate": "2026-12-01",
+       "inHiddenMenuInClub": false,
+       "promotionItems": [],
+       "textByLanguage": {
+        "es-es": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "en-gb": {
+         "name": "Half Price Joining Fee plus 3 Personal Training Sessions",
+         "rateCardBannerTitle": "Reduced joining fee on selected memberships, plus 3 personal training sessions included to help you get started.",
+         "rateCardBannerDescription": "when joining on a selected standard 12 month memberships. Joining fee includes 3 Personal Training sessions. A Personal Training  session lasts 45 minutes and typically retails at \u00a335 per session.",
+         "shortDescription": "Includes 3 Personal Training sessions",
+         "promotionalTermsAndConditionsTitle": "Important points about your Membership  ",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "Reduced joining fee on selected memberships, plus 3 personal training sessions included to help you get started.",
+         "bannerDescription": "when joining on a selected standard 12 month memberships. Joining fee includes 3 Personal Training sessions. A Personal Training  session lasts 45 minutes and typically retails at \u00a335 per session."
+        },
+        "de-de": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "nl-be": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "ca": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "fr-be": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        },
+        "it-it": {
+         "name": "",
+         "rateCardBannerTitle": "",
+         "rateCardBannerDescription": "",
+         "shortDescription": "",
+         "promotionalTermsAndConditionsTitle": "",
+         "introBannerTitle": "",
+         "introBannerSubtitle": "",
+         "introBannerLineOne": "",
+         "introBannerLineTwo": "",
+         "introBannerLineThree": "",
+         "position": "MIDDLE",
+         "bannerTitle": "",
+         "bannerDescription": ""
+        }
+       },
+       "termsAndConditionsItemsByLanguage": {
+        "en-gb": [
+         "The decision of the manager is final.",
+         "Under 18s must be accompanied by an adult.",
+         "Offer is not transferable between clubs.",
+         "Offer of half price joining fee is only applicable when joining on a 12 month standard packages.",
+         "Certain membership packages will be excluded from this offer.",
+         "Standard rules and membership regulations apply.",
+         "Offer is only available at selected David Lloyd Clubs.",
+         "This offer cannot be used in conjunction with any other offer.",
+         "Certain activities may incur additional fees.",
+         "You use the facilities at your own risk.",
+         "We recommend getting medical advice before doing any physical activity.",
+         "Facilities, fees, classes and membership contracts vary by club.",
+         "Management reserves the right to withdraw the offer at any time.",
+         "Personal Training sessions are non-refundable and can\u2019t be exchanged or swapped",
+         "Personal Training sessions must be booked and taken within 4 weeks of joining.",
+         "Personal Training sessions are subject to availability and will need to be taken at your home club"
+        ]
+       },
+       "promotionLastUpdated": "2026-09-03T19:17:01.608725"
+      }
+     ]
+    }
+   },
+   "packageInformationGroupedByType": {
+    "BENEFIT": [
+     {
+      "packageInformationId": 3,
+      "iconKey": "clock",
+      "orderingPriority": 570,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Sin restricciones horarias",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Unrestricted hours",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Unbegrenzte Stunden",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Onbeperkte uren.",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Sense restricci\u00f3 hor\u00e0ria",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Heures libres",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Orario illimitato",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 14,
+      "iconKey": "dumbbell",
+      "orderingPriority": 20,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Gimnasio",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Gym",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Trainingsfl\u00e4che",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Gym",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Fitness",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Gimn\u00e0s",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Palestra",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 24,
+      "iconKey": "cardio",
+      "orderingPriority": 25,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Salas",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Studios",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Kurse",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Studio's",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Sales",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Studios",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Corsi di fitness",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 29,
+      "iconKey": "racquet",
+      "orderingPriority": 80,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Tenis y P\u00e1del",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Racquets",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Tennis",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Racketsporten",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Raquettes",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Raquetes",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Tennis e Paddle",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 123,
+      "iconKey": "pool",
+      "orderingPriority": 40,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Piscinas",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Swimming Pools",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Pools/Schwimmbecken",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Zwembaden",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Piscines",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Piscine",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Piscine",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 177,
+      "iconKey": "mobile-phone",
+      "orderingPriority": 115,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "fr-fr": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "ca": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "On-Demand Content",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "On-Demand Content",
+        "subtext": null
+       }
+      },
+      "code": null
+     }
+    ]
+   },
+   "rateCardOrdering": {},
+   "fixedFutureMembershipStartDate": null
+  }
+ ],
+ "addOns": [
+  {
+   "addOnKey": "INFANT",
+   "prices": {
+    "FLEXIBLE": {
+     "price": 1400,
+     "joiningFee": 0
+    },
+    "STANDARD": {
+     "price": 400,
+     "joiningFee": 0
+    },
+    "ANNUAL": {
+     "price": 4600,
+     "joiningFee": 0
+    }
+   },
+   "packageInformationGroupedByType": {
+    "BENEFIT": [
+     {
+      "packageInformationId": 2,
+      "iconKey": "pool",
+      "orderingPriority": 30,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Piscinas",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Swimming Pools",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Pools",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Zwembaden",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Piscines",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Piscines",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Piscina coperta e scoperta",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 44,
+      "iconKey": "plus",
+      "orderingPriority": 280,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Zona familiar",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Dedicated family area",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Besonderer Familienbereich",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Speciaal familiegedeelte",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Espaces d\u00e9di\u00e9es aux familles",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Zona familiar",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Area famiglia dedicata",
+        "subtext": null
+       }
+      },
+      "code": null
+     }
+    ]
+   },
+   "pricesByParentPackageKey": {}
+  },
+  {
+   "addOnKey": "CHILD",
+   "prices": {
+    "FLEXIBLE": {
+     "price": 7700,
+     "joiningFee": 1000
+    },
+    "STANDARD": {
+     "price": 4200,
+     "joiningFee": 1000
+    },
+    "ANNUAL": {
+     "price": 47900,
+     "joiningFee": 1000
+    }
+   },
+   "packageInformationGroupedByType": {
+    "BENEFIT": [
+     {
+      "packageInformationId": 2,
+      "iconKey": "pool",
+      "orderingPriority": 30,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Piscinas",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Swimming Pools",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Pools",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Zwembaden",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Piscines",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Piscines",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Piscina coperta e scoperta",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 43,
+      "iconKey": "plus",
+      "orderingPriority": 430,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Fitness Teens",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Fitness Into Teens",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Fitness f\u00fcr Teens",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Fitness voor tieners",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Fitness per a adolescents",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Fit for teens",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Fitness per Teens",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 44,
+      "iconKey": "plus",
+      "orderingPriority": 280,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Zona familiar",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Dedicated family area",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Besonderer Familienbereich",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Speciaal familiegedeelte",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Espaces d\u00e9di\u00e9es aux familles",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Zona familiar",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Area famiglia dedicata",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 45,
+      "iconKey": "plus",
+      "orderingPriority": 290,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Club Play 3-5 a\u00f1os",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Club Play 3-5 years",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Club Play 3 - 4 jaar",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Club Spiel 3-5 Jahre",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Club Play de 3 \u00e0 4 ans",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Club Play 3-5 anys",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Club Play 3-5 anni",
+        "subtext": null
+       }
+      },
+      "code": null
+     },
+     {
+      "packageInformationId": 47,
+      "iconKey": "plus",
+      "orderingPriority": 310,
+      "displayTextByLanguage": {
+       "es-es": {
+        "text": "Club Play 6-10 a\u00f1os",
+        "subtext": null
+       },
+       "en-gb": {
+        "text": "Club Active 6-10 years",
+        "subtext": null
+       },
+       "nl-be": {
+        "text": "Club Active 5 - 11 jaar",
+        "subtext": null
+       },
+       "de-de": {
+        "text": "Club Active 6-10 Jahre",
+        "subtext": null
+       },
+       "fr-be": {
+        "text": "Club Actif de 5 \u00e0 11 ans",
+        "subtext": null
+       },
+       "ca": {
+        "text": "Club Play 6-10 anys",
+        "subtext": null
+       },
+       "it-it": {
+        "text": "Club Play 6-10 anni",
+        "subtext": null
+       }
+      },
+      "code": null
+     }
+    ]
+   },
+   "pricesByParentPackageKey": {}
+  },
+  {
+   "addOnKey": "NANNY",
+   "prices": {
+    "FLEXIBLE": {
+     "price": 7400,
+     "joiningFee": 16000
+    },
+    "STANDARD": {
+     "price": 3900,
+     "joiningFee": 15000
+    }
+   },
+   "packageInformationGroupedByType": {},
+   "pricesByParentPackageKey": {}
+  }
+ ]
+}
