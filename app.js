@@ -1,39 +1,21 @@
 /* The Price Book — independent, unofficial David Lloyd price lookup.
- * Fully client-side and self-updating: clubs come from /clubs, and the set of
- * plans / membership types / durations is read from the API's own enum (by
- * asking for a bogus value and parsing the rejection). Nothing is hardcoded, so
- * new clubs and new plans appear on their own.                                */
+ * Self-updating & backend-free: the club list and every club's plans, prices
+ * and plan benefits come live from David Lloyd's own public endpoints, so new
+ * clubs and new plans appear on their own.                                    */
 "use strict";
 
 const API = "https://mobile-app-back.davidlloyd.co.uk";
-const CONCURRENCY = 8;
 const DAY = 864e5;
 
-/* Snapshot used only if the live enum discovery ever fails, so the page still
- * works. The live values always win when available.                          */
-const FALLBACK = {
-  packages: ["CLUB","CLUB_PLUS","CLUB_PLATINUM","CLUB_PLATINUM_HOME","DIAMOND_PLUS",
-    "PLATINUM_INFINITY","PLATINUM_SPA","EVERGREEN","FAMILY_PLUS","FAMILY_PLATINUM",
-    "YOUNG_ADULT","YOUNG_ADULT_PLUS","YOUNG_ADULT_PLATINUM","JUNIOR","DIGITAL_MEMBERSHIP"],
-  types: ["INDIVIDUAL","COUPLE","FAMILY"],
-  durations: ["STANDARD","FLEXIBLE","ANNUAL"],
-};
+const TYPES = ["INDIVIDUAL","COUPLE","FAMILY"];                 // column order
 const TYPE_LABEL = { INDIVIDUAL:"Individual", COUPLE:"Couple", FAMILY:"Family" };
-const TYPE_ORDER = ["INDIVIDUAL","COUPLE","FAMILY"];
-function orderedTypes(){
-  let ts = ENUMS.types.filter(t=>TYPE_LABEL[t]);
-  if(!ts.length) ts = FALLBACK.types.slice();
-  return ts.sort((a,b)=>{ const ia=TYPE_ORDER.indexOf(a), ib=TYPE_ORDER.indexOf(b);
-    return (ia<0?99:ia)-(ib<0?99:ib); });
-}
+const TYPE_FIELD = { INDIVIDUAL:"individual", COUPLE:"couple", FAMILY:"family" };
+const DUR_ORDER  = ["STANDARD","FLEXIBLE","ANNUAL"];
 const DUR_LABEL  = { STANDARD:"Monthly rolling", FLEXIBLE:"Flexible", ANNUAL:"Paid annually" };
 
 const qs = s => document.querySelector(s);
-const todayISO = () => new Date().toISOString().slice(0,10);
-
-/* ---- tiny cache helpers ---- */
-function cacheGet(k){ try{ const v=JSON.parse(localStorage.getItem(k)); if(v&&v.t&&Date.now()-v.t<v.ttl) return v.d; }catch{} return null; }
-function cacheSet(k,d,ttl){ try{ localStorage.setItem(k,JSON.stringify({t:Date.now(),ttl,d})); }catch{} }
+const cacheGet = k => { try{ const v=JSON.parse(localStorage.getItem(k)); if(v&&Date.now()-v.t<v.ttl) return v.d; }catch{} return null; };
+const cacheSet = (k,d,ttl) => { try{ localStorage.setItem(k,JSON.stringify({t:Date.now(),ttl,d})); }catch{} };
 
 /* ---- data ---- */
 async function getClubs(){
@@ -43,78 +25,27 @@ async function getClubs(){
   cacheSet("pb_clubs", clubs, DAY);
   return clubs;
 }
-
-function parseEnum(text){
-  const m = /accepted for Enum class:\s*\[([^\]]+)\]/.exec(text||"");
-  return m ? m[1].split(",").map(s=>s.trim()).filter(Boolean) : null;
-}
-async function bogus(field){
-  const body = { siteId:91, membershipType:"INDIVIDUAL", packageKey:"CLUB_PLATINUM",
-    membershipDuration:"STANDARD", startDate:todayISO(), promotionIds:[], associatedMemberTypes:[], journeyType:"NORMAL" };
-  body[field] = "____";
-  try{
-    const r = await fetch(`${API}/membership/price-breakdown`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
-    const j = await r.json();
-    return parseEnum(j?.errors?.[0]?.error);
-  }catch{ return null; }
-}
-async function getEnums(){
-  const c = cacheGet("pb_enums"); if(c) return c;
-  const [packages,types,durations] = await Promise.all([bogus("packageKey"),bogus("membershipType"),bogus("membershipDuration")]);
-  const e = {
-    packages: packages||FALLBACK.packages,
-    types:    (types||FALLBACK.types),
-    durations:(durations||FALLBACK.durations),
-  };
-  cacheSet("pb_enums", e, DAY);
-  return e;
+async function getPackages(siteId){
+  const ck = `pb_pkg_${siteId}`; const c = cacheGet(ck); if(c) return c;
+  const r = await fetch(`${API}/clubs/${siteId}/packages/online`);
+  if(!r.ok) throw new Error(`HTTP ${r.status}`);
+  const j = await r.json();
+  cacheSet(ck, j, DAY/2);
+  return j;
 }
 
-function journeyFor(pkg){
-  if(/^TEAM_CORPORATE|^CORPORATE/.test(pkg)) return "CORPORATE";
-  if(/^YOUNG_ADULT/.test(pkg)) return "YOUNG_ADULT";
-  if(/^FAMILY/.test(pkg)) return "FAMILY";
-  return "NORMAL";
-}
-async function price(siteId,pkg,type,dur,signal){
-  const body = { siteId, membershipType:type, packageKey:pkg, membershipDuration:dur,
-    startDate:todayISO(), promotionIds:[], associatedMemberTypes:[], journeyType:journeyFor(pkg) };
-  const ctrl = new AbortController();
-  const to = setTimeout(()=>ctrl.abort(), 15000);          // never let a request hang forever
-  const onAbort = ()=>ctrl.abort();
-  if(signal){ if(signal.aborted) ctrl.abort(); else signal.addEventListener("abort",onAbort,{once:true}); }
-  try{
-    const r = await fetch(`${API}/membership/price-breakdown`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body),signal:ctrl.signal});
-    if(!r.ok) return null;
-    const j = await r.json(); const p = j?.prices;
-    if(!p) return null;
-    // Monthly plans expose monthlyFeeInPennies; annual/fixed-term plans expose
-    // fixedTermPriceInPennies (with monthlyFeeInPennies null). Keep either.
-    const monthly = p.monthlyFeeInPennies!=null ? p.monthlyFeeInPennies : null;
-    const fixed   = p.fixedTermPriceInPennies!=null ? p.fixedTermPriceInPennies : null;
-    if(monthly==null && fixed==null) return null;
-    return { monthly, fixed, joining:p.joiningFeeInPennies||0, total:p.totalPriceInPennies||0 };
-  }catch{ return null; }
-  finally{ clearTimeout(to); if(signal) signal.removeEventListener("abort",onAbort); }
-}
-
-/* run tasks with bounded concurrency; onProgress(done,total) */
-async function pool(items, worker, onProgress){
-  let i=0, done=0; const total=items.length;
-  async function run(){ while(i<total){ const idx=i++; try{ await worker(items[idx],idx); }catch{} onProgress&&onProgress(++done,total); } }
-  await Promise.all(Array.from({length:Math.min(CONCURRENCY,total)},run));
-}
-
-/* ---- format ---- */
+/* ---- helpers ---- */
 const fmt = (pennies,cur) => new Intl.NumberFormat("en-GB",{style:"currency",currency:cur,minimumFractionDigits:0,maximumFractionDigits:pennies%100?2:0}).format(pennies/100);
-function prettyPlan(key){
-  return key.toLowerCase().split("_").map(w=>{
-    if(w==="dl") return "DL"; return w.charAt(0).toUpperCase()+w.slice(1);
-  }).join(" ").replace(/\bPlatinum Home\b/,"Platinum (Home)");
-}
+const prettyPlan = key => key.toLowerCase().split("_")
+  .map(w=> w==="dl"?"DL" : w.charAt(0).toUpperCase()+w.slice(1)).join(" ")
+  .replace(/\bPlatinum Home\b/,"Platinum (Home)").replace(/2$/,"");
+const benefitsOf = pkg => ((pkg.packageInformationGroupedByType||{}).BENEFIT||[])
+  .slice().sort((a,b)=>(a.orderingPriority??999)-(b.orderingPriority??999))
+  .map(b=>((b.displayTextByLanguage||{})["en-gb"]||{}).text).filter(Boolean);
+const planRank = p => p.startsWith("CLUB")?0 : p.startsWith("JUNIOR")?1 : p.startsWith("YOUNG_ADULT")?2 : p.startsWith("TEAM")?3 : 4;
 
 /* ---- state ---- */
-let CLUBS=[], ENUMS=null, CURRENT=null, CURDUR="STANDARD", token=0;
+let CLUBS=[], CURRENT=null, DATA=null, CURDUR="STANDARD", token=0;
 
 /* ---- search / dropdown ---- */
 const q=qs("#q"), dd=qs("#results-list");
@@ -126,9 +57,7 @@ function renderDropdown(list,term){
   dd.innerHTML = list.slice(0,60).map((c,idx)=>{
     const name = rx? c.clubName.replace(rx,"<mark>$1</mark>") : c.clubName;
     return `<li role="option" data-idx="${idx}" aria-selected="${idx===active}">
-      <span class="cn">${name}</span>
-      <span class="cl">${c.country||""}</span>
-      <span class="cc">${c.currency||""}</span></li>`;
+      <span class="cn">${name}</span><span class="cl">${c.country||""}</span><span class="cc">${c.currency||""}</span></li>`;
   }).join("");
   dd.hidden=false; q.setAttribute("aria-expanded","true");
 }
@@ -146,7 +75,7 @@ q.addEventListener("keydown",e=>{
   if(dd.hidden) return;
   if(e.key==="ArrowDown"){ e.preventDefault(); active=Math.min(active+1,Math.min(shown.length,60)-1); }
   else if(e.key==="ArrowUp"){ e.preventDefault(); active=Math.max(active-1,0); }
-  else if(e.key==="Enter"){ e.preventDefault(); if(active>=0&&shown[active]) selectClub(shown[active]); else if(shown[0]) selectClub(shown[0]); return; }
+  else if(e.key==="Enter"){ e.preventDefault(); if(shown[active>=0?active:0]) selectClub(shown[active>=0?active:0]); return; }
   else if(e.key==="Escape"){ closeDropdown(); q.blur(); return; }
   else return;
   [...dd.children].forEach((li,i)=>li.setAttribute("aria-selected", i===active));
@@ -155,108 +84,92 @@ q.addEventListener("keydown",e=>{
 dd.addEventListener("mousedown",e=>{ const li=e.target.closest("li[data-idx]"); if(li) selectClub(shown[+li.dataset.idx]); });
 document.addEventListener("click",e=>{ if(!e.target.closest(".combo")) closeDropdown(); });
 
-/* ---- select + price a club ---- */
+/* ---- select a club ---- */
 async function selectClub(club){
-  CURRENT=club; token++; const my=token;
+  CURRENT=club; const my=++token;
   q.value=club.clubName; closeDropdown(); q.blur();
   const panel=qs("#panel"); panel.hidden=false;
   qs("#clubname").textContent=club.clubName;
   qs("#clubsub").innerHTML=`<span class="pin">◆</span> ${club.country||"—"} <span class="sep">/</span> site #${club.siteId} <span class="sep">/</span> prices in ${club.currency}`;
-  buildDurations();
+  qs("#pricetable").hidden=true; qs("#empty").hidden=true; qs("#foot-note").hidden=true; qs("#addons").hidden=true;
+  qs("#durations").innerHTML="";
+  const status=qs("#status"); status.hidden=false;
+  status.innerHTML=`<span class="spin"></span><span>Pulling live prices…</span>`;
   panel.scrollIntoView({behavior:"smooth",block:"start"});
-  await loadPrices(my);
+  try{
+    const data = await getPackages(club.siteId);
+    if(my!==token) return;
+    DATA = data;
+    const durs = DUR_ORDER.filter(d => (data.packages||[]).some(p=>p.prices&&p.prices[d]));
+    if(!durs.includes(CURDUR)) CURDUR = durs[0] || "STANDARD";
+    buildDurations(durs);
+    renderTable();
+  }catch(e){
+    if(my!==token) return;
+    status.hidden=true; qs("#pricetable").hidden=true;
+    const empty=qs("#empty"); empty.hidden=false; empty.textContent="Couldn't load prices for this club — try again shortly.";
+  }
 }
-function buildDurations(){
-  const wrap=qs("#durations"); const durs=ENUMS.durations.filter(d=>DUR_LABEL[d]).length?ENUMS.durations:FALLBACK.durations;
-  if(!durs.includes(CURDUR)) CURDUR=durs[0];
-  wrap.innerHTML=durs.map(d=>`<button role="tab" data-dur="${d}" aria-selected="${d===CURDUR}">${DUR_LABEL[d]||prettyPlan(d)}</button>`).join("");
-  wrap.querySelectorAll("button").forEach(b=>b.onclick=()=>{ if(b.dataset.dur===CURDUR) return; CURDUR=b.dataset.dur;
+function buildDurations(durs){
+  const wrap=qs("#durations");
+  wrap.innerHTML=durs.map(d=>`<button role="tab" data-dur="${d}" aria-selected="${d===CURDUR}">${DUR_LABEL[d]||d}</button>`).join("");
+  wrap.querySelectorAll("button").forEach(b=>b.onclick=()=>{
+    if(b.dataset.dur===CURDUR) return; CURDUR=b.dataset.dur;
     wrap.querySelectorAll("button").forEach(x=>x.setAttribute("aria-selected",x.dataset.dur===CURDUR));
-    token++; loadPrices(token); });
+    renderTable();
+  });
 }
 
-async function loadPrices(my){
-  const club=CURRENT, cur=club.currency, dur=CURDUR;
-  const table=qs("#pricetable"), tbody=qs("#tbody"), status=qs("#status"), empty=qs("#empty"), foot=qs("#foot-note");
-  empty.hidden=true; foot.hidden=true;
-  const ckey=`pb_px_${club.siteId}_${dur}`;
-  const cached=cacheGet(ckey);
-  if(cached){ if(my!==token) return; renderTable(cached,cur); return; }
-
-  table.hidden=true; tbody.innerHTML="";
-  status.hidden=false; status.innerHTML=`<span class="spin"></span><span>Pulling live prices…</span><span class="bar"><i></i></span>`;
-  const bar=status.querySelector(".bar i");
-
-  const types=orderedTypes();
-  const pkgs=ENUMS.packages;
-  const ctrl=new AbortController();
-  const data={}; // pkg -> {type -> price}
-  const primary = p => journeyFor(p)==="FAMILY" ? "FAMILY" : "INDIVIDUAL";
-
-  // Phase 1 — probe each plan once (at its natural membership type) to discover
-  // which plans this club actually offers. Keeps the request count/404s down.
-  await pool(pkgs, async (p)=>{
-    if(my!==token){ ctrl.abort(); return; }
-    const t=primary(p);
-    const res=await price(club.siteId,p,t,dur,ctrl.signal);
-    if(res){ (data[p]=data[p]||{})[t]=res; }
-  }, (done,total)=>{ if(my===token && bar) bar.style.width=Math.round(done/total*45)+"%"; });
-  if(my!==token) return;
-
-  // Phase 2 — for the plans that exist, fill in the remaining membership types.
-  const offered=Object.keys(data);
-  const jobs2=[]; for(const p of offered) for(const t of types) if(!data[p][t]) jobs2.push([p,t]);
-  await pool(jobs2, async ([p,t])=>{
-    if(my!==token){ ctrl.abort(); return; }
-    const res=await price(club.siteId,p,t,dur,ctrl.signal);
-    if(res){ (data[p]=data[p]||{})[t]=res; }
-  }, (done,total)=>{ if(my===token && bar) bar.style.width=(45+Math.round(done/(total||1)*55))+"%"; });
-  if(my!==token) return;
-
-  if(offered.length) cacheSet(ckey,data,DAY/2);
-  renderTable(data,cur);
-}
-
-function renderTable(data,cur){
-  const table=qs("#pricetable"), thead=qs("#thead-row"), tbody=qs("#tbody"), status=qs("#status"), empty=qs("#empty"), foot=qs("#foot-note");
+/* ---- render ---- */
+function renderTable(){
+  const cur=CURRENT.currency, dur=CURDUR, unit = dur==="ANNUAL" ? "/yr" : "/mo";
+  const status=qs("#status"), table=qs("#pricetable"), thead=qs("#thead-row"), tbody=qs("#tbody"),
+        empty=qs("#empty"), foot=qs("#foot-note"), addons=qs("#addons");
   status.hidden=true;
-  const types=orderedTypes();
-  const offered=Object.keys(data);
-  if(!offered.length){ table.hidden=true; empty.hidden=false; foot.hidden=true; return; }
 
-  // Group order: Club* → Junior* → Young Adult* → Team* → rest; then cheapest first.
-  const amountOf=r=> r ? (r.monthly!=null ? r.monthly : r.fixed) : Infinity;
-  const unitOf=r=> r && r.monthly!=null ? "/mo" : "/yr";
-  const minAmt=p=>Math.min(...types.map(t=>amountOf(data[p][t])));
-  const rank=p=> p.startsWith("CLUB")?0 : p.startsWith("JUNIOR")?1 : p.startsWith("YOUNG_ADULT")?2 : p.startsWith("TEAM")?3 : 4;
-  offered.sort((a,b)=> (rank(a)-rank(b)) || (minAmt(a)-minAmt(b)) || a.localeCompare(b));
-  const cheapest=offered.reduce((m,p)=>minAmt(p)<minAmt(m)?p:m,offered[0]);
+  const priceAt = (p,t) => { const d=p.prices&&p.prices[dur]; const v=d&&d[TYPE_FIELD[t]]; return (v==null)?null:v; };
+  const pkgs = (DATA.packages||[]).filter(p => TYPES.some(t=>priceAt(p,t)!=null));
+  if(!pkgs.length){ table.hidden=true; empty.hidden=false; empty.textContent="Nothing on offer for this club at this duration."; foot.hidden=true; addons.hidden=true; return; }
 
-  thead.innerHTML=`<th>Plan</th>`+types.map(t=>`<th>${TYPE_LABEL[t]}</th>`).join("");
-  tbody.innerHTML=offered.map(p=>{
-    const cells=types.map(t=>{
-      const r=data[p][t];
-      if(!r) return `<td class="cell na">—</td>`;
-      const amt=amountOf(r), tag=(p===cheapest && amt===minAmt(p)) ? `<div class="best-tag">Lowest</div>`:"";
-      return `<td class="cell"><div class="mo">${fmt(amt,cur)}<span class="per">${unitOf(r)}</span></div>`+
-             `<div class="join">${r.joining?`+ ${fmt(r.joining,cur)} joining`:`no joining fee`}</div>${tag}</td>`;
+  const minAmt = p => Math.min(...TYPES.map(t=>priceAt(p,t) ?? Infinity));
+  pkgs.sort((a,b)=> (planRank(a.packageKey)-planRank(b.packageKey)) || (minAmt(a)-minAmt(b)) || a.packageKey.localeCompare(b.packageKey));
+  const cheapest = pkgs.reduce((m,p)=>minAmt(p)<minAmt(m)?p:m,pkgs[0]);
+
+  thead.innerHTML=`<th>Plan</th>`+TYPES.map(t=>`<th>${TYPE_LABEL[t]}</th>`).join("");
+  tbody.innerHTML=pkgs.map(p=>{
+    const jf = p.prices[dur].joiningFee||0;
+    const bens = benefitsOf(p);
+    const benHtml = bens.length ? `<div class="benefits">${bens.map(b=>`<span class="ben">${b}</span>`).join("")}</div>` : "";
+    const cells=TYPES.map(t=>{
+      const v=priceAt(p,t);
+      if(v==null) return `<td class="cell na">—</td>`;
+      const tag = (p===cheapest && v===minAmt(p)) ? `<div class="best-tag">Lowest</div>`:"";
+      return `<td class="cell"><div class="mo">${fmt(v,cur)}<span class="per">${unit}</span></div>`+
+             `<div class="join">${jf?`+ ${fmt(jf,cur)} joining`:`no joining fee`}</div>${tag}</td>`;
     }).join("");
-    return `<tr class="${p===cheapest?"best":""}"><td class="plan"><div class="pn">${prettyPlan(p)}</div><div class="pk">${p}</div></td>${cells}</tr>`;
+    return `<tr class="${p===cheapest?"best":""}"><td class="plan"><div class="pn">${prettyPlan(p.packageKey)}</div>`+
+           `<div class="pk">${p.packageKey}</div>${benHtml}</td>${cells}</tr>`;
   }).join("");
   table.hidden=false; empty.hidden=true;
+
+  // add-ons (optional extras) for the current duration
+  const ao=(DATA.addOns||[]).map(a=>{ const d=a.prices&&a.prices[dur]; if(!d||d.price==null) return null;
+    return `${prettyPlan(a.addOnKey)} ${fmt(d.price,cur)}${unit}`; }).filter(Boolean);
+  addons.hidden = !ao.length;
+  if(ao.length) addons.innerHTML = `<span class="ao-k">Add-ons</span> ${ao.join(" · ")}`;
+
   foot.hidden=false;
-  foot.textContent=`Standard rates before any promotion · ${offered.length} plan${offered.length>1?"s":""} on offer · pulled live ${new Date().toLocaleString("en-GB",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"})}. Joining fees are one-off; monthly fees recur.`;
+  foot.textContent=`Standard rates before any promotion · ${pkgs.length} plan${pkgs.length>1?"s":""} · pulled live ${new Date().toLocaleString("en-GB",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"})}. ${dur==="ANNUAL"?"Prices are the annual total.":"Monthly fees recur; joining fees are one-off."}`;
 }
 
 /* ---- boot ---- */
 (async function(){
   try{
-    ENUMS=await getEnums();
     CLUBS=await getClubs();
     qs("#clubcount").textContent=`${CLUBS.length}`;
     const spec=qs("#spec-clubs"); if(spec) spec.textContent=`${CLUBS.length} clubs`;
     if(document.activeElement===q) renderDropdown(filterClubs(q.value),q.value.trim());
-  }catch(e){
-    qs("#q").placeholder="Couldn't reach the pricing service — try again later";
+  }catch{
+    q.placeholder="Couldn't reach the pricing service — try again later";
   }
 })();

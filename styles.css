@@ -114,6 +114,9 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--disp);
 .plan{position:relative;text-align:left!important}
 .plan .pn{font-family:var(--disp);font-weight:700;font-size:1.06rem;line-height:1.12}
 .plan .pk{font-family:var(--mono);font-size:.62rem;letter-spacing:.05em;color:var(--muted);margin-top:4px}
+.benefits{display:flex;flex-wrap:wrap;gap:5px;margin-top:9px;max-width:340px}
+.benefits .ben{font-family:var(--mono);font-size:.6rem;letter-spacing:.02em;color:var(--muted);
+  border:1px solid var(--line-soft);padding:2px 6px;white-space:nowrap}
 .cell .mo{font-family:var(--mono);font-size:1.14rem;font-weight:700;color:var(--ink);letter-spacing:-.02em}
 .cell .mo .per{font-size:.64rem;font-weight:400;color:var(--muted);letter-spacing:0}
 .cell .join{font-family:var(--mono);font-size:.7rem;color:var(--muted);margin-top:4px}
@@ -122,7 +125,10 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--disp);
   background:var(--accent);color:var(--accent-ink);padding:2px 6px;margin-top:6px;font-weight:700}
 
 .empty{margin-top:22px;font-family:var(--mono);font-size:.82rem;color:var(--muted)}
-.foot-note{margin-top:18px;font-family:var(--mono);font-size:.7rem;line-height:1.6;color:var(--muted)}
+.addons{margin-top:16px;padding-top:14px;border-top:1px solid var(--line-soft);
+  font-family:var(--mono);font-size:.72rem;color:var(--muted)}
+.addons .ao-k{color:var(--ink);font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-right:8px}
+.foot-note{margin-top:16px;font-family:var(--mono);font-size:.7rem;line-height:1.6;color:var(--muted)}
 
 /* footer */
 .sitefoot{padding:16px clamp(16px,3vw,28px);background:var(--ink)}
