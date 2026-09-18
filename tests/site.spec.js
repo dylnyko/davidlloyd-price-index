@@ -96,16 +96,17 @@ test("renders the price table 1:1 with the fixture", async ({ page }) => {
   await expect(page.locator("#thead-row th").filter({ hasText: "Family" })).toHaveCount(0);
 
   // most-popular plan with correct per-person prices + joining fee
-  const plat = page.locator("#tbody tr", { has: page.locator(".pk", { hasText: "CLUB_PLATINUM" }) });
-  await expect(plat.locator(".pn")).toContainText("Club Platinum");
+  const plat = page.locator("#tbody tr", { has: page.locator(".pn", { hasText: "Club Platinum" }) });
   await expect(plat.locator(".pop")).toHaveText("Most popular");
   await expect(plat.locator("td.cell").nth(0)).toContainText("£159");
   await expect(plat.locator("td.cell").nth(0)).toContainText("/mo");
   await expect(plat.locator("td.cell").nth(1)).toContainText("£139");
   await expect(plat).toContainText("+ £150 joining");
+  // the raw plan key is no longer exposed on the frontend
+  await expect(page.locator("#tbody .pk")).toHaveCount(0);
 
   // a plan with no couple rate shows an em dash, not a fabricated price
-  const club = page.locator("#tbody tr", { has: page.locator(".pk", { hasText: /^CLUB$/ }) });
+  const club = page.locator("#tbody tr", { has: page.locator(".pn", { hasText: /^Club$/ }) });
   await expect(club.locator("td.cell").nth(0)).toContainText("£114");
   await expect(club.locator("td").nth(2)).toHaveClass(/na/);
   await expect(club.locator("td").nth(2)).toContainText("—");
@@ -293,6 +294,18 @@ test("league is scoped to one currency (#15)", async ({ page }) => {
   const countries = await page.locator("#league-table tbody .lg-country").allInnerTexts();
   expect(countries.length).toBeGreaterThan(0);
   expect(countries.includes("England")).toBeFalsy();
+});
+
+test("shows a staleness banner when the snapshot is over a week old", async ({ page }) => {
+  await page.route(/\/data\/latest\.json/, (r) =>
+    r.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({
+      generatedAt: "2020-01-01T00:00:00Z", date: "2020-01-01", count: 1, sports: {},
+      clubs: [{ siteId: 75, name: "Glasgow West End", country: "Scotland", currency: "GBP", plans: {} }],
+    }) })
+  );
+  await page.goto("/");
+  await expect(page.locator("#stale")).toBeVisible();
+  await expect(page.locator("#stale")).toContainText("out of date");
 });
 
 test("duration control does not overflow on mobile", async ({ page }) => {

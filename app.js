@@ -415,7 +415,7 @@ function renderTable(){
              `<div class="join">${jf?`+ ${fmt(jf,cur)} joining`:`no joining fee`}</div></td>`;
     }).join("");
     return `<tr><td class="plan"><div class="pn">${prettyPlan(p.packageKey)}${pop}</div>`+
-           `<div class="pk">${p.packageKey}</div>${offerHtml}${trendHtml}${benHtml}${accHtml}</td>${cells}</tr>`;
+           `${offerHtml}${trendHtml}${benHtml}${accHtml}</td>${cells}</tr>`;
   }).join("");
   table.hidden=false; empty.hidden=true;
   renderPromos(dur);
@@ -429,8 +429,8 @@ function renderTable(){
   const ppTypes = activeTypes.filter(t=>t!=="INDIVIDUAL").map(t=>TYPE_LABEL[t]);
   const ppNote = ppTypes.length ? ` ${ppTypes.join(" & ")} rates are per person.` : "";
   foot.hidden=false;
-  const snap = (LATEST&&LATEST.date) ? ` · from David Lloyd, snapshot ${fmtDate(LATEST.date)}` : "";
-  foot.textContent=`Standard rates before any promotion · ${pkgs.length} plan${pkgs.length>1?"s":""}${snap}. ${dur==="ANNUAL"?"Prices are the annual total.":"Monthly fees recur; joining fees are one-off."}${ppNote}`;
+  const snap = (LATEST&&LATEST.date) ? `From David Lloyd, snapshot ${fmtDate(LATEST.date)}. ` : "";
+  foot.textContent=`${snap}${dur==="ANNUAL"?"Prices are the annual total.":"Monthly fees recur; joining fees are one-off."}${ppNote}`;
 
   // capture a model for the shareable image, and reveal the button
   LASTIMG = {
@@ -442,7 +442,7 @@ function renderTable(){
         cells: activeTypes.map(t=>{ const v=priceAt(p,t); if(v==null) return null;
           return { price:fmt(v,cur), unit, join: jf?`+ ${fmt(jf,cur)} joining`:"no joining fee" }; }) }; }),
     url: `dylnyko.github.io/davidlloyd-price-index/?club=${slugify(CURRENT.clubName)}`,
-    date: new Date().toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"}),
+    date: (LATEST&&LATEST.date) ? fmtDate(LATEST.date) : new Date().toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"}),
     annual: dur==="ANNUAL",
   };
   qs("#share").hidden=false;
@@ -754,7 +754,7 @@ function renderCompare(){
     `<tbody>`+plans.map(k=>{
       const vals=picked.map(c=>val(c,k));
       const nums=vals.filter(v=>v!=null); const min=nums.length?Math.min(...nums):null;
-      return `<tr><td class="plan"><div class="pn">${prettyPlan(k)}</div><div class="pk">${k}</div></td>`+
+      return `<tr><td class="plan"><div class="pn">${prettyPlan(k)}</div></td>`+
         picked.map((c,ix)=>{ const v=vals[ix];
           if(v==null) return `<td class="cell na">—</td>`;
           const best = nums.length>1 && v===min;
@@ -892,7 +892,6 @@ function drawShare(m){
     const top=yRows+ri*RH;
     ctx.textAlign="left"; ctx.fillStyle=INK; ctx.font=`700 19px ${DISP}`; ctx.fillText(r.name, P, top+26);
     if(r.pop){ const w=ctx.measureText(r.name).width; ctx.font=`700 9px ${MONO}`; ctx.fillStyle=ACCENT; ctx.fillText("★ MOST POPULAR", P+w+10, top+24); }
-    ctx.fillStyle=MUTED; ctx.font=`400 11px ${MONO}`; ctx.fillText(r.key, P, top+45);
     r.cells.forEach((cell,i)=>{ const rx=colR(i);
       if(!cell){ ctx.textAlign="right"; ctx.fillStyle=MUTED; ctx.font=`400 18px ${MONO}`; ctx.fillText("—", rx, top+27); return; }
       ctx.textAlign="right";
@@ -984,12 +983,26 @@ window.addEventListener("popstate",()=>{
   setView("lookup");
 });
 
+// Warn if the committed snapshot has gone stale (nightly job failing, DL API
+// changed, or we're blocked) — data older than a week gets a visible banner.
+function maybeShowStale(){
+  const el=qs("#stale"); if(!el) return;
+  const gen = LATEST && (LATEST.generatedAt || LATEST.date);
+  if(!gen) return;                                  // live-fallback data isn't stale
+  const days = Math.floor((Date.now()-new Date(gen))/864e5);
+  if(days>7){
+    el.hidden=false;
+    el.innerHTML=`<b>⚠ Heads up —</b> prices were last refreshed on ${esc(fmtDate(LATEST.date||gen))} (${days} days ago). David&nbsp;Lloyd's data may have changed since, so treat these figures as possibly out of date until the automatic update resumes.`;
+  }
+}
+
 /* ---- boot ---- */
 (async function(){
   try{
     CLUBS=await getClubs();
     CLUBBY=Object.fromEntries(CLUBS.map(c=>[c.siteId, c.clubName]));
     qs("#clubcount").textContent=`${CLUBS.length}`;
+    maybeShowStale();
     const spec=qs("#spec-clubs"); if(spec) spec.textContent=`${CLUBS.length} clubs`;
     // Deep links (shareable URLs): ?view=league[&plan&who&term] or ?club=<slug>,
     // plus ?pc=<postcode> which restores "clubs near me" across refresh/shares.

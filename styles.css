@@ -24,6 +24,11 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--disp);
   padding:12px clamp(16px,3vw,28px);font-family:var(--mono);flex-wrap:wrap}
 .topbar .mark{font-weight:700;letter-spacing:.04em;font-size:.86rem}
 .nav{flex-wrap:wrap}
+
+/* staleness banner — shown when the nightly snapshot is over a week old */
+.stale{background:var(--paper-2);border-left:6px solid var(--accent);
+  padding:12px clamp(16px,3vw,28px);font-family:var(--mono);font-size:.72rem;line-height:1.55;color:var(--ink)}
+.stale b{color:var(--accent)}
 .topbar .tag{font-size:.66rem;letter-spacing:.12em;color:var(--accent);font-weight:700}
 
 /* hero */
