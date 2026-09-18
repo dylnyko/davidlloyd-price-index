@@ -138,15 +138,19 @@ function renderTable(){
   const pkgs = (DATA.packages||[]).filter(p => TYPES.some(t=>priceAt(p,t)!=null));
   if(!pkgs.length){ table.hidden=true; empty.hidden=false; empty.textContent="Nothing on offer for this club at this duration."; foot.hidden=true; addons.hidden=true; qs("#share").hidden=true; LASTIMG=null; return; }
 
-  const minAmt = p => Math.min(...TYPES.map(t=>priceAt(p,t) ?? Infinity));
+  // Only show membership-type columns that actually have prices for this club
+  // (Family is usually empty — DL builds families from adults + child add-ons,
+  // except at clubs with a dedicated FAMILY_* package).
+  const activeTypes = TYPES.filter(t => pkgs.some(p=>priceAt(p,t)!=null));
+  const minAmt = p => Math.min(...activeTypes.map(t=>priceAt(p,t) ?? Infinity));
   pkgs.sort((a,b)=> (planRank(a.packageKey)-planRank(b.packageKey)) || (minAmt(a)-minAmt(b)) || a.packageKey.localeCompare(b.packageKey));
 
-  thead.innerHTML=`<th>Plan</th>`+TYPES.map(t=>`<th>${TYPE_LABEL[t]}${t==="INDIVIDUAL"?"":`<span class="th-sub">per person</span>`}</th>`).join("");
+  thead.innerHTML=`<th>Plan</th>`+activeTypes.map(t=>`<th>${TYPE_LABEL[t]}${t==="INDIVIDUAL"?"":`<span class="th-sub">per person</span>`}</th>`).join("");
   tbody.innerHTML=pkgs.map(p=>{
     const jf = p.prices[dur].joiningFee||0;
     const bens = benefitsOf(p);
     const benHtml = bens.length ? `<div class="benefits">${bens.map(b=>`<span class="ben">${b}</span>`).join("")}</div>` : "";
-    const cells=TYPES.map(t=>{
+    const cells=activeTypes.map(t=>{
       const v=priceAt(p,t);
       if(v==null) return `<td class="cell na">—</td>`;
       return `<td class="cell"><div class="mo">${fmt(v,cur)}<span class="per">${unit}</span></div>`+
@@ -163,17 +167,19 @@ function renderTable(){
   addons.hidden = !ao.length;
   if(ao.length) addons.innerHTML = `<span class="ao-k">Add-ons</span> ${ao.join(" · ")}`;
 
+  const ppTypes = activeTypes.filter(t=>t!=="INDIVIDUAL").map(t=>TYPE_LABEL[t]);
+  const ppNote = ppTypes.length ? ` ${ppTypes.join(" & ")} rates are per person.` : "";
   foot.hidden=false;
-  foot.textContent=`Standard rates before any promotion · ${pkgs.length} plan${pkgs.length>1?"s":""} · pulled live ${new Date().toLocaleString("en-GB",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"})}. ${dur==="ANNUAL"?"Prices are the annual total.":"Monthly fees recur; joining fees are one-off."} Couple & Family rates are per person.`;
+  foot.textContent=`Standard rates before any promotion · ${pkgs.length} plan${pkgs.length>1?"s":""} · pulled live ${new Date().toLocaleString("en-GB",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"})}. ${dur==="ANNUAL"?"Prices are the annual total.":"Monthly fees recur; joining fees are one-off."}${ppNote}`;
 
   // capture a model for the shareable image, and reveal the button
   LASTIMG = {
     club: CURRENT.clubName,
     meta: `${CURRENT.country||"—"} · Site #${CURRENT.siteId} · ${cur} · ${DUR_LABEL[dur]||dur}`,
-    cols: TYPES.map(t=>TYPE_LABEL[t]),
+    cols: activeTypes.map(t=>({ label:TYPE_LABEL[t], pp:t!=="INDIVIDUAL" })),
     rows: pkgs.map(p=>{ const jf=p.prices[dur].joiningFee||0;
       return { name:prettyPlan(p.packageKey), key:p.packageKey,
-        cells: TYPES.map(t=>{ const v=priceAt(p,t); if(v==null) return null;
+        cells: activeTypes.map(t=>{ const v=priceAt(p,t); if(v==null) return null;
           return { price:fmt(v,cur), unit, join: jf?`+ ${fmt(jf,cur)} joining`:"no joining fee" }; }) }; }),
     url: `dylnyko.github.io/davidlloyd-price-index/?club=${slugify(CURRENT.clubName)}`,
     date: new Date().toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"}),
@@ -190,7 +196,7 @@ function drawShare(m){
   const planW=Math.round((W-2*P)*0.40), priceW=Math.round((W-2*P-planW)/ncol);
   const colR = i => P+planW+priceW*(i+1)-8;
   const RH=66;
-  const yWord=P+16, yClub=yWord+52, yMeta=yClub+26, yDiv=yMeta+22, yHead=yDiv+34, yRule=yHead+12, yRows=yRule+12;
+  const yWord=P+16, yClub=yWord+52, yMeta=yClub+26, yDiv=yMeta+22, yHead=yDiv+34, yRule=yHead+26, yRows=yRule+12;
   const yFoot = yRows+m.rows.length*RH+26, H = yFoot+44+P-24;
   const cv=document.createElement("canvas"); cv.width=W*S; cv.height=H*S;
   const ctx=cv.getContext("2d"); ctx.scale(S,S); ctx.textBaseline="alphabetic";
@@ -204,9 +210,12 @@ function drawShare(m){
   ctx.fillStyle=MUTED; ctx.font=`400 13px ${MONO}`; ctx.fillText(m.meta.toUpperCase(), P, yMeta);
   ctx.strokeStyle=INK; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(P,yDiv); ctx.lineTo(W-P,yDiv); ctx.stroke();
   // header
-  ctx.fillStyle=ACCENT; ctx.font=`700 12px ${MONO}`;
-  ctx.textAlign="left"; ctx.fillText("PLAN", P, yHead);
-  ctx.textAlign="right"; m.cols.forEach((c,i)=>ctx.fillText(c.toUpperCase(), colR(i), yHead));
+  ctx.textAlign="left"; ctx.fillStyle=ACCENT; ctx.font=`700 12px ${MONO}`; ctx.fillText("PLAN", P, yHead);
+  ctx.textAlign="right";
+  m.cols.forEach((c,i)=>{
+    ctx.fillStyle=ACCENT; ctx.font=`700 12px ${MONO}`; ctx.fillText(c.label.toUpperCase(), colR(i), yHead);
+    if(c.pp){ ctx.fillStyle=MUTED; ctx.font=`400 9px ${MONO}`; ctx.fillText("PER PERSON", colR(i), yHead+13); }
+  });
   ctx.strokeStyle=INK; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(P,yRule); ctx.lineTo(W-P,yRule); ctx.stroke();
   // rows
   m.rows.forEach((r,ri)=>{
@@ -225,8 +234,10 @@ function drawShare(m){
   });
   // footer: shareable link (accent) + note
   ctx.textAlign="left"; ctx.font=`700 13px ${MONO}`; ctx.fillStyle=ACCENT; ctx.fillText(m.url, P, yFoot+16);
+  const ppCols=m.cols.filter(c=>c.pp).map(c=>c.label.toLowerCase());
+  const ppTxt=ppCols.length?` · ${ppCols.join("/")} per person`:"";
   ctx.font=`400 11px ${MONO}`; ctx.fillStyle=MUTED;
-  ctx.fillText(`Standard rates · pre-promotion${m.annual?" · annual total":""} · couple/family per person · unofficial, not affiliated with David Lloyd`, P, yFoot+36);
+  ctx.fillText(`Standard rates · pre-promotion${m.annual?" · annual total":""}${ppTxt} · unofficial, not affiliated with David Lloyd`, P, yFoot+36);
   return cv;
 }
 let CURCANVAS=null;

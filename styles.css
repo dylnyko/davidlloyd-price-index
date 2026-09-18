@@ -100,7 +100,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--disp);
 .share:hover{background:var(--accent);color:var(--accent-ink)}
 .share:active{transform:translate(1px,1px)}
 
-.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);z-index:200;
+.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);z-index:400;
   background:var(--ink);color:var(--paper);font-family:var(--mono);font-size:.78rem;letter-spacing:.02em;
   padding:11px 18px;border:2px solid var(--ink);box-shadow:var(--shadow);
   animation:toastin .18s ease both}
@@ -112,7 +112,8 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--disp);
 .modal{position:fixed;inset:0;z-index:300;display:flex;align-items:center;justify-content:center;padding:20px}
 .modal-backdrop{position:absolute;inset:0;background:rgba(11,11,10,.55);backdrop-filter:blur(2px)}
 .modal-card{position:relative;z-index:1;background:var(--paper);border:2px solid var(--ink);box-shadow:var(--shadow);
-  max-width:560px;width:100%;max-height:90vh;overflow:auto;padding:22px;animation:toastin .18s ease both}
+  width:min(560px,100%);max-height:90vh;overflow:auto;padding:22px;animation:modalin .18s ease both}
+@keyframes modalin{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 .modal-head{display:flex;justify-content:space-between;align-items:center;gap:12px}
 .modal-head h3{font-family:var(--disp);font-weight:800;font-size:1.45rem;margin:0;letter-spacing:-.01em}
 .modal-x{font-family:var(--mono);font-size:.9rem;background:var(--paper);border:2px solid var(--ink);
