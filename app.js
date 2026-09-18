@@ -493,7 +493,10 @@ function renderProfile(){
 /* ---- national price league (#6) — from committed latest.json ---- */
 let LEAGUE_METRIC={ plan:"CLUB_PLATINUM", type:"i", dur:"S" };
 const DUR_SHORT={ S:"Standard · 12-mo", F:"Flexible · 3-mo", A:"Annual total" };
-const TYPE_SHORT={ i:"Individual", c:"Couple", f:"Family" };
+// Family deliberately excluded (as on the club tables): DL prices it as a
+// whole-family total with undefined composition, so a per-person ranking is
+// meaningless (e.g. Family Platinum reads ~£4k vs Individual ~£174).
+const TYPE_SHORT={ i:"Individual", c:"Couple" };
 const leagueURL = () => buildURL({ view:"league", plan:LEAGUE_METRIC.plan, who:LEAGUE_METRIC.type, term:LEAGUE_METRIC.dur });
 async function openLeague(fromUrl){
   setView("league");
@@ -515,6 +518,7 @@ function buildLeagueControls(){
   const wrap=qs("#league-controls"); if(!wrap) return;
   const plans=planUniverse();
   if(!plans.includes(LEAGUE_METRIC.plan)) LEAGUE_METRIC.plan = plans.includes("CLUB_PLATINUM")?"CLUB_PLATINUM":plans[0];
+  if(!TYPE_SHORT[LEAGUE_METRIC.type]) LEAGUE_METRIC.type="i";   // guard stale ?who=f links
   const opt=(v,l,sel)=>`<option value="${v}"${v===sel?" selected":""}>${esc(l)}</option>`;
   wrap.innerHTML=
     `<label>Plan <select id="lg-plan">${plans.map(p=>opt(p,prettyPlan(p),LEAGUE_METRIC.plan)).join("")}</select></label>`+
