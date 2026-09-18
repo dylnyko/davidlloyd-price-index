@@ -46,7 +46,7 @@ const planRank = p => p.startsWith("CLUB")?0 : p.startsWith("JUNIOR")?1 : p.star
 const slugify = s => s.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
 
 /* ---- state ---- */
-let CLUBS=[], CURRENT=null, DATA=null, CURDUR="STANDARD", token=0;
+let CLUBS=[], CURRENT=null, DATA=null, CURDUR="STANDARD", token=0, LASTIMG=null;
 
 /* ---- search / dropdown ---- */
 const q=qs("#q"), dd=qs("#results-list");
@@ -98,7 +98,7 @@ async function selectClub(club, fromUrl){
   const panel=qs("#panel"); panel.hidden=false;
   qs("#clubname").textContent=club.clubName;
   qs("#clubsub").innerHTML=`<span class="pin">◆</span> ${club.country||"—"} <span class="sep">/</span> site #${club.siteId} <span class="sep">/</span> prices in ${club.currency}`;
-  qs("#pricetable").hidden=true; qs("#empty").hidden=true; qs("#foot-note").hidden=true; qs("#addons").hidden=true;
+  qs("#pricetable").hidden=true; qs("#empty").hidden=true; qs("#foot-note").hidden=true; qs("#addons").hidden=true; qs("#share").hidden=true;
   qs("#durations").innerHTML="";
   const status=qs("#status"); status.hidden=false;
   status.innerHTML=`<span class="spin"></span><span>Pulling live prices…</span>`;
@@ -136,7 +136,7 @@ function renderTable(){
 
   const priceAt = (p,t) => { const d=p.prices&&p.prices[dur]; const v=d&&d[TYPE_FIELD[t]]; return (v==null)?null:v; };
   const pkgs = (DATA.packages||[]).filter(p => TYPES.some(t=>priceAt(p,t)!=null));
-  if(!pkgs.length){ table.hidden=true; empty.hidden=false; empty.textContent="Nothing on offer for this club at this duration."; foot.hidden=true; addons.hidden=true; return; }
+  if(!pkgs.length){ table.hidden=true; empty.hidden=false; empty.textContent="Nothing on offer for this club at this duration."; foot.hidden=true; addons.hidden=true; qs("#share").hidden=true; LASTIMG=null; return; }
 
   const minAmt = p => Math.min(...TYPES.map(t=>priceAt(p,t) ?? Infinity));
   pkgs.sort((a,b)=> (planRank(a.packageKey)-planRank(b.packageKey)) || (minAmt(a)-minAmt(b)) || a.packageKey.localeCompare(b.packageKey));
@@ -167,7 +167,85 @@ function renderTable(){
 
   foot.hidden=false;
   foot.textContent=`Standard rates before any promotion · ${pkgs.length} plan${pkgs.length>1?"s":""} · pulled live ${new Date().toLocaleString("en-GB",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"})}. ${dur==="ANNUAL"?"Prices are the annual total.":"Monthly fees recur; joining fees are one-off."}`;
+
+  // capture a model for the shareable image, and reveal the button
+  LASTIMG = {
+    club: CURRENT.clubName,
+    meta: `${CURRENT.country||"—"} · Site #${CURRENT.siteId} · ${cur} · ${DUR_LABEL[dur]||dur}`,
+    cols: TYPES.map(t=>TYPE_LABEL[t]),
+    rows: pkgs.map(p=>{ const jf=p.prices[dur].joiningFee||0;
+      return { name:prettyPlan(p.packageKey), key:p.packageKey,
+        cells: TYPES.map(t=>{ const v=priceAt(p,t); if(v==null) return null;
+          return { price:fmt(v,cur), unit, join: jf?`+ ${fmt(jf,cur)} joining`:"no joining fee", lowest:(p===cheapest && v===minAmt(p)) }; }) }; }),
+    url: `dylnyko.github.io/davidlloyd-price-index/?club=${slugify(CURRENT.clubName)}`,
+    date: new Date().toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"}),
+    annual: dur==="ANNUAL",
+  };
+  qs("#share").hidden=false;
 }
+
+/* ---- shareable image (custom-drawn canvas in the site's style) ---- */
+function drawShare(m){
+  const INK="#0b0b0a", PAPER="#efece3", ACCENT="#ff3d00", MUTED="#6b675d", LINE="rgba(11,11,10,0.14)";
+  const DISP='"Bricolage Grotesque", sans-serif', MONO='"Space Mono", monospace';
+  const S=2, W=960, P=48, ncol=m.cols.length;
+  const planW=Math.round((W-2*P)*0.40), priceW=Math.round((W-2*P-planW)/ncol);
+  const colR = i => P+planW+priceW*(i+1)-8;
+  const RH=66;
+  const yWord=P+16, yClub=yWord+52, yMeta=yClub+26, yDiv=yMeta+22, yHead=yDiv+34, yRule=yHead+12, yRows=yRule+12;
+  const yFoot = yRows+m.rows.length*RH+26, H = yFoot+44+P-24;
+  const cv=document.createElement("canvas"); cv.width=W*S; cv.height=H*S;
+  const ctx=cv.getContext("2d"); ctx.scale(S,S); ctx.textBaseline="alphabetic";
+  ctx.fillStyle=PAPER; ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle=INK; ctx.lineWidth=2; ctx.strokeRect(1,1,W-2,H-2);
+  // wordmark + date
+  ctx.textAlign="left"; ctx.fillStyle=INK; ctx.font=`700 14px ${MONO}`; ctx.fillText("THE PRICE BOOK", P, yWord);
+  ctx.textAlign="right"; ctx.fillStyle=MUTED; ctx.font=`400 13px ${MONO}`; ctx.fillText(m.date, W-P, yWord);
+  // club + meta
+  ctx.textAlign="left"; ctx.fillStyle=INK; ctx.font=`700 40px ${DISP}`; ctx.fillText(m.club, P, yClub);
+  ctx.fillStyle=MUTED; ctx.font=`400 13px ${MONO}`; ctx.fillText(m.meta.toUpperCase(), P, yMeta);
+  ctx.strokeStyle=INK; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(P,yDiv); ctx.lineTo(W-P,yDiv); ctx.stroke();
+  // header
+  ctx.fillStyle=ACCENT; ctx.font=`700 12px ${MONO}`;
+  ctx.textAlign="left"; ctx.fillText("PLAN", P, yHead);
+  ctx.textAlign="right"; m.cols.forEach((c,i)=>ctx.fillText(c.toUpperCase(), colR(i), yHead));
+  ctx.strokeStyle=INK; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(P,yRule); ctx.lineTo(W-P,yRule); ctx.stroke();
+  // rows
+  m.rows.forEach((r,ri)=>{
+    const top=yRows+ri*RH;
+    ctx.textAlign="left"; ctx.fillStyle=INK; ctx.font=`700 19px ${DISP}`; ctx.fillText(r.name, P, top+26);
+    ctx.fillStyle=MUTED; ctx.font=`400 11px ${MONO}`; ctx.fillText(r.key, P, top+45);
+    r.cells.forEach((cell,i)=>{ const rx=colR(i);
+      if(!cell){ ctx.textAlign="right"; ctx.fillStyle=MUTED; ctx.font=`400 18px ${MONO}`; ctx.fillText("—", rx, top+27); return; }
+      ctx.textAlign="right";
+      ctx.font=`400 11px ${MONO}`; ctx.fillStyle=MUTED; ctx.fillText(cell.unit, rx, top+26);
+      const uw=ctx.measureText(cell.unit).width+3;
+      ctx.font=`700 19px ${MONO}`; ctx.fillStyle=cell.lowest?ACCENT:INK; ctx.fillText(cell.price, rx-uw, top+27);
+      ctx.font=`400 11px ${MONO}`; ctx.fillStyle=MUTED; ctx.fillText(cell.join, rx, top+45);
+    });
+    ctx.strokeStyle=LINE; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(P,top+RH); ctx.lineTo(W-P,top+RH); ctx.stroke();
+  });
+  // footer: shareable link (accent) + note
+  ctx.textAlign="left"; ctx.font=`700 13px ${MONO}`; ctx.fillStyle=ACCENT; ctx.fillText(m.url, P, yFoot+16);
+  ctx.font=`400 11px ${MONO}`; ctx.fillStyle=MUTED;
+  ctx.fillText(`Standard rates · pre-promotion${m.annual?" · annual total":""} · unofficial, not affiliated with David Lloyd`, P, yFoot+36);
+  return cv;
+}
+function shareImage(){
+  if(!LASTIMG) return;
+  const cv=drawShare(LASTIMG);
+  try{
+    const item=new ClipboardItem({ "image/png": new Promise(res=>cv.toBlob(b=>res(b),"image/png")) });
+    navigator.clipboard.write([item]).then(()=>toast("Price image copied ✓")).catch(()=>downloadCanvas(cv));
+  }catch(e){ downloadCanvas(cv); }
+}
+function downloadCanvas(cv){
+  cv.toBlob(b=>{ const a=document.createElement("a"); a.href=URL.createObjectURL(b);
+    a.download=`price-book-${slugify(LASTIMG.club)}.png`; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(a.href),1000); toast("Price image downloaded"); },"image/png");
+}
+let _toastT; function toast(msg){ const t=qs("#toast"); if(!t) return; t.textContent=msg; t.hidden=false; clearTimeout(_toastT); _toastT=setTimeout(()=>{t.hidden=true;},2400); }
+qs("#share").addEventListener("click", shareImage);
 
 /* ---- boot ---- */
 (async function(){

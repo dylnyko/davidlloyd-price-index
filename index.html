@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Space+Mono:wght@400;700&display=swap" />
-<link rel="stylesheet" href="styles.css?v=9" />
+<link rel="stylesheet" href="styles.css?v=10" />
 </head>
 <body>
 <div class="frame">
@@ -41,7 +41,13 @@
         <h2 id="clubname">—</h2>
         <p id="clubsub" class="clubsub">—</p>
       </div>
-      <div class="durations" id="durations" role="tablist" aria-label="Membership duration"></div>
+      <div class="head-actions">
+        <div class="durations" id="durations" role="tablist" aria-label="Membership duration"></div>
+        <button id="share" class="share" type="button" hidden aria-label="Copy the price table as an image">
+          <svg viewBox="0 0 24 24" aria-hidden="true" width="15" height="15"><rect x="9" y="9" width="11" height="11" rx="1"/><path d="M5 15V5a1 1 0 0 1 1-1h10"/></svg>
+          Copy image
+        </button>
+      </div>
     </div>
 
     <div id="status" class="status" hidden></div>
@@ -59,11 +65,12 @@
   </main>
 
   <footer class="sitefoot">
-    <p><span class="fs-mk">DISCLAIMER</span> Independent and unofficial — no affiliation with, endorsement by, or connection to David&nbsp;Lloyd Leisure. "David&nbsp;Lloyd" is a trademark of its owner. Prices are indicative standard rates pulled live from a public endpoint and may be inaccurate or out of date — always confirm with the club. Only anonymous, cookieless page-view counts are recorded (Cloudflare Web Analytics) — no cookies, no personal data, no cross-site tracking.</p>
+    <p><span class="fs-mk">UNOFFICIAL</span> Not affiliated with David&nbsp;Lloyd Leisure · indicative live rates, always confirm with the club · anonymous, cookieless analytics only.</p>
   </footer>
 
 </div>
-<script src="app.js?v=9"></script>
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+<script src="app.js?v=10"></script>
 <!-- Cloudflare Web Analytics — cookieless, no personal data. Public site tag. -->
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "5661e49f2a504dd69734b894973090a0"}'></script>
 </body>
