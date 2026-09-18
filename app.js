@@ -140,9 +140,8 @@ function renderTable(){
 
   const minAmt = p => Math.min(...TYPES.map(t=>priceAt(p,t) ?? Infinity));
   pkgs.sort((a,b)=> (planRank(a.packageKey)-planRank(b.packageKey)) || (minAmt(a)-minAmt(b)) || a.packageKey.localeCompare(b.packageKey));
-  const cheapest = pkgs.reduce((m,p)=>minAmt(p)<minAmt(m)?p:m,pkgs[0]);
 
-  thead.innerHTML=`<th>Plan</th>`+TYPES.map(t=>`<th>${TYPE_LABEL[t]}</th>`).join("");
+  thead.innerHTML=`<th>Plan</th>`+TYPES.map(t=>`<th>${TYPE_LABEL[t]}${t==="INDIVIDUAL"?"":`<span class="th-sub">per person</span>`}</th>`).join("");
   tbody.innerHTML=pkgs.map(p=>{
     const jf = p.prices[dur].joiningFee||0;
     const bens = benefitsOf(p);
@@ -150,11 +149,10 @@ function renderTable(){
     const cells=TYPES.map(t=>{
       const v=priceAt(p,t);
       if(v==null) return `<td class="cell na">—</td>`;
-      const tag = (p===cheapest && v===minAmt(p)) ? `<div class="best-tag">Lowest</div>`:"";
       return `<td class="cell"><div class="mo">${fmt(v,cur)}<span class="per">${unit}</span></div>`+
-             `<div class="join">${jf?`+ ${fmt(jf,cur)} joining`:`no joining fee`}</div>${tag}</td>`;
+             `<div class="join">${jf?`+ ${fmt(jf,cur)} joining`:`no joining fee`}</div></td>`;
     }).join("");
-    return `<tr class="${p===cheapest?"best":""}"><td class="plan"><div class="pn">${prettyPlan(p.packageKey)}</div>`+
+    return `<tr><td class="plan"><div class="pn">${prettyPlan(p.packageKey)}</div>`+
            `<div class="pk">${p.packageKey}</div>${benHtml}</td>${cells}</tr>`;
   }).join("");
   table.hidden=false; empty.hidden=true;
@@ -166,7 +164,7 @@ function renderTable(){
   if(ao.length) addons.innerHTML = `<span class="ao-k">Add-ons</span> ${ao.join(" · ")}`;
 
   foot.hidden=false;
-  foot.textContent=`Standard rates before any promotion · ${pkgs.length} plan${pkgs.length>1?"s":""} · pulled live ${new Date().toLocaleString("en-GB",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"})}. ${dur==="ANNUAL"?"Prices are the annual total.":"Monthly fees recur; joining fees are one-off."}`;
+  foot.textContent=`Standard rates before any promotion · ${pkgs.length} plan${pkgs.length>1?"s":""} · pulled live ${new Date().toLocaleString("en-GB",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"})}. ${dur==="ANNUAL"?"Prices are the annual total.":"Monthly fees recur; joining fees are one-off."} Couple & Family rates are per person.`;
 
   // capture a model for the shareable image, and reveal the button
   LASTIMG = {
@@ -176,7 +174,7 @@ function renderTable(){
     rows: pkgs.map(p=>{ const jf=p.prices[dur].joiningFee||0;
       return { name:prettyPlan(p.packageKey), key:p.packageKey,
         cells: TYPES.map(t=>{ const v=priceAt(p,t); if(v==null) return null;
-          return { price:fmt(v,cur), unit, join: jf?`+ ${fmt(jf,cur)} joining`:"no joining fee", lowest:(p===cheapest && v===minAmt(p)) }; }) }; }),
+          return { price:fmt(v,cur), unit, join: jf?`+ ${fmt(jf,cur)} joining`:"no joining fee" }; }) }; }),
     url: `dylnyko.github.io/davidlloyd-price-index/?club=${slugify(CURRENT.clubName)}`,
     date: new Date().toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"}),
     annual: dur==="ANNUAL",
@@ -228,24 +226,41 @@ function drawShare(m){
   // footer: shareable link (accent) + note
   ctx.textAlign="left"; ctx.font=`700 13px ${MONO}`; ctx.fillStyle=ACCENT; ctx.fillText(m.url, P, yFoot+16);
   ctx.font=`400 11px ${MONO}`; ctx.fillStyle=MUTED;
-  ctx.fillText(`Standard rates · pre-promotion${m.annual?" · annual total":""} · unofficial, not affiliated with David Lloyd`, P, yFoot+36);
+  ctx.fillText(`Standard rates · pre-promotion${m.annual?" · annual total":""} · couple/family per person · unofficial, not affiliated with David Lloyd`, P, yFoot+36);
   return cv;
 }
-function shareImage(){
+let CURCANVAS=null;
+function openShare(){
   if(!LASTIMG) return;
-  const cv=drawShare(LASTIMG);
+  CURCANVAS=drawShare(LASTIMG);
+  qs("#share-preview").src=CURCANVAS.toDataURL("image/png");
+  qs("#share-link").textContent="https://"+LASTIMG.url;
+  qs("#sharemodal").hidden=false; document.body.style.overflow="hidden";
+}
+function closeShare(){ qs("#sharemodal").hidden=true; document.body.style.overflow=""; }
+function copyImg(){
+  if(!CURCANVAS) return;
   try{
-    const item=new ClipboardItem({ "image/png": new Promise(res=>cv.toBlob(b=>res(b),"image/png")) });
-    navigator.clipboard.write([item]).then(()=>toast("Price image copied ✓")).catch(()=>downloadCanvas(cv));
-  }catch(e){ downloadCanvas(cv); }
+    const item=new ClipboardItem({ "image/png": new Promise(res=>CURCANVAS.toBlob(b=>res(b),"image/png")) });
+    navigator.clipboard.write([item]).then(()=>toast("Image copied to clipboard ✓")).catch(()=>downloadCanvas(CURCANVAS));
+  }catch(e){ downloadCanvas(CURCANVAS); }
+}
+function copyLink(){
+  const u="https://"+LASTIMG.url;
+  (navigator.clipboard?.writeText(u) ?? Promise.reject()).then(()=>toast("Link copied ✓")).catch(()=>toast("Couldn't copy link"));
 }
 function downloadCanvas(cv){
   cv.toBlob(b=>{ const a=document.createElement("a"); a.href=URL.createObjectURL(b);
     a.download=`price-book-${slugify(LASTIMG.club)}.png`; document.body.appendChild(a); a.click(); a.remove();
-    setTimeout(()=>URL.revokeObjectURL(a.href),1000); toast("Price image downloaded"); },"image/png");
+    setTimeout(()=>URL.revokeObjectURL(a.href),1000); toast("Image downloaded"); },"image/png");
 }
 let _toastT; function toast(msg){ const t=qs("#toast"); if(!t) return; t.textContent=msg; t.hidden=false; clearTimeout(_toastT); _toastT=setTimeout(()=>{t.hidden=true;},2400); }
-qs("#share").addEventListener("click", shareImage);
+qs("#share").addEventListener("click", openShare);
+qs("#sharemodal").addEventListener("click", e=>{ if(e.target.closest("[data-close]")) closeShare(); });
+qs("#do-copy").addEventListener("click", copyImg);
+qs("#do-download").addEventListener("click", ()=>{ if(CURCANVAS) downloadCanvas(CURCANVAS); });
+qs("#do-link").addEventListener("click", copyLink);
+document.addEventListener("keydown", e=>{ if(e.key==="Escape" && !qs("#sharemodal").hidden) closeShare(); });
 
 /* ---- boot ---- */
 (async function(){
