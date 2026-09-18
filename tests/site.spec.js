@@ -256,6 +256,36 @@ test("remembers the postcode across refresh via the URL (#1)", async ({ page }) 
   await expect(page.locator("#nm-pc")).toHaveValue("G1 1AA");
 });
 
+test("compare view puts clubs side by side (#13)", async ({ page }) => {
+  await page.goto("/?view=compare");
+  await expect(page.locator("#compare")).toBeVisible();
+  expect(await page.locator('.cmp-pick[data-i="0"] option').count()).toBeGreaterThan(50);
+  await page.selectOption('.cmp-pick[data-i="0"]', { index: 1 });
+  await expect(page.locator("#cmp-table")).toBeVisible();
+  expect(await page.locator("#cmp-table tbody tr").count()).toBeGreaterThan(0);
+});
+
+test("biggest movers view loads with an empty state before history accrues (#16)", async ({ page }) => {
+  await page.goto("/?view=movers");
+  await expect(page.locator("#movers")).toBeVisible();
+  await expect(page.locator("#mov-empty")).toBeVisible();
+});
+
+test("map view builds its controls (#14)", async ({ page }) => {
+  await page.goto("/?view=map");
+  await expect(page.locator("#map")).toBeVisible();
+  await expect(page.locator("#mp-plan")).toBeVisible();
+});
+
+test("league is scoped to one currency (#15)", async ({ page }) => {
+  await page.goto("/?view=league&cur=EUR");
+  await expect(page.locator("#league-table")).toBeVisible();
+  // every country shown should be a EUR one (no UK clubs mixed in)
+  const countries = await page.locator("#league-table tbody .lg-country").allInnerTexts();
+  expect(countries.length).toBeGreaterThan(0);
+  expect(countries.includes("England")).toBeFalsy();
+});
+
 test("duration control does not overflow on mobile", async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 800 });
   await openWestEnd(page);

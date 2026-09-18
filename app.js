@@ -122,13 +122,17 @@ async function getHistory(){
   catch{ HISTORY={series:{}}; }
   return HISTORY;
 }
+// DL's feed sometimes carries placeholder coords (e.g. Windsor at 100,100),
+// so validate lat/lng ranges — a bad point would skew distances and the map.
+const validLatLng=(la,ln)=>Number.isFinite(la)&&Number.isFinite(ln)&&la>=-90&&la<=90&&ln>=-180&&ln<=180;
 async function getLocations(){
   if(LOCS) return LOCS;
-  try{ const r=await fetch(`data/locations.json?t=${Math.floor(Date.now()/36e5)}`); const j=await r.json(); LOCS=j.locations||{}; }
+  const clean=obj=>{ const o={}; for(const [k,v] of Object.entries(obj||{})){ const la=+v.lat, ln=+v.lng; if(validLatLng(la,ln)) o[k]={lat:la,lng:ln}; } return o; };
+  try{ const r=await fetch(`data/locations.json?t=${Math.floor(Date.now()/36e5)}`); const j=await r.json(); LOCS=clean(j.locations); }
   catch{
-    try{ const r=await fetch(`${API}/clubs/locations`); const j=await r.json(); LOCS={};
+    try{ const r=await fetch(`${API}/clubs/locations`); const j=await r.json(); const o={};
       for(const [sid,v] of Object.entries(j.clubLocations||{})){ const la=parseFloat(v.latitude),ln=parseFloat(v.longitude);
-        if(isFinite(la)&&isFinite(ln)) LOCS[sid]={lat:la,lng:ln}; } }
+        if(validLatLng(la,ln)) o[sid]={lat:la,lng:ln}; } LOCS=o; }
     catch{ LOCS={}; }
   }
   return LOCS;
@@ -206,6 +210,9 @@ function syncURL(){
   let u;
   if(!qs("#league").hidden) u=leagueURL();
   else if(!qs("#facilities").hidden) u=facURL();
+  else if(!qs("#compare").hidden) u=compareURL();
+  else if(!qs("#map").hidden) u=mapURL();
+  else if(!qs("#movers").hidden) u=buildURL({view:"movers"});
   else if(CURRENT) u=buildURL({club:slugify(CURRENT.clubName)});
   else u=buildURL({});
   history.replaceState({},"",u);
@@ -491,13 +498,19 @@ function renderProfile(){
 }
 
 /* ---- national price league (#6) — from committed latest.json ---- */
-let LEAGUE_METRIC={ plan:"CLUB_PLATINUM", type:"i", dur:"S" };
+let LEAGUE_METRIC={ plan:"CLUB_PLATINUM", type:"i", dur:"S", cur:"GBP" };
 const DUR_SHORT={ S:"Standard · 12-mo", F:"Flexible · 3-mo", A:"Annual total" };
+// Currencies can't be ranked against each other, so the league is scoped to one.
+const CUR_LABEL={ GBP:"£ UK", EUR:"€ Europe & Ireland", CHF:"Fr Switzerland" };
+const curOrder = c => ({GBP:0,EUR:1,CHF:2}[c] ?? 9);
 // Family deliberately excluded (as on the club tables): DL prices it as a
 // whole-family total with undefined composition, so a per-person ranking is
 // meaningless (e.g. Family Platinum reads ~£4k vs Individual ~£174).
 const TYPE_SHORT={ i:"Individual", c:"Couple" };
-const leagueURL = () => buildURL({ view:"league", plan:LEAGUE_METRIC.plan, who:LEAGUE_METRIC.type, term:LEAGUE_METRIC.dur });
+const leagueURL = () => buildURL({ view:"league", plan:LEAGUE_METRIC.plan, who:LEAGUE_METRIC.type, term:LEAGUE_METRIC.dur, cur:LEAGUE_METRIC.cur });
+function leagueCurrencies(){
+  return [...new Set((LATEST.clubs||[]).map(c=>c.currency))].sort((a,b)=>curOrder(a)-curOrder(b));
+}
 async function openLeague(fromUrl){
   setView("league");
   const box=qs("#league"); box.hidden=false;
@@ -509,31 +522,44 @@ async function openLeague(fromUrl){
   buildLeagueControls();
   renderLeague();
 }
-function planUniverse(){
+// Plans available for a currency, limited to those with an individual/couple
+// price somewhere — drops FAMILY_* (whole-family total only) and other i/c-less plans.
+function planUniverse(cur){
   const set=new Set();
-  for(const c of (LATEST.clubs||[])) for(const k of Object.keys(c.plans||{})) set.add(k);
+  for(const c of (LATEST.clubs||[])){
+    if(cur && c.currency!==cur) continue;
+    for(const [k,byd] of Object.entries(c.plans||{}))
+      if(Object.values(byd).some(cell=>cell && (cell.i!=null || cell.c!=null))) set.add(k);
+  }
   return [...set].sort((a,b)=> (planRank(a)-planRank(b)) || a.localeCompare(b));
 }
 function buildLeagueControls(){
   const wrap=qs("#league-controls"); if(!wrap) return;
-  const plans=planUniverse();
+  const curs=leagueCurrencies();
+  if(!curs.includes(LEAGUE_METRIC.cur)) LEAGUE_METRIC.cur = curs.includes("GBP")?"GBP":curs[0];
+  const plans=planUniverse(LEAGUE_METRIC.cur);
   if(!plans.includes(LEAGUE_METRIC.plan)) LEAGUE_METRIC.plan = plans.includes("CLUB_PLATINUM")?"CLUB_PLATINUM":plans[0];
   if(!TYPE_SHORT[LEAGUE_METRIC.type]) LEAGUE_METRIC.type="i";   // guard stale ?who=f links
   const opt=(v,l,sel)=>`<option value="${v}"${v===sel?" selected":""}>${esc(l)}</option>`;
-  wrap.innerHTML=
+  const curSel = curs.length>1
+    ? `<label>Region <select id="lg-cur">${curs.map(c=>opt(c,CUR_LABEL[c]||c,LEAGUE_METRIC.cur)).join("")}</select></label>` : "";
+  wrap.innerHTML= curSel+
     `<label>Plan <select id="lg-plan">${plans.map(p=>opt(p,prettyPlan(p),LEAGUE_METRIC.plan)).join("")}</select></label>`+
     `<label>Who <select id="lg-type">${Object.entries(TYPE_SHORT).map(([v,l])=>opt(v,l,LEAGUE_METRIC.type)).join("")}</select></label>`+
     `<label>Term <select id="lg-dur">${Object.entries(DUR_SHORT).map(([v,l])=>opt(v,l,LEAGUE_METRIC.dur)).join("")}</select></label>`;
   const upd=()=>{ renderLeague(); history.replaceState({},"",leagueURL()); };
+  const curEl=qs("#lg-cur");
+  if(curEl) curEl.onchange=e=>{ LEAGUE_METRIC.cur=e.target.value; buildLeagueControls(); renderLeague(); history.replaceState({},"",leagueURL()); };
   qs("#lg-plan").onchange=e=>{ LEAGUE_METRIC.plan=e.target.value; upd(); };
   qs("#lg-type").onchange=e=>{ LEAGUE_METRIC.type=e.target.value; upd(); };
   qs("#lg-dur").onchange=e=>{ LEAGUE_METRIC.dur=e.target.value; upd(); };
 }
 function renderLeague(){
   const box=qs("#league"); if(!box || box.hidden) return;
-  const {plan,type,dur}=LEAGUE_METRIC;
+  const {plan,type,dur,cur}=LEAGUE_METRIC;
   const rows=[];
   for(const c of (LATEST.clubs||[])){
+    if(c.currency!==cur) continue;                 // one currency at a time (#15)
     const cell=(c.plans[plan]||{})[dur];
     const v=cell?cell[type]:null;
     if(v==null) continue;
@@ -546,9 +572,11 @@ function renderLeague(){
   const unit = dur==="A" ? "/yr" : "/mo";
   const showMi = USERLOC && rows.some(r=>r.mi!=null);
   const cheapest = rows.length?rows[0].val:0, dearest=rows.length?rows[rows.length-1].val:0;
-  const pp = type!=="i";   // couple/family rates are per person (as in the club tables)
-  qs("#league-sub").textContent =
-    `${rows.length} clubs with ${prettyPlan(plan)} · ${TYPE_SHORT[type]}${pp?" (per person)":""} · ${DUR_SHORT[dur]} — from ${fmt(cheapest,rows[0]?.cur||"GBP")} to ${fmt(dearest,rows[rows.length-1]?.cur||"GBP")}${unit}`;
+  const pp = type!=="i";   // couple rates are per person (as in the club tables)
+  const region = leagueCurrencies().length>1 ? `${CUR_LABEL[cur]||cur} · ` : "";
+  qs("#league-sub").textContent = rows.length
+    ? `${region}${rows.length} clubs with ${prettyPlan(plan)} · ${TYPE_SHORT[type]}${pp?" (per person)":""} · ${DUR_SHORT[dur]} — from ${fmt(cheapest,cur)} to ${fmt(dearest,cur)}${unit}`
+    : `${region}no clubs offer ${prettyPlan(plan)} on this term — try another plan.`;
   t.innerHTML=
     `<thead><tr><th>#</th><th>Club</th><th>Country</th>${showMi?`<th class="num">Distance</th>`:""}<th class="num">${TYPE_SHORT[type]} ${unit}${pp?`<span class="th-sub">per person</span>`:""}</th></tr></thead>`+
     `<tbody>`+rows.map((r,i)=>`<tr data-site="${r.siteId}">`+
@@ -617,17 +645,208 @@ function renderFacilities(){
   });
 }
 
-/* ---- view switching (lookup / league / facilities) ---- */
+/* ---- biggest movers (#16) — from committed history.json ---- */
+const FIELD_LABEL={ iS:"Individual · Standard", iA:"Individual · Annual" };
+async function openMovers(fromUrl){
+  setView("movers");
+  qs("#mov-status").hidden=false; qs("#mov-table").hidden=true; qs("#mov-empty").hidden=true;
+  if(fromUrl) history.replaceState({},"",buildURL({view:"movers"})); else history.pushState({},"",buildURL({view:"movers"}));
+  document.title="Biggest movers — The Price Book";
+  await Promise.all([getHistory(), getLatest()]);
+  renderMovers();
+}
+function renderMovers(){
+  const box=qs("#movers"); if(!box || box.hidden) return;
+  const by={}; for(const c of (LATEST.clubs||[])) by[c.siteId]=c;
+  const moves=[];
+  for(const [sid,plans] of Object.entries((HISTORY&&HISTORY.series)||{})){
+    const club=by[sid]; if(!club) continue;
+    for(const [key,fields] of Object.entries(plans)){
+      for(const [f,arr] of Object.entries(fields)){
+        if(!arr || arr.length<2) continue;
+        const prev=arr[arr.length-2], last=arr[arr.length-1];
+        if(prev[1]===last[1]) continue;
+        moves.push({ siteId:+sid, name:club.name, cur:club.currency, key, field:f,
+          from:prev[1], to:last[1], on:last[0], delta:last[1]-prev[1], up:last[1]>prev[1] });
+      }
+    }
+  }
+  moves.sort((a,b)=>Math.abs(b.delta)-Math.abs(a.delta));
+  qs("#mov-status").hidden=true;
+  const t=qs("#mov-table"), empty=qs("#mov-empty");
+  if(!moves.length){
+    t.hidden=true; empty.hidden=false;
+    const since = HISTORY && HISTORY.series && Object.keys(HISTORY.series).length ? "tracking has just begun" : "tracking has just begun";
+    empty.textContent=`No price changes recorded yet — ${since}. As the nightly snapshot runs, any club that changes a price will appear here.`;
+    qs("#mov-sub").textContent="";
+    return;
+  }
+  empty.hidden=true; t.hidden=false;
+  qs("#mov-sub").textContent=`${moves.length} price change${moves.length>1?"s":""} recorded so far — biggest first.`;
+  t.innerHTML=
+    `<thead><tr><th>#</th><th>Club</th><th>Plan</th><th>Metric</th><th class="num">Was</th><th class="num">Now</th><th class="num">Change</th><th>On</th></tr></thead>`+
+    `<tbody>`+moves.map((m,i)=>`<tr data-site="${m.siteId}">`+
+      `<td class="lg-rank">${i+1}</td>`+
+      `<td class="lg-name">${esc(m.name)}</td>`+
+      `<td class="lg-country">${esc(prettyPlan(m.key))}</td>`+
+      `<td class="lg-country">${esc(FIELD_LABEL[m.field]||m.field)}</td>`+
+      `<td class="num">${fmt(m.from,m.cur)}</td>`+
+      `<td class="num">${fmt(m.to,m.cur)}</td>`+
+      `<td class="num"><span class="trend ${m.up?"up":"down"}">${m.up?"▲":"▼"} ${fmt(Math.abs(m.delta),m.cur)}</span></td>`+
+      `<td class="lg-country">${esc(fmtDate(m.on))}</td></tr>`).join("")+
+    `</tbody>`;
+  t.querySelectorAll("tbody tr").forEach(tr=>tr.onclick=()=>{
+    const club=CLUBS.find(c=>c.siteId===+tr.dataset.site); if(club){ setView("lookup"); selectClub(club); }
+  });
+}
+
+/* ---- compare clubs side-by-side (#13) — from latest.json ---- */
+let CMP=[null,null,null], CMP_TYPE="i", CMP_DUR="S";
+const compareURL = () => buildURL(Object.assign({view:"compare", who:CMP_TYPE, term:CMP_DUR},
+  CMP[0]?{a:slugify(CMP[0])}:{}, CMP[1]?{b:slugify(CMP[1])}:{}, CMP[2]?{c:slugify(CMP[2])}:{}));
+function restoreCompareParams(p){
+  if(p.get("who")) CMP_TYPE=p.get("who"); if(!TYPE_SHORT[CMP_TYPE]) CMP_TYPE="i";
+  if(p.get("term")) CMP_DUR=p.get("term");
+  CMP=[p.get("a"),p.get("b"),p.get("c")].map(s=>s?clubBySlug(s):null);
+}
+async function openCompare(fromUrl){
+  setView("compare");
+  if(fromUrl) history.replaceState({},"",compareURL()); else history.pushState({},"",compareURL());
+  document.title="Compare clubs — The Price Book";
+  await getLatest();
+  buildComparePickers();
+  renderCompare();
+}
+function clubBySlug(s){ const c=(LATEST.clubs||[]).find(x=>slugify(x.name)===s); return c?c.name:null; }
+function buildComparePickers(){
+  const wrap=qs("#cmp-pickers"); if(!wrap) return;
+  const names=(LATEST.clubs||[]).map(c=>c.name).sort((a,b)=>a.localeCompare(b));
+  const sel=(i)=>`<select class="cmp-pick" data-i="${i}"><option value="">— pick a club —</option>`+
+    names.map(n=>`<option value="${esc(n)}"${CMP[i]===n?" selected":""}>${esc(n)}</option>`).join("")+`</select>`;
+  wrap.innerHTML=`<div class="cmp-slots">${[0,1,2].map(sel).join("")}</div>`+
+    `<div class="league-controls" style="margin-top:12px">`+
+    `<label>Who <select id="cmp-type">${Object.entries(TYPE_SHORT).map(([v,l])=>`<option value="${v}"${v===CMP_TYPE?" selected":""}>${esc(l)}</option>`).join("")}</select></label>`+
+    `<label>Term <select id="cmp-dur">${Object.entries(DUR_SHORT).map(([v,l])=>`<option value="${v}"${v===CMP_DUR?" selected":""}>${esc(l)}</option>`).join("")}</select></label></div>`;
+  wrap.querySelectorAll(".cmp-pick").forEach(s=>s.onchange=e=>{ CMP[+e.target.dataset.i]=e.target.value||null; renderCompare(); history.replaceState({},"",compareURL()); });
+  qs("#cmp-type").onchange=e=>{ CMP_TYPE=e.target.value; renderCompare(); history.replaceState({},"",compareURL()); };
+  qs("#cmp-dur").onchange=e=>{ CMP_DUR=e.target.value; renderCompare(); history.replaceState({},"",compareURL()); };
+}
+function renderCompare(){
+  const box=qs("#compare"); if(!box || box.hidden) return;
+  const picked=CMP.map(n=>n?(LATEST.clubs||[]).find(c=>c.name===n):null).filter(Boolean);
+  const t=qs("#cmp-table"), empty=qs("#cmp-empty");
+  if(!picked.length){ t.hidden=true; empty.hidden=false; return; }
+  empty.hidden=true; t.hidden=false;
+  const dur=CMP_DUR, type=CMP_TYPE, unit=dur==="A"?"/yr":"/mo";
+  // union of plans across picked clubs that have an individual/couple value
+  const planSet=new Set();
+  for(const c of picked) for(const [k,byd] of Object.entries(c.plans||{}))
+    if(Object.values(byd).some(cell=>cell && (cell.i!=null||cell.c!=null))) planSet.add(k);
+  const plans=[...planSet].sort((a,b)=>(planRank(a)-planRank(b))||a.localeCompare(b));
+  const val=(c,k)=>{ const cell=(c.plans[k]||{})[dur]; return cell?cell[type]:null; };
+  t.innerHTML=
+    `<thead><tr><th>Plan</th>${picked.map(c=>`<th class="num">${esc(c.name)}</th>`).join("")}</tr></thead>`+
+    `<tbody>`+plans.map(k=>{
+      const vals=picked.map(c=>val(c,k));
+      const nums=vals.filter(v=>v!=null); const min=nums.length?Math.min(...nums):null;
+      return `<tr><td class="plan"><div class="pn">${prettyPlan(k)}</div><div class="pk">${k}</div></td>`+
+        picked.map((c,ix)=>{ const v=vals[ix];
+          if(v==null) return `<td class="cell na">—</td>`;
+          const best = nums.length>1 && v===min;
+          return `<td class="cell"><div class="mo"${best?' style="color:var(--accent)"':''}>${fmt(v,c.currency)}<span class="per">${unit}</span></div></td>`;
+        }).join("")+`</tr>`;
+    }).join("")+`</tbody>`;
+}
+
+/* ---- club map (#14) — Leaflet + OpenStreetMap (both free) ---- */
+let MAP=null, MAP_LAYER=null, MAP_METRIC={ plan:"CLUB_PLATINUM", dur:"S", cur:"GBP" };
+const mapURL = () => buildURL({ view:"map", plan:MAP_METRIC.plan, term:MAP_METRIC.dur, cur:MAP_METRIC.cur });
+function restoreMapParams(p){
+  if(p.get("plan")) MAP_METRIC.plan=p.get("plan");
+  if(p.get("term")) MAP_METRIC.dur=p.get("term");
+  if(p.get("cur")) MAP_METRIC.cur=p.get("cur");
+}
+function loadLeaflet(){
+  return new Promise((res,rej)=>{
+    if(window.L) return res();
+    const css=document.createElement("link"); css.rel="stylesheet";
+    css.href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"; document.head.appendChild(css);
+    const js=document.createElement("script");
+    js.src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js";
+    js.onload=()=>res(); js.onerror=rej; document.head.appendChild(js);
+  });
+}
+const heat = t => { // 0(cheap)=green → 1(dear)=red
+  const h=(1-t)*120; return `hsl(${h} 85% 45%)`;
+};
+async function openMap(fromUrl){
+  setView("map");
+  if(fromUrl) history.replaceState({},"",mapURL()); else history.pushState({},"",mapURL());
+  document.title="Club map — The Price Book";
+  await Promise.all([getLatest(), getLocations()]);
+  buildMapControls();
+  try{ await loadLeaflet(); renderMap(); }
+  catch{ qs("#map-note").textContent="Couldn't load the map library."; }
+}
+function buildMapControls(){
+  const wrap=qs("#map-controls"); if(!wrap) return;
+  const curs=leagueCurrencies(); if(!curs.includes(MAP_METRIC.cur)) MAP_METRIC.cur=curs.includes("GBP")?"GBP":curs[0];
+  const plans=planUniverse(MAP_METRIC.cur); if(!plans.includes(MAP_METRIC.plan)) MAP_METRIC.plan=plans.includes("CLUB_PLATINUM")?"CLUB_PLATINUM":plans[0];
+  const opt=(v,l,sel)=>`<option value="${v}"${v===sel?" selected":""}>${esc(l)}</option>`;
+  const curSel=curs.length>1?`<label>Region <select id="mp-cur">${curs.map(c=>opt(c,CUR_LABEL[c]||c,MAP_METRIC.cur)).join("")}</select></label>`:"";
+  wrap.innerHTML=curSel+
+    `<label>Plan <select id="mp-plan">${plans.map(p=>opt(p,prettyPlan(p),MAP_METRIC.plan)).join("")}</select></label>`+
+    `<label>Term <select id="mp-dur">${Object.entries(DUR_SHORT).map(([v,l])=>opt(v,l,MAP_METRIC.dur)).join("")}</select></label>`;
+  const c=qs("#mp-cur"); if(c) c.onchange=e=>{ MAP_METRIC.cur=e.target.value; buildMapControls(); renderMap(); history.replaceState({},"",mapURL()); };
+  qs("#mp-plan").onchange=e=>{ MAP_METRIC.plan=e.target.value; renderMap(); history.replaceState({},"",mapURL()); };
+  qs("#mp-dur").onchange=e=>{ MAP_METRIC.dur=e.target.value; renderMap(); history.replaceState({},"",mapURL()); };
+}
+function renderMap(){
+  if(!window.L) return;
+  const {plan,dur,cur}=MAP_METRIC;
+  if(!MAP){
+    MAP=L.map("map-canvas",{scrollWheelZoom:false}).setView([54.5,-3],5);
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+      { maxZoom:18, attribution:"© OpenStreetMap contributors" }).addTo(MAP);
+  }
+  if(MAP_LAYER) MAP_LAYER.remove();
+  MAP_LAYER=L.layerGroup().addTo(MAP);
+  const pts=[];
+  for(const c of (LATEST.clubs||[])){
+    if(c.currency!==cur) continue;
+    const loc=LOCS[c.siteId]; if(!loc) continue;
+    const cell=(c.plans[plan]||{})[dur]; const v=cell?cell.i:null; if(v==null) continue;
+    pts.push({c, loc, v});
+  }
+  const note=qs("#map-note");
+  if(!pts.length){ note.textContent="No clubs with this plan to map."; return; }
+  const vals=pts.map(p=>p.v), lo=Math.min(...vals), hi=Math.max(...vals);
+  const bounds=[];
+  for(const {c,loc,v} of pts){
+    const t=hi>lo?(v-lo)/(hi-lo):0.5;
+    const m=L.circleMarker([loc.lat,loc.lng],{ radius:8, color:"#0b0b0a", weight:1.5, fillColor:heat(t), fillOpacity:.9 });
+    m.bindPopup(`<b>${esc(c.name)}</b><br>${esc(prettyPlan(plan))} · ${fmt(v,cur)}${dur==="A"?"/yr":"/mo"}<br><a href="?club=${slugify(c.name)}" data-site="${c.siteId}" class="map-open">View prices →</a>`);
+    m.addTo(MAP_LAYER); bounds.push([loc.lat,loc.lng]);
+  }
+  if(bounds.length) MAP.fitBounds(bounds,{padding:[30,30]});
+  note.textContent=`${pts.length} clubs · ${prettyPlan(plan)} individual · green ${fmt(lo,cur)} → red ${fmt(hi,cur)}. Free OpenStreetMap tiles.`;
+  MAP.off("popupopen"); MAP.on("popupopen", e=>{
+    const a=e.popup.getElement().querySelector(".map-open");
+    if(a) a.onclick=ev=>{ ev.preventDefault(); const club=CLUBS.find(x=>x.siteId===+a.dataset.site); if(club){ setView("lookup"); selectClub(club); } };
+  });
+  setTimeout(()=>MAP.invalidateSize(),100);
+}
+
+/* ---- view switching (lookup / league / facilities / compare / map / movers) ---- */
+const VIEWS={ league:"#league", facilities:"#facilities", compare:"#compare", map:"#map", movers:"#movers" };
 function setView(v){
-  const isLeague=v==="league", isFac=v==="facilities", isLookup=v==="lookup";
-  qs("#league").hidden = !isLeague;
-  qs("#facilities").hidden = !isFac;
+  const isLookup=v==="lookup";
+  for(const [name,sel] of Object.entries(VIEWS)) qs(sel).hidden = (v!==name);
   qs(".hero").hidden = !isLookup;
   qs(".search").hidden = !isLookup;
   qs("#panel").hidden = isLookup ? !CURRENT : true;
   document.querySelectorAll(".nav button").forEach(b=>b.setAttribute("aria-selected", b.dataset.view===v));
-  if(isLeague) qs("#league").scrollIntoView({behavior:"smooth",block:"start"});
-  if(isFac) qs("#facilities").scrollIntoView({behavior:"smooth",block:"start"});
+  if(VIEWS[v]) qs(VIEWS[v]).scrollIntoView({behavior:"smooth",block:"start"});
 }
 
 /* ---- shareable image (custom-drawn canvas in the site's style) ---- */
@@ -725,7 +944,12 @@ function gotoLookup(){
 }
 document.querySelectorAll(".nav button").forEach(b=>b.addEventListener("click",()=>{
   const v=b.dataset.view;
-  if(v==="league") openLeague(); else if(v==="facilities") openFacilities(); else gotoLookup();
+  if(v==="league") openLeague();
+  else if(v==="facilities") openFacilities();
+  else if(v==="compare") openCompare();
+  else if(v==="map") openMap();
+  else if(v==="movers") openMovers();
+  else gotoLookup();
 }));
 qs("#nm-geo")?.addEventListener("click", setNearMeByGeo);
 qs("#nm-form")?.addEventListener("submit", e=>{ e.preventDefault(); setNearMeByPostcode(qs("#nm-pc").value); });
@@ -737,9 +961,13 @@ window.addEventListener("popstate",()=>{
     if(p.get("plan")) LEAGUE_METRIC.plan=p.get("plan");
     if(p.get("who")) LEAGUE_METRIC.type=p.get("who");
     if(p.get("term")) LEAGUE_METRIC.dur=p.get("term");
+    if(p.get("cur")) LEAGUE_METRIC.cur=p.get("cur");
     openLeague(true); return;
   }
   if(p.get("view")==="facilities"){ if(p.get("metric")) FAC_METRIC=p.get("metric"); openFacilities(true); return; }
+  if(p.get("view")==="compare"){ restoreCompareParams(p); openCompare(true); return; }
+  if(p.get("view")==="map"){ restoreMapParams(p); openMap(true); return; }
+  if(p.get("view")==="movers"){ openMovers(true); return; }
   const cs=p.get("club");
   if(cs){ const m=CLUBS.find(c=>slugify(c.clubName)===cs); if(m){ setView("lookup"); selectClub(m,true); return; } }
   setView("lookup");
@@ -761,9 +989,13 @@ window.addEventListener("popstate",()=>{
       if(params.get("plan")) LEAGUE_METRIC.plan=params.get("plan");
       if(params.get("who")) LEAGUE_METRIC.type=params.get("who");
       if(params.get("term")) LEAGUE_METRIC.dur=params.get("term");
+      if(params.get("cur")) LEAGUE_METRIC.cur=params.get("cur");
       openLeague(true); return;
     }
     if(params.get("view")==="facilities"){ if(params.get("metric")) FAC_METRIC=params.get("metric"); openFacilities(true); return; }
+    if(params.get("view")==="compare"){ restoreCompareParams(params); openCompare(true); return; }
+    if(params.get("view")==="map"){ restoreMapParams(params); openMap(true); return; }
+    if(params.get("view")==="movers"){ openMovers(true); return; }
     const cslug=params.get("club");
     if(cslug){ const m=CLUBS.find(c=>slugify(c.clubName)===cslug); if(m){ selectClub(m,true); return; } }
     if(document.activeElement===q) renderDropdown(filterClubs(q.value),q.value.trim());

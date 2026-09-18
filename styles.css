@@ -23,6 +23,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--disp);
 .topbar{display:flex;justify-content:space-between;align-items:center;gap:14px;
   padding:12px clamp(16px,3vw,28px);font-family:var(--mono);flex-wrap:wrap}
 .topbar .mark{font-weight:700;letter-spacing:.04em;font-size:.86rem}
+.nav{flex-wrap:wrap}
 .topbar .tag{font-size:.66rem;letter-spacing:.12em;color:var(--accent);font-weight:700}
 
 /* hero */
@@ -278,6 +279,18 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--disp);
 .fac-courts{font-family:var(--mono);font-size:.72rem;color:var(--muted);line-height:1.5}
 .lg-price .per{font-size:.62rem;color:var(--muted);font-weight:400;margin-left:2px}
 .lg-foot{margin:16px 0 0;font-family:var(--mono);font-size:.66rem;color:var(--muted)}
+
+/* compare (#13) */
+.cmp-slots{display:flex;flex-wrap:wrap;gap:10px}
+.cmp-pick{font-family:var(--disp);font-weight:600;font-size:.95rem;color:var(--ink);
+  background:var(--paper);border:2px solid var(--ink);padding:9px 11px;cursor:pointer;flex:1;min-width:180px}
+#cmp-table .cell .mo{font-size:1.06rem}
+
+/* map (#14) */
+#map-canvas{height:min(68vh,620px);margin-top:16px;border:2px solid var(--ink);box-shadow:var(--sh);background:var(--paper-2)}
+.leaflet-container{font-family:var(--mono)!important;background:var(--paper-2)}
+.leaflet-popup-content{font-family:var(--disp)}
+.leaflet-popup-content a{color:var(--accent);font-weight:700;text-decoration:none}
 
 /* reveal */
 .hero-main>*,.spec-row{opacity:0;animation:fade .5s ease forwards}

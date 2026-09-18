@@ -164,7 +164,9 @@ async function main() {
   const locations = {};
   for (const [sid, v] of Object.entries(locResp.clubLocations || {})) {
     const lat = parseFloat(v.latitude), lng = parseFloat(v.longitude);
-    if (Number.isFinite(lat) && Number.isFinite(lng)) locations[sid] = { lat, lng };
+    // Validate ranges — DL sometimes emits placeholders (e.g. Windsor at 100,100).
+    if (Number.isFinite(lat) && Number.isFinite(lng) && lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180)
+      locations[sid] = { lat, lng };
   }
 
   const CLUBDIR = `${DATA}/clubs`;

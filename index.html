@@ -28,7 +28,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Space+Mono:wght@400;700&display=swap" />
-<link rel="stylesheet" href="styles.css?v=30" />
+<link rel="stylesheet" href="styles.css?v=32" />
 </head>
 <body>
 <div class="frame">
@@ -39,6 +39,9 @@
       <button type="button" data-view="lookup" aria-selected="true">Club&nbsp;lookup</button>
       <button type="button" data-view="league" aria-selected="false">Price&nbsp;league</button>
       <button type="button" data-view="facilities" aria-selected="false">Facilities</button>
+      <button type="button" data-view="compare" aria-selected="false">Compare</button>
+      <button type="button" data-view="map" aria-selected="false">Map</button>
+      <button type="button" data-view="movers" aria-selected="false">Movers</button>
     </nav>
   </header>
 
@@ -125,6 +128,38 @@
     <div class="tablewrap"><table id="fac-table" class="pricetable league-table" hidden></table></div>
   </section>
 
+  <section id="compare" class="league" hidden aria-label="Compare clubs">
+    <div class="lg-head">
+      <h2>Compare clubs</h2>
+      <p class="lg-lede">Pick up to three clubs and put their prices side by side.</p>
+    </div>
+    <div id="cmp-pickers" class="cmp-pickers"></div>
+    <div id="cmp-controls" class="league-controls"></div>
+    <p id="cmp-empty" class="empty">Pick a club above to start comparing.</p>
+    <div class="tablewrap"><table id="cmp-table" class="pricetable" hidden></table></div>
+  </section>
+
+  <section id="map" class="league" hidden aria-label="Club map">
+    <div class="lg-head">
+      <h2>Club map</h2>
+      <p class="lg-lede">Every club, pinned and coloured by price — green is cheapest, red priciest. Click a pin for its rates.</p>
+    </div>
+    <div id="map-controls" class="league-controls"></div>
+    <div id="map-canvas"></div>
+    <p class="lg-foot" id="map-note"></p>
+  </section>
+
+  <section id="movers" class="league" hidden aria-label="Biggest price movers">
+    <div class="lg-head">
+      <h2>Biggest movers</h2>
+      <p class="lg-lede">Clubs whose standard prices have changed since tracking began — this fills in as the nightly snapshots build up.</p>
+    </div>
+    <p id="mov-sub" class="league-sub"></p>
+    <div id="mov-status" class="status"><span class="spin"></span><span>Reading price history…</span></div>
+    <div class="tablewrap"><table id="mov-table" class="pricetable league-table" hidden></table></div>
+    <p id="mov-empty" class="empty" hidden></p>
+  </section>
+
   <footer class="sitefoot">
     <p><span class="fs-mk">UNOFFICIAL</span> Not affiliated with David&nbsp;Lloyd Leisure · indicative live rates, always confirm with the club · anonymous, cookieless analytics only.</p>
   </footer>
@@ -150,7 +185,7 @@
 </div>
 
 <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
-<script src="app.js?v=30"></script>
+<script src="app.js?v=32"></script>
 <!-- Cloudflare Web Analytics — cookieless, no personal data. Public site tag. -->
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "5661e49f2a504dd69734b894973090a0"}'></script>
 </body>
