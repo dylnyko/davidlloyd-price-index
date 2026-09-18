@@ -43,6 +43,7 @@ const benefitsOf = pkg => ((pkg.packageInformationGroupedByType||{}).BENEFIT||[]
   .slice().sort((a,b)=>(a.orderingPriority??999)-(b.orderingPriority??999))
   .map(b=>((b.displayTextByLanguage||{})["en-gb"]||{}).text).filter(Boolean);
 const planRank = p => p.startsWith("CLUB")?0 : p.startsWith("JUNIOR")?1 : p.startsWith("YOUNG_ADULT")?2 : p.startsWith("TEAM")?3 : 4;
+const slugify = s => s.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
 
 /* ---- state ---- */
 let CLUBS=[], CURRENT=null, DATA=null, CURDUR="STANDARD", token=0;
@@ -85,9 +86,15 @@ dd.addEventListener("mousedown",e=>{ const li=e.target.closest("li[data-idx]"); 
 document.addEventListener("click",e=>{ if(!e.target.closest(".combo")) closeDropdown(); });
 
 /* ---- select a club ---- */
-async function selectClub(club){
+async function selectClub(club, fromUrl){
   CURRENT=club; const my=++token;
   q.value=club.clubName; closeDropdown(); q.blur();
+  // Give each club its own URL + title so Cloudflare's SPA tracking logs it as a
+  // distinct page view — the dashboard's "Top pages" then shows which clubs get
+  // looked up. Cookieless: it's just a path, no identifiers.
+  const url=`?club=${slugify(club.clubName)}`;
+  if(fromUrl) history.replaceState({}, "", url); else history.pushState({}, "", url);
+  document.title=`${club.clubName} — The Price Book`;
   const panel=qs("#panel"); panel.hidden=false;
   qs("#clubname").textContent=club.clubName;
   qs("#clubsub").innerHTML=`<span class="pin">◆</span> ${club.country||"—"} <span class="sep">/</span> site #${club.siteId} <span class="sep">/</span> prices in ${club.currency}`;
@@ -168,6 +175,9 @@ function renderTable(){
     CLUBS=await getClubs();
     qs("#clubcount").textContent=`${CLUBS.length}`;
     const spec=qs("#spec-clubs"); if(spec) spec.textContent=`${CLUBS.length} clubs`;
+    // Deep link: ?club=<slug> opens straight to that club (shareable URLs).
+    const cslug=new URLSearchParams(location.search).get("club");
+    if(cslug){ const m=CLUBS.find(c=>slugify(c.clubName)===cslug); if(m){ selectClub(m,true); return; } }
     if(document.activeElement===q) renderDropdown(filterClubs(q.value),q.value.trim());
   }catch{
     q.placeholder="Couldn't reach the pricing service — try again later";
