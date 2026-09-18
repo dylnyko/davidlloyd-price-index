@@ -105,7 +105,7 @@ test("renders the price table 1:1 with the fixture", async ({ page }) => {
   // the raw plan key is no longer exposed on the frontend
   await expect(page.locator("#tbody .pk")).toHaveCount(0);
   // each plan carries a "?" info button
-  await expect(plat.locator(".pn-info")).toBeVisible();
+  await expect(plat.locator(".pn-more")).toBeVisible();
 
   // a plan with no couple rate shows an em dash, not a fabricated price
   const club = page.locator("#tbody tr", { has: page.locator(".pn-name", { hasText: /^Club$/ }) });
@@ -117,7 +117,7 @@ test("renders the price table 1:1 with the fixture", async ({ page }) => {
 test("the plan ? button opens a details modal (description + benefits)", async ({ page }) => {
   await openWestEnd(page);
   const plat = page.locator("#tbody tr", { has: page.locator(".pn-name", { hasText: "Club Platinum" }) });
-  await plat.locator(".pn-info").click();
+  await plat.locator(".pn-more").click();
   await expect(page.locator("#planmodal")).toBeVisible();
   await expect(page.locator("#plantitle")).toContainText("Club Platinum");
   await expect(page.locator("#planbens .ben").first()).toBeVisible();
@@ -125,10 +125,11 @@ test("the plan ? button opens a details modal (description + benefits)", async (
   await expect(page.locator("#planmodal")).toBeHidden();
 });
 
-test("lists accessible clubs from clubsInTheSameTierOrLower", async ({ page }) => {
+test("lists accessible clubs in the plan modal", async ({ page }) => {
   await openWestEnd(page);
-  const summary = page.locator("#tbody details.access summary").first();
-  await expect(summary).toContainText("Clubs you can access");
+  const plat = page.locator("#tbody tr", { has: page.locator(".pn-name", { hasText: "Club Platinum" }) });
+  await plat.locator(".pn-more").click();
+  await expect(page.locator("#planaccess")).toContainText("Clubs you can access");
 });
 
 test("switches duration to Annual and updates units + note", async ({ page }) => {

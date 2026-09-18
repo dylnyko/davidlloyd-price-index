@@ -399,14 +399,9 @@ function renderTable(){
   tbody.innerHTML=pkgs.map(p=>{
     const jf = p.prices[dur].joiningFee||0;
     const bens = benefitsOf(p);
-    const benHtml = bens.length ? `<div class="benefits">${bens.map(b=>`<span class="ben">${b}</span>`).join("")}</div>` : "";
+    const desc = descOf(p);
     const acc = ACCESS[p.packageKey]||[];
-    let accHtml="";
-    if(acc.length>1){
-      const names=acc.map(id=>CLUBBY[id]).filter(Boolean).sort((a,b)=>a.localeCompare(b));
-      accHtml=`<details class="access"><summary>Clubs you can access · ${names.length}</summary>`+
-              `<div class="access-list">${names.join(" · ")}</div></details>`;
-    }
+    const accNames = acc.length>1 ? acc.map(id=>CLUBBY[id]).filter(Boolean).sort((a,b)=>a.localeCompare(b)) : [];
     const pop = p.packageKey===MOSTPOP ? `<span class="pop">Most popular</span>` : "";
     // Offers are attached per package by DL — show them on the plans they apply to (#10).
     const offers=[...new Set((p.prices[dur].promotions||[]).filter(pm=>!pm.inHiddenMenuInClub).map(promoText).filter(Boolean))];
@@ -419,13 +414,18 @@ function renderTable(){
       return `<td class="cell"><div class="mo">${fmt(v,cur)}<span class="per">${unit}</span></div>`+
              `<div class="join">${jf?`+ ${fmt(jf,cur)} joining`:`no joining fee`}</div></td>`;
     }).join("");
-    const desc = descOf(p);
-    // A "?" opens a modal with the plan's description + benefits (works on touch, unlike a title tooltip).
-    if(desc || bens.length) PLANINFO[p.packageKey] = { name:prettyPlan(p.packageKey), desc, bens };
-    const info = (desc || bens.length)
-      ? `<button class="pn-info" type="button" data-key="${esc(p.packageKey)}" aria-label="About the ${esc(prettyPlan(p.packageKey))} plan">?</button>` : "";
-    return `<tr><td class="plan"><div class="pn"><span class="pn-name">${prettyPlan(p.packageKey)}</span>${info}${pop}</div>`+
-           `${offerHtml}${trendHtml}${benHtml}${accHtml}</td>${cells}</tr>`;
+    // Plain-English description does the heavy lifting on the table; the full
+    // benefit list + accessible clubs live in the modal, so we don't repeat the
+    // same base facilities on every plan (#clean).
+    const descHtml = desc ? `<div class="pdesc">${esc(desc)}</div>` : "";
+    const hasMore = bens.length || accNames.length || desc;
+    if(hasMore) PLANINFO[p.packageKey] = { name:prettyPlan(p.packageKey), desc, bens, access:accNames };
+    const bits=[]; if(bens.length) bits.push(`${bens.length} perk${bens.length>1?"s":""}`);
+    if(accNames.length) bits.push(`${accNames.length} club${accNames.length>1?"s":""} to visit`);
+    const moreHtml = hasMore
+      ? `<button class="pn-more" type="button" data-key="${esc(p.packageKey)}">What’s included${bits.length?` · ${bits.join(" · ")}`:""} <span class="chev">›</span></button>` : "";
+    return `<tr><td class="plan"><div class="pn"><span class="pn-name">${prettyPlan(p.packageKey)}</span>${pop}</div>`+
+           `${descHtml}${offerHtml}${trendHtml}${moreHtml}</td>${cells}</tr>`;
   }).join("");
   table.hidden=false; empty.hidden=true;
   renderPromos(dur);
@@ -448,7 +448,7 @@ function renderTable(){
     meta: `${CURRENT.country||""} · Site #${CURRENT.siteId} · ${cur} · ${DUR_LABEL[dur]||dur}`,
     cols: activeTypes.map(t=>({ label:TYPE_LABEL[t], pp:t!=="INDIVIDUAL" })),
     rows: pkgs.map(p=>{ const jf=p.prices[dur].joiningFee||0;
-      return { name:prettyPlan(p.packageKey), key:p.packageKey, pop:p.packageKey===MOSTPOP,
+      return { name:prettyPlan(p.packageKey), desc:descOf(p), pop:p.packageKey===MOSTPOP,
         cells: activeTypes.map(t=>{ const v=priceAt(p,t); if(v==null) return null;
           return { price:fmt(v,cur), unit, join: jf?`+ ${fmt(jf,cur)} joining`:"no joining fee" }; }) }; }),
     url: `dylnyko.github.io/davidlloyd-price-index/?club=${slugify(CURRENT.clubName)}`,
@@ -869,6 +869,13 @@ function setView(v){
 }
 
 /* ---- shareable image (custom-drawn canvas in the site's style) ---- */
+function ellipsize(ctx, text, maxW){
+  if(!text) return "";
+  if(ctx.measureText(text).width<=maxW) return text;
+  let t=text;
+  while(t.length>1 && ctx.measureText(t+"…").width>maxW) t=t.slice(0,-1);
+  return t.replace(/[ ,.;:]+$/,"")+"…";
+}
 function drawShare(m){
   const INK="#0b0b0a", PAPER="#efece3", ACCENT="#ff3d00", MUTED="#6b675d", LINE="rgba(11,11,10,0.14)";
   const DISP='"Bricolage Grotesque", sans-serif', MONO='"Space Mono", monospace';
@@ -902,6 +909,7 @@ function drawShare(m){
     const top=yRows+ri*RH;
     ctx.textAlign="left"; ctx.fillStyle=INK; ctx.font=`700 19px ${DISP}`; ctx.fillText(r.name, P, top+26);
     if(r.pop){ const w=ctx.measureText(r.name).width; ctx.font=`700 9px ${MONO}`; ctx.fillStyle=ACCENT; ctx.fillText("★ MOST POPULAR", P+w+10, top+24); }
+    if(r.desc){ ctx.font=`400 11px ${MONO}`; ctx.fillStyle=MUTED; ctx.fillText(ellipsize(ctx, r.desc, planW-6), P, top+45); }
     r.cells.forEach((cell,i)=>{ const rx=colR(i);
       if(!cell){ ctx.textAlign="right"; ctx.fillStyle=MUTED; ctx.font=`400 18px ${MONO}`; ctx.fillText("—", rx, top+27); return; }
       ctx.textAlign="right";
@@ -956,11 +964,15 @@ function openPlanModal(key){
   const info=PLANINFO[key]; if(!info) return;
   qs("#plantitle").textContent=info.name;
   const d=qs("#plandesc"); d.textContent=info.desc||""; d.hidden=!info.desc;
+  const bh=qs("#planbens-h"); if(bh) bh.hidden=!info.bens.length;
   qs("#planbens").innerHTML=info.bens.length ? info.bens.map(b=>`<span class="ben">${esc(b)}</span>`).join("") : "";
+  const a=qs("#planaccess");
+  if(a) a.innerHTML=(info.access&&info.access.length)
+    ? `<h4 class="modal-h">Clubs you can access · ${info.access.length}</h4><p class="access-list">${info.access.map(esc).join(" · ")}</p>` : "";
   qs("#planmodal").hidden=false; document.body.style.overflow="hidden";
 }
 function closePlanModal(){ qs("#planmodal").hidden=true; document.body.style.overflow=""; }
-qs("#tbody").addEventListener("click", e=>{ const b=e.target.closest(".pn-info"); if(b) openPlanModal(b.dataset.key); });
+qs("#tbody").addEventListener("click", e=>{ const b=e.target.closest(".pn-more"); if(b) openPlanModal(b.dataset.key); });
 qs("#planmodal").addEventListener("click", e=>{ if(e.target.closest("[data-close]")) closePlanModal(); });
 
 document.addEventListener("keydown", e=>{
