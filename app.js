@@ -79,19 +79,24 @@ function journeyFor(pkg){
 async function price(siteId,pkg,type,dur,signal){
   const body = { siteId, membershipType:type, packageKey:pkg, membershipDuration:dur,
     startDate:todayISO(), promotionIds:[], associatedMemberTypes:[], journeyType:journeyFor(pkg) };
+  const ctrl = new AbortController();
+  const to = setTimeout(()=>ctrl.abort(), 15000);          // never let a request hang forever
+  const onAbort = ()=>ctrl.abort();
+  if(signal){ if(signal.aborted) ctrl.abort(); else signal.addEventListener("abort",onAbort,{once:true}); }
   try{
-    const r = await fetch(`${API}/membership/price-breakdown`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body),signal});
+    const r = await fetch(`${API}/membership/price-breakdown`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body),signal:ctrl.signal});
     if(!r.ok) return null;
     const j = await r.json(); const p = j?.prices;
     if(!p || p.monthlyFeeInPennies==null) return null;
     return { monthly:p.monthlyFeeInPennies, joining:p.joiningFeeInPennies||0, total:p.totalPriceInPennies||0 };
   }catch{ return null; }
+  finally{ clearTimeout(to); if(signal) signal.removeEventListener("abort",onAbort); }
 }
 
 /* run tasks with bounded concurrency; onProgress(done,total) */
 async function pool(items, worker, onProgress){
   let i=0, done=0; const total=items.length;
-  async function run(){ while(i<total){ const idx=i++; await worker(items[idx],idx); onProgress&&onProgress(++done,total); } }
+  async function run(){ while(i<total){ const idx=i++; try{ await worker(items[idx],idx); }catch{} onProgress&&onProgress(++done,total); } }
   await Promise.all(Array.from({length:Math.min(CONCURRENCY,total)},run));
 }
 
@@ -180,17 +185,30 @@ async function loadPrices(my){
 
   const types=orderedTypes();
   const pkgs=ENUMS.packages;
-  const jobs=[]; for(const p of pkgs) for(const t of types) jobs.push([p,t]);
   const ctrl=new AbortController();
   const data={}; // pkg -> {type -> price}
-  await pool(jobs, async ([p,t])=>{
+  const primary = p => journeyFor(p)==="FAMILY" ? "FAMILY" : "INDIVIDUAL";
+
+  // Phase 1 — probe each plan once (at its natural membership type) to discover
+  // which plans this club actually offers. Keeps the request count/404s down.
+  await pool(pkgs, async (p)=>{
+    if(my!==token){ ctrl.abort(); return; }
+    const t=primary(p);
+    const res=await price(club.siteId,p,t,dur,ctrl.signal);
+    if(res){ (data[p]=data[p]||{})[t]=res; }
+  }, (done,total)=>{ if(my===token && bar) bar.style.width=Math.round(done/total*45)+"%"; });
+  if(my!==token) return;
+
+  // Phase 2 — for the plans that exist, fill in the remaining membership types.
+  const offered=Object.keys(data);
+  const jobs2=[]; for(const p of offered) for(const t of types) if(!data[p][t]) jobs2.push([p,t]);
+  await pool(jobs2, async ([p,t])=>{
     if(my!==token){ ctrl.abort(); return; }
     const res=await price(club.siteId,p,t,dur,ctrl.signal);
     if(res){ (data[p]=data[p]||{})[t]=res; }
-  }, (done,total)=>{ if(my===token && bar) bar.style.width=Math.round(done/total*100)+"%"; });
+  }, (done,total)=>{ if(my===token && bar) bar.style.width=(45+Math.round(done/(total||1)*55))+"%"; });
   if(my!==token) return;
 
-  const offered=Object.keys(data);
   if(offered.length) cacheSet(ckey,data,DAY/2);
   renderTable(data,cur);
 }
@@ -202,9 +220,10 @@ function renderTable(data,cur){
   const offered=Object.keys(data);
   if(!offered.length){ table.hidden=true; empty.hidden=false; foot.hidden=true; return; }
 
-  // sort plans by cheapest available monthly
+  // Group order: Club* → Junior* → Team* → everything else; then cheapest first.
   const minMonthly=p=>Math.min(...types.map(t=>data[p][t]?.monthly ?? Infinity));
-  offered.sort((a,b)=>minMonthly(a)-minMonthly(b));
+  const rank=p=> p.startsWith("CLUB")?0 : p.startsWith("JUNIOR")?1 : p.startsWith("TEAM")?2 : 3;
+  offered.sort((a,b)=> (rank(a)-rank(b)) || (minMonthly(a)-minMonthly(b)) || a.localeCompare(b));
   const cheapest=offered.reduce((m,p)=>minMonthly(p)<minMonthly(m)?p:m,offered[0]);
 
   thead.innerHTML=`<th>Plan</th>`+types.map(t=>`<th>${TYPE_LABEL[t]}</th>`).join("");
