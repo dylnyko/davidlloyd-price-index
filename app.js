@@ -87,8 +87,13 @@ async function price(siteId,pkg,type,dur,signal){
     const r = await fetch(`${API}/membership/price-breakdown`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body),signal:ctrl.signal});
     if(!r.ok) return null;
     const j = await r.json(); const p = j?.prices;
-    if(!p || p.monthlyFeeInPennies==null) return null;
-    return { monthly:p.monthlyFeeInPennies, joining:p.joiningFeeInPennies||0, total:p.totalPriceInPennies||0 };
+    if(!p) return null;
+    // Monthly plans expose monthlyFeeInPennies; annual/fixed-term plans expose
+    // fixedTermPriceInPennies (with monthlyFeeInPennies null). Keep either.
+    const monthly = p.monthlyFeeInPennies!=null ? p.monthlyFeeInPennies : null;
+    const fixed   = p.fixedTermPriceInPennies!=null ? p.fixedTermPriceInPennies : null;
+    if(monthly==null && fixed==null) return null;
+    return { monthly, fixed, joining:p.joiningFeeInPennies||0, total:p.totalPriceInPennies||0 };
   }catch{ return null; }
   finally{ clearTimeout(to); if(signal) signal.removeEventListener("abort",onAbort); }
 }
@@ -219,19 +224,21 @@ function renderTable(data,cur){
   const offered=Object.keys(data);
   if(!offered.length){ table.hidden=true; empty.hidden=false; foot.hidden=true; return; }
 
-  // Group order: Club* → Junior* → Team* → everything else; then cheapest first.
-  const minMonthly=p=>Math.min(...types.map(t=>data[p][t]?.monthly ?? Infinity));
+  // Group order: Club* → Junior* → Young Adult* → Team* → rest; then cheapest first.
+  const amountOf=r=> r ? (r.monthly!=null ? r.monthly : r.fixed) : Infinity;
+  const unitOf=r=> r && r.monthly!=null ? "/mo" : "/yr";
+  const minAmt=p=>Math.min(...types.map(t=>amountOf(data[p][t])));
   const rank=p=> p.startsWith("CLUB")?0 : p.startsWith("JUNIOR")?1 : p.startsWith("YOUNG_ADULT")?2 : p.startsWith("TEAM")?3 : 4;
-  offered.sort((a,b)=> (rank(a)-rank(b)) || (minMonthly(a)-minMonthly(b)) || a.localeCompare(b));
-  const cheapest=offered.reduce((m,p)=>minMonthly(p)<minMonthly(m)?p:m,offered[0]);
+  offered.sort((a,b)=> (rank(a)-rank(b)) || (minAmt(a)-minAmt(b)) || a.localeCompare(b));
+  const cheapest=offered.reduce((m,p)=>minAmt(p)<minAmt(m)?p:m,offered[0]);
 
   thead.innerHTML=`<th>Plan</th>`+types.map(t=>`<th>${TYPE_LABEL[t]}</th>`).join("");
   tbody.innerHTML=offered.map(p=>{
     const cells=types.map(t=>{
       const r=data[p][t];
       if(!r) return `<td class="cell na">—</td>`;
-      const tag = (p===cheapest && r.monthly===minMonthly(p)) ? `<div class="best-tag">Lowest</div>`:"";
-      return `<td class="cell"><div class="mo">${fmt(r.monthly,cur)}<span class="per">/mo</span></div>`+
+      const amt=amountOf(r), tag=(p===cheapest && amt===minAmt(p)) ? `<div class="best-tag">Lowest</div>`:"";
+      return `<td class="cell"><div class="mo">${fmt(amt,cur)}<span class="per">${unitOf(r)}</span></div>`+
              `<div class="join">${r.joining?`+ ${fmt(r.joining,cur)} joining`:`no joining fee`}</div>${tag}</td>`;
     }).join("");
     return `<tr class="${p===cheapest?"best":""}"><td class="plan"><div class="pn">${prettyPlan(p)}</div><div class="pk">${p}</div></td>${cells}</tr>`;
