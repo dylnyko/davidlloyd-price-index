@@ -150,6 +150,9 @@ const prettyPlan = key => key.toLowerCase().split("_")
 const benefitsOf = pkg => ((pkg.packageInformationGroupedByType||{}).BENEFIT||[])
   .slice().sort((a,b)=>(a.orderingPriority??999)-(b.orderingPriority??999))
   .map(b=>((b.displayTextByLanguage||{})["en-gb"]||{}).text).filter(Boolean);
+// DL's one-line plan blurb (packageInformationGroupedByType.DESCRIPTION) — shown as a tooltip.
+const descOf = pkg => (((pkg.packageInformationGroupedByType||{}).DESCRIPTION||[])
+  .map(d=>((d.displayTextByLanguage||{})["en-gb"]||{}).text).filter(Boolean)[0]) || "";
 const planRank = p => p.startsWith("CLUB")?0 : p.startsWith("JUNIOR")?1 : p.startsWith("YOUNG_ADULT")?2 : p.startsWith("TEAM")?3 : 4;
 const slugify = s => s.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
 const esc = s => String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -414,7 +417,9 @@ function renderTable(){
       return `<td class="cell"><div class="mo">${fmt(v,cur)}<span class="per">${unit}</span></div>`+
              `<div class="join">${jf?`+ ${fmt(jf,cur)} joining`:`no joining fee`}</div></td>`;
     }).join("");
-    return `<tr><td class="plan"><div class="pn">${prettyPlan(p.packageKey)}${pop}</div>`+
+    const desc = descOf(p);
+    const nameHtml = `<span class="pn-name${desc?" has-desc":""}"${desc?` title="${esc(desc)}"`:""}>${prettyPlan(p.packageKey)}</span>`;
+    return `<tr><td class="plan"><div class="pn">${nameHtml}${pop}</div>`+
            `${offerHtml}${trendHtml}${benHtml}${accHtml}</td>${cells}</tr>`;
   }).join("");
   table.hidden=false; empty.hidden=true;

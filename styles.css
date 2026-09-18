@@ -163,6 +163,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--disp);
 .pricetable tbody tr.best{background:rgba(255,61,0,.06)}
 .plan{position:relative;text-align:left!important}
 .plan .pn{font-family:var(--disp);font-weight:700;font-size:1.06rem;line-height:1.12}
+.pn-name.has-desc{text-decoration:underline dotted var(--line-2);text-underline-offset:3px;cursor:help}
 .plan .pk{font-family:var(--mono);font-size:.62rem;letter-spacing:.05em;color:var(--muted);margin-top:4px}
 .pop{display:inline-block;margin-left:9px;font-family:var(--mono);font-size:.56rem;letter-spacing:.08em;
   text-transform:uppercase;font-weight:700;background:var(--accent);color:var(--accent-ink);padding:2px 6px;vertical-align:middle}

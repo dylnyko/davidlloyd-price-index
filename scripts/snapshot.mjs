@@ -113,11 +113,15 @@ function trimPackages(pkg) {
       prices[dur] = { individual: d.individual ?? null, couple: d.couple ?? null, family: d.family ?? null,
         joiningFee: d.joiningFee ?? 0, promotions: (d.promotions || []).map(trimPromo) };
     }
-    const ben = ((p.packageInformationGroupedByType || {}).BENEFIT || []).map((b) => ({
+    const grouped = p.packageInformationGroupedByType || {};
+    const ben = (grouped.BENEFIT || []).map((b) => ({
       orderingPriority: b.orderingPriority,
       displayTextByLanguage: { "en-gb": { text: ((b.displayTextByLanguage || {})["en-gb"] || {}).text || "" } },
     }));
-    return { packageKey: p.packageKey, prices, packageInformationGroupedByType: { BENEFIT: ben } };
+    const desc = (grouped.DESCRIPTION || []).map((d) => ({
+      displayTextByLanguage: { "en-gb": { text: ((d.displayTextByLanguage || {})["en-gb"] || {}).text || "" } },
+    }));
+    return { packageKey: p.packageKey, prices, packageInformationGroupedByType: { BENEFIT: ben, DESCRIPTION: desc } };
   });
 }
 function trimAddOns(pkg) {

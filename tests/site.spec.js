@@ -104,6 +104,8 @@ test("renders the price table 1:1 with the fixture", async ({ page }) => {
   await expect(plat).toContainText("+ £150 joining");
   // the raw plan key is no longer exposed on the frontend
   await expect(page.locator("#tbody .pk")).toHaveCount(0);
+  // the plan's description is available as a tooltip on its name
+  await expect(plat.locator(".pn-name")).toHaveAttribute("title", /.+/);
 
   // a plan with no couple rate shows an em dash, not a fabricated price
   const club = page.locator("#tbody tr", { has: page.locator(".pn", { hasText: /^Club$/ }) });
