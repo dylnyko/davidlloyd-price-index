@@ -825,16 +825,20 @@ function renderMap(){
   }
   const note=qs("#map-note");
   if(!pts.length){ note.textContent="No clubs with this plan to map."; return; }
-  const vals=pts.map(p=>p.v), lo=Math.min(...vals), hi=Math.max(...vals);
+  // Colour by RANK (percentile), not raw min→max: a single outlier like Chelsea
+  // otherwise compresses every other club into the green end of the scale.
+  const sorted=pts.map(p=>p.v).slice().sort((a,b)=>a-b);
+  const n=sorted.length, lo=sorted[0], hi=sorted[n-1];
+  const rankT=v=> n<=1 ? 0.5 : sorted.indexOf(v)/(n-1);
   const bounds=[];
   for(const {c,loc,v} of pts){
-    const t=hi>lo?(v-lo)/(hi-lo):0.5;
+    const t=rankT(v);
     const m=L.circleMarker([loc.lat,loc.lng],{ radius:8, color:"#0b0b0a", weight:1.5, fillColor:heat(t), fillOpacity:.9 });
     m.bindPopup(`<b>${esc(c.name)}</b><br>${esc(prettyPlan(plan))} · ${fmt(v,cur)}${dur==="A"?"/yr":"/mo"}<br><a href="?club=${slugify(c.name)}" data-site="${c.siteId}" class="map-open">View prices →</a>`);
     m.addTo(MAP_LAYER); bounds.push([loc.lat,loc.lng]);
   }
   if(bounds.length) MAP.fitBounds(bounds,{padding:[30,30]});
-  note.textContent=`${pts.length} clubs · ${prettyPlan(plan)} individual · green ${fmt(lo,cur)} → red ${fmt(hi,cur)}. Free OpenStreetMap tiles.`;
+  note.textContent=`${pts.length} clubs · ${prettyPlan(plan)} individual · coloured by rank, green ${fmt(lo,cur)} (cheapest) → red ${fmt(hi,cur)} (priciest). Free OpenStreetMap tiles.`;
   MAP.off("popupopen"); MAP.on("popupopen", e=>{
     const a=e.popup.getElement().querySelector(".map-open");
     if(a) a.onclick=ev=>{ ev.preventDefault(); const club=CLUBS.find(x=>x.siteId===+a.dataset.site); if(club){ setView("lookup"); selectClub(club); } };
