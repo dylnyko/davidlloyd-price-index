@@ -7,6 +7,7 @@
   --shadow:5px 5px 0 var(--ink);
 }
 *{box-sizing:border-box}
+[hidden]{display:none!important}   /* author display rules must not defeat the hidden attribute */
 html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--disp);
   font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;

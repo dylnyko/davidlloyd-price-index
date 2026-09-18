@@ -28,7 +28,7 @@ function orderedTypes(){
 }
 const DUR_LABEL  = { STANDARD:"Monthly rolling", FLEXIBLE:"Flexible", ANNUAL:"Paid annually" };
 
-const $ = s => document.querySelector(s);
+const qs = s => document.querySelector(s);
 const todayISO = () => new Date().toISOString().slice(0,10);
 
 /* ---- tiny cache helpers ---- */
@@ -112,7 +112,7 @@ function prettyPlan(key){
 let CLUBS=[], ENUMS=null, CURRENT=null, CURDUR="STANDARD", token=0;
 
 /* ---- search / dropdown ---- */
-const q=$("#q"), dd=$("#results-list");
+const q=qs("#q"), dd=qs("#results-list");
 let active=-1, shown=[];
 function renderDropdown(list,term){
   shown=list;
@@ -154,15 +154,15 @@ document.addEventListener("click",e=>{ if(!e.target.closest(".combo")) closeDrop
 async function selectClub(club){
   CURRENT=club; token++; const my=token;
   q.value=club.clubName; closeDropdown(); q.blur();
-  const panel=$("#panel"); panel.hidden=false;
-  $("#clubname").textContent=club.clubName;
-  $("#clubsub").innerHTML=`<span class="pin">◆</span> ${club.country||"—"} <span class="sep">/</span> site #${club.siteId} <span class="sep">/</span> prices in ${club.currency}`;
+  const panel=qs("#panel"); panel.hidden=false;
+  qs("#clubname").textContent=club.clubName;
+  qs("#clubsub").innerHTML=`<span class="pin">◆</span> ${club.country||"—"} <span class="sep">/</span> site #${club.siteId} <span class="sep">/</span> prices in ${club.currency}`;
   buildDurations();
   panel.scrollIntoView({behavior:"smooth",block:"start"});
   await loadPrices(my);
 }
 function buildDurations(){
-  const wrap=$("#durations"); const durs=ENUMS.durations.filter(d=>DUR_LABEL[d]).length?ENUMS.durations:FALLBACK.durations;
+  const wrap=qs("#durations"); const durs=ENUMS.durations.filter(d=>DUR_LABEL[d]).length?ENUMS.durations:FALLBACK.durations;
   if(!durs.includes(CURDUR)) CURDUR=durs[0];
   wrap.innerHTML=durs.map(d=>`<button role="tab" data-dur="${d}" aria-selected="${d===CURDUR}">${DUR_LABEL[d]||prettyPlan(d)}</button>`).join("");
   wrap.querySelectorAll("button").forEach(b=>b.onclick=()=>{ if(b.dataset.dur===CURDUR) return; CURDUR=b.dataset.dur;
@@ -172,7 +172,7 @@ function buildDurations(){
 
 async function loadPrices(my){
   const club=CURRENT, cur=club.currency, dur=CURDUR;
-  const table=$("#pricetable"), tbody=$("#tbody"), status=$("#status"), empty=$("#empty"), foot=$("#foot-note");
+  const table=qs("#pricetable"), tbody=qs("#tbody"), status=qs("#status"), empty=qs("#empty"), foot=qs("#foot-note");
   empty.hidden=true; foot.hidden=true;
   const ckey=`pb_px_${club.siteId}_${dur}`;
   const cached=cacheGet(ckey);
@@ -213,7 +213,7 @@ async function loadPrices(my){
 }
 
 function renderTable(data,cur){
-  const table=$("#pricetable"), thead=$("#thead-row"), tbody=$("#tbody"), status=$("#status"), empty=$("#empty"), foot=$("#foot-note");
+  const table=qs("#pricetable"), thead=qs("#thead-row"), tbody=qs("#tbody"), status=qs("#status"), empty=qs("#empty"), foot=qs("#foot-note");
   status.hidden=true;
   const types=orderedTypes();
   const offered=Object.keys(data);
@@ -246,10 +246,10 @@ function renderTable(data,cur){
   try{
     ENUMS=await getEnums();
     CLUBS=await getClubs();
-    $("#clubcount").textContent=`${CLUBS.length}`;
-    const spec=$("#spec-clubs"); if(spec) spec.textContent=`${CLUBS.length} clubs`;
+    qs("#clubcount").textContent=`${CLUBS.length}`;
+    const spec=qs("#spec-clubs"); if(spec) spec.textContent=`${CLUBS.length} clubs`;
     if(document.activeElement===q) renderDropdown(filterClubs(q.value),q.value.trim());
   }catch(e){
-    $("#q").placeholder="Couldn't reach the pricing service — try again later";
+    qs("#q").placeholder="Couldn't reach the pricing service — try again later";
   }
 })();
