@@ -196,6 +196,19 @@ test("opens the national price league and ranks clubs cheapest-first (#6)", asyn
   await expect(page.locator("#pricetable")).toBeVisible();
 });
 
+test("price league is URL-driven and deep-linkable (#6)", async ({ page }) => {
+  await page.goto("/");
+  await page.locator('.nav button[data-view="league"]').click();
+  await expect(page.locator("#league-table")).toBeVisible();
+  await expect(page).toHaveURL(/view=league/);
+  await page.selectOption("#lg-dur", "A");
+  await expect(page).toHaveURL(/term=A/);
+  // direct deep link restores the view and the chosen metric
+  await page.goto("/?view=league&plan=CLUB_PLATINUM&who=i&term=A");
+  await expect(page.locator("#league-table")).toBeVisible();
+  await expect(page.locator("#lg-dur")).toHaveValue("A");
+});
+
 test("ranks clubs by distance from a postcode (#1)", async ({ page }) => {
   await page.goto("/");
   await page.fill("#nm-pc", "G1 1AA");

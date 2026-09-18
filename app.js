@@ -448,10 +448,14 @@ function renderProfile(){
 let LEAGUE_METRIC={ plan:"CLUB_PLATINUM", type:"i", dur:"S" };
 const DUR_SHORT={ S:"Standard · 12-mo", F:"Flexible · 3-mo", A:"Annual total" };
 const TYPE_SHORT={ i:"Individual", c:"Couple", f:"Family" };
-async function openLeague(){
+const leagueURL = () => `?view=league&plan=${encodeURIComponent(LEAGUE_METRIC.plan)}&who=${LEAGUE_METRIC.type}&term=${LEAGUE_METRIC.dur}`;
+async function openLeague(fromUrl){
   setView("league");
   const box=qs("#league"); box.hidden=false;
   qs("#league-status").hidden=false; qs("#league-table").hidden=true;
+  // Shareable/bookmarkable URL for the league view (and its chosen metric).
+  if(fromUrl) history.replaceState({},"",leagueURL()); else history.pushState({},"",leagueURL());
+  document.title="National price league — The Price Book";
   await Promise.all([getLatest(), USERLOC?applyDistances():null]);
   buildLeagueControls();
   renderLeague();
@@ -470,9 +474,10 @@ function buildLeagueControls(){
     `<label>Plan <select id="lg-plan">${plans.map(p=>opt(p,prettyPlan(p),LEAGUE_METRIC.plan)).join("")}</select></label>`+
     `<label>Who <select id="lg-type">${Object.entries(TYPE_SHORT).map(([v,l])=>opt(v,l,LEAGUE_METRIC.type)).join("")}</select></label>`+
     `<label>Term <select id="lg-dur">${Object.entries(DUR_SHORT).map(([v,l])=>opt(v,l,LEAGUE_METRIC.dur)).join("")}</select></label>`;
-  qs("#lg-plan").onchange=e=>{ LEAGUE_METRIC.plan=e.target.value; renderLeague(); };
-  qs("#lg-type").onchange=e=>{ LEAGUE_METRIC.type=e.target.value; renderLeague(); };
-  qs("#lg-dur").onchange=e=>{ LEAGUE_METRIC.dur=e.target.value; renderLeague(); };
+  const upd=()=>{ renderLeague(); history.replaceState({},"",leagueURL()); };
+  qs("#lg-plan").onchange=e=>{ LEAGUE_METRIC.plan=e.target.value; upd(); };
+  qs("#lg-type").onchange=e=>{ LEAGUE_METRIC.type=e.target.value; upd(); };
+  qs("#lg-dur").onchange=e=>{ LEAGUE_METRIC.dur=e.target.value; upd(); };
 }
 function renderLeague(){
   const box=qs("#league"); if(!box || box.hidden) return;
@@ -605,11 +610,31 @@ qs("#do-link").addEventListener("click", copyLink);
 document.addEventListener("keydown", e=>{ if(e.key==="Escape" && !qs("#sharemodal").hidden) closeShare(); });
 
 /* ---- nav + near-me wiring ---- */
+function gotoLookup(){
+  setView("lookup");
+  const u = CURRENT ? `?club=${slugify(CURRENT.clubName)}` : location.pathname;
+  history.pushState({},"",u);
+  document.title = CURRENT ? `${CURRENT.clubName} — The Price Book` : "The Price Book — unofficial David Lloyd price lookup";
+}
 document.querySelectorAll(".nav button").forEach(b=>b.addEventListener("click",()=>{
-  if(b.dataset.view==="league") openLeague(); else setView("lookup");
+  if(b.dataset.view==="league") openLeague(); else gotoLookup();
 }));
 qs("#nm-geo")?.addEventListener("click", setNearMeByGeo);
 qs("#nm-form")?.addEventListener("submit", e=>{ e.preventDefault(); setNearMeByPostcode(qs("#nm-pc").value); });
+
+// Back/forward between league and club views.
+window.addEventListener("popstate",()=>{
+  const p=new URLSearchParams(location.search);
+  if(p.get("view")==="league"){
+    if(p.get("plan")) LEAGUE_METRIC.plan=p.get("plan");
+    if(p.get("who")) LEAGUE_METRIC.type=p.get("who");
+    if(p.get("term")) LEAGUE_METRIC.dur=p.get("term");
+    openLeague(true); return;
+  }
+  const cs=p.get("club");
+  if(cs){ const m=CLUBS.find(c=>slugify(c.clubName)===cs); if(m){ setView("lookup"); selectClub(m,true); return; } }
+  setView("lookup");
+});
 
 /* ---- boot ---- */
 (async function(){
@@ -618,8 +643,15 @@ qs("#nm-form")?.addEventListener("submit", e=>{ e.preventDefault(); setNearMeByP
     CLUBBY=Object.fromEntries(CLUBS.map(c=>[c.siteId, c.clubName]));
     qs("#clubcount").textContent=`${CLUBS.length}`;
     const spec=qs("#spec-clubs"); if(spec) spec.textContent=`${CLUBS.length} clubs`;
-    // Deep link: ?club=<slug> opens straight to that club (shareable URLs).
-    const cslug=new URLSearchParams(location.search).get("club");
+    // Deep links (shareable URLs): ?view=league[&plan&who&term] or ?club=<slug>.
+    const params=new URLSearchParams(location.search);
+    if(params.get("view")==="league"){
+      if(params.get("plan")) LEAGUE_METRIC.plan=params.get("plan");
+      if(params.get("who")) LEAGUE_METRIC.type=params.get("who");
+      if(params.get("term")) LEAGUE_METRIC.dur=params.get("term");
+      openLeague(true); return;
+    }
+    const cslug=params.get("club");
     if(cslug){ const m=CLUBS.find(c=>slugify(c.clubName)===cslug); if(m){ selectClub(m,true); return; } }
     if(document.activeElement===q) renderDropdown(filterClubs(q.value),q.value.trim());
   }catch{
