@@ -598,7 +598,7 @@ function renderFacilities(){
   qs("#fac-status").hidden=true; const t=qs("#fac-table"); t.hidden=false;
   const showMi = USERLOC && rows.some(r=>r.mi!=null);
   const label = FAC_METRIC==="total"?"Racquet courts":`${FAC_METRIC} courts`;
-  qs("#fac-sub").textContent = `${rows.length} clubs ranked by ${label.toLowerCase()} — most is ${rows[0]?rows[0].v:0}. Every club also has a pool & spa.`;
+  qs("#fac-sub").textContent = `${rows.length} clubs ranked by ${label.toLowerCase()}.`;
   const chips=c=>Object.entries(c.courts||{}).sort((a,b)=>b[1]-a[1]).map(([n,ct])=>`${ct} ${esc(n)}`).join(" · ");
   t.innerHTML=
     `<thead><tr><th>#</th><th>Club</th><th>Country</th>${showMi?`<th class="num">Distance</th>`:""}<th>Courts</th><th class="num">${esc(label)}</th></tr></thead>`+
