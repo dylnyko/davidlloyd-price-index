@@ -69,7 +69,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--disp);
 .dropdown .cn{font-family:var(--disp);font-weight:600;font-size:1.02rem}
 .dropdown .cl{font-family:var(--mono);font-size:.72rem;color:var(--muted);margin-left:auto;text-align:right;white-space:nowrap}
 .dropdown .cc{font-family:var(--mono);font-size:.62rem;letter-spacing:.06em;color:var(--muted);
-  border:1px solid var(--line-soft);padding:2px 6px}
+  border:1px solid var(--line-soft);padding:2px 6px;margin-left:auto}
 .dropdown .none{padding:16px;color:var(--muted);font-family:var(--mono);font-size:.8rem;cursor:default}
 .dropdown li mark{background:none;color:var(--accent);font-weight:700}
 
