@@ -7,7 +7,11 @@
 const API = "https://mobile-app-back.davidlloyd.co.uk";
 const DAY = 864e5;
 
-const TYPES = ["INDIVIDUAL","COUPLE","FAMILY"];                 // column order
+// Individual = one person; Couple = PER PERSON on a joint membership. Family is
+// deliberately excluded: it only exists as a rare bundled FAMILY_* package priced
+// as a whole-family total (inconsistent with the per-person couple rate) and the
+// API doesn't define what it includes — so it's dropped rather than misrepresented.
+const TYPES = ["INDIVIDUAL","COUPLE"];                          // column order
 const TYPE_LABEL = { INDIVIDUAL:"Individual", COUPLE:"Couple", FAMILY:"Family" };
 const TYPE_FIELD = { INDIVIDUAL:"individual", COUPLE:"couple", FAMILY:"family" };
 const DUR_ORDER  = ["STANDARD","FLEXIBLE","ANNUAL"];
