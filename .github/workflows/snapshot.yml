@@ -1,0 +1,40 @@
+name: Nightly price snapshot
+
+# Pulls every club's public prices once a day and commits the JSON that powers
+# the price league (#6) and price trends (#12). Read-only against David Lloyd.
+on:
+  schedule:
+    - cron: "17 5 * * *"   # 05:17 UTC daily
+  workflow_dispatch: {}     # allow manual runs from the Actions tab / gh CLI
+
+permissions:
+  contents: write
+
+concurrency:
+  group: price-snapshot
+  cancel-in-progress: false
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Generate snapshot
+        run: node scripts/snapshot.mjs
+
+      - name: Commit data if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/
+          if git diff --cached --quiet; then
+            echo "No price changes today — nothing to commit."
+          else
+            git commit -m "Data: nightly price snapshot ($(date -u +%Y-%m-%d))"
+            git push
+          fi

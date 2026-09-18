@@ -67,6 +67,49 @@ async function getAccess(siteId, keys){                 // clubs each plan can v
   for(const e of (j.awayClubsByPackageKeys||[])) map[e.packageKey]=((e.awayClubs||{}).clubsInTheSameTierOrLower||[]);
   cacheSet(ck, map, DAY/2); return map;
 }
+async function getDetail(siteId){                        // full club profile (#3/#4)
+  const ck = `pb_det_${siteId}`; const c = cacheGet(ck); if(c) return c;
+  const r = await fetch(`${API}/clubs/${siteId}`);
+  if(!r.ok) throw new Error(`HTTP ${r.status}`);
+  const j = await r.json(); const club = j.club||j; cacheSet(ck, club, DAY); return club;
+}
+let SPORTS = {};                                         // sportId -> name
+async function getSports(){
+  if(Object.keys(SPORTS).length) return SPORTS;
+  const c = cacheGet("pb_sports"); if(c){ SPORTS=c; return SPORTS; }
+  try{ const r=await fetch(`${API}/sports`); const j=await r.json();
+    for(const s of (j.sports||[])) SPORTS[s.sportId]=s.sportName;
+    cacheSet("pb_sports", SPORTS, 7*DAY);
+  }catch{}
+  return SPORTS;
+}
+// Committed nightly data (self-hosted, same origin) — powers the league (#6),
+// price trends (#12) and clubs-near-me (#1). All optional: the site works if absent.
+let LATEST=null, HISTORY=null, LOCS=null;
+async function getLatest(){
+  if(LATEST) return LATEST;
+  try{ const r=await fetch(`data/latest.json?t=${Math.floor(Date.now()/36e5)}`); LATEST=await r.json();
+    if(LATEST.sports) SPORTS={...LATEST.sports, ...SPORTS}; }
+  catch{ LATEST={clubs:[]}; }
+  return LATEST;
+}
+async function getHistory(){
+  if(HISTORY) return HISTORY;
+  try{ const r=await fetch(`data/history.json?t=${Math.floor(Date.now()/36e5)}`); HISTORY=await r.json(); }
+  catch{ HISTORY={series:{}}; }
+  return HISTORY;
+}
+async function getLocations(){
+  if(LOCS) return LOCS;
+  try{ const r=await fetch(`data/locations.json?t=${Math.floor(Date.now()/36e5)}`); const j=await r.json(); LOCS=j.locations||{}; }
+  catch{
+    try{ const r=await fetch(`${API}/clubs/locations`); const j=await r.json(); LOCS={};
+      for(const [sid,v] of Object.entries(j.clubLocations||{})){ const la=parseFloat(v.latitude),ln=parseFloat(v.longitude);
+        if(isFinite(la)&&isFinite(ln)) LOCS[sid]={lat:la,lng:ln}; } }
+    catch{ LOCS={}; }
+  }
+  return LOCS;
+}
 
 /* ---- helpers ---- */
 const fmt = (pennies,cur) => new Intl.NumberFormat("en-GB",{style:"currency",currency:cur,minimumFractionDigits:0,maximumFractionDigits:pennies%100?2:0}).format(pennies/100);
@@ -78,9 +121,54 @@ const benefitsOf = pkg => ((pkg.packageInformationGroupedByType||{}).BENEFIT||[]
   .map(b=>((b.displayTextByLanguage||{})["en-gb"]||{}).text).filter(Boolean);
 const planRank = p => p.startsWith("CLUB")?0 : p.startsWith("JUNIOR")?1 : p.startsWith("YOUNG_ADULT")?2 : p.startsWith("TEAM")?3 : 4;
 const slugify = s => s.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
+const esc = s => String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+// Great-circle distance in miles (haversine) — for "clubs near me" (#1).
+function distMiles(a,b){
+  const R=3958.8, rad=d=>d*Math.PI/180;
+  const dLat=rad(b.lat-a.lat), dLng=rad(b.lng-a.lng);
+  const h=Math.sin(dLat/2)**2 + Math.cos(rad(a.lat))*Math.cos(rad(b.lat))*Math.sin(dLng/2)**2;
+  return R*2*Math.atan2(Math.sqrt(h),Math.sqrt(1-h));
+}
+const fmtMiles = m => m<10 ? `${m.toFixed(1)} mi` : `${Math.round(m)} mi`;
+
+// Facility signals derived from real /clubs/{id} fields only (#4) — never fabricated.
+const RACQUET_IDS = [13,14,15,19,22];
+function facilitiesOf(detail){
+  const f=[];
+  if(detail.swimmingEmailAddress) f.push({k:"Pool"});
+  if(detail.isBlaze) f.push({k:"Blaze",hot:true});
+  if(detail.spaBookingsEmailAddress) f.push({k:"Spa"});
+  const racq=(detail.sportIdsAvailable||[]).filter(id=>RACQUET_IDS.includes(id)).map(id=>SPORTS[id]).filter(Boolean);
+  for(const r of racq) f.push({k:r});
+  if(detail.isAdultOnly) f.push({k:"Adults only",hot:true});
+  return f;
+}
+
+// Human offer text from a promotion (#10). Prefer DL's own customer-facing copy,
+// then a saving derived from promotionItems, then a cleaned internal name.
+function promoText(pm){
+  const en=(pm.textByLanguage||{})["en-gb"]||{};
+  let t = (en.shortDescription||en.rateCardBannerTitle||"").trim();
+  if(!t){
+    const it=(pm.promotionItems||[])[0];
+    if(it){
+      const what = it.type==="JOINING_FEE" ? "joining fee" : String(it.type||"").toLowerCase().replace(/_/g," ");
+      if(it.savingType==="PERCENTAGE" && it.savingAmount) t = (it.savingAmount>=100?`Free ${what}`:`${(+it.savingAmount).toFixed(0)}% off ${what}`);
+      else if(it.savingType==="AMOUNT" && it.savingAmount) t = `Money off ${what}`;
+    }
+  }
+  if(!t){ // strip internal codes: "EXERP - Half Price Joining Fee (PROMO50)"
+    t = (pm.name||"").replace(/^[A-Z0-9]+(?:\s+[A-Z0-9/]+)*\s+-\s+/,"").replace(/\s*\([^)]*\)\s*$/,"").trim();
+    if(/lead|copy|part\s*\d/i.test(pm.name||"") && !/joining|free|off|month/i.test(t)) t=""; // drop pure internal labels
+  }
+  return t;
+}
+const fmtDate = iso => { try{ return new Date(iso).toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"}); }catch{ return iso; } };
 
 /* ---- state ---- */
 let CLUBS=[], CURRENT=null, DATA=null, CURDUR="STANDARD", token=0, LASTIMG=null, MOSTPOP=null, ACCESS={}, CLUBBY={};
+let DETAIL=null, USERLOC=null, USERLABEL="";   // club profile + "near me" origin
 
 /* ---- search / dropdown ---- */
 const q=qs("#q"), dd=qs("#results-list");
@@ -91,18 +179,27 @@ function renderDropdown(list,term){
   const rx = term? new RegExp("("+term.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+")","ig") : null;
   dd.innerHTML = list.slice(0,60).map((c,idx)=>{
     const name = rx? c.clubName.replace(rx,"<mark>$1</mark>") : c.clubName;
+    // When a "near me" origin is set, the distance is the useful right-hand fact.
+    const right = USERLOC && c._mi!=null ? `<span class="cl mi">${fmtMiles(c._mi)}</span>` : `<span class="cl">${esc(c.country||"")}</span>`;
     return `<li role="option" data-idx="${idx}" aria-selected="${idx===active}">
-      <span class="cn">${name}</span><span class="cl">${c.country||""}</span><span class="cc">${c.currency||""}</span></li>`;
+      <span class="cn">${name}</span>${right}<span class="cc">${esc(c.currency||"")}</span></li>`;
   }).join("");
   dd.hidden=false; q.setAttribute("aria-expanded","true");
 }
 function closeDropdown(){ dd.hidden=true; q.setAttribute("aria-expanded","false"); active=-1; }
 function filterClubs(term){
   const t=term.trim().toLowerCase();
-  if(!t) return CLUBS.slice(0,60);
+  let base;
+  if(!t){
+    // No query: nearest-first when a location is set, else alphabetical.
+    base = USERLOC ? CLUBS.filter(c=>c._mi!=null).slice().sort((a,b)=>a._mi-b._mi) : CLUBS;
+    return base.slice(0,60);
+  }
   const starts=[], has=[];
   for(const c of CLUBS){ const n=c.clubName.toLowerCase(); if(n.startsWith(t)) starts.push(c); else if(n.includes(t)||(c.country||"").toLowerCase().includes(t)) has.push(c); }
-  return starts.concat(has);
+  const out = starts.concat(has);
+  if(USERLOC) out.sort((a,b)=>(a._mi??1e9)-(b._mi??1e9));  // among matches, nearest first
+  return out;
 }
 q.addEventListener("input",()=>{ active=-1; renderDropdown(filterClubs(q.value),q.value.trim()); });
 q.addEventListener("focus",()=>{ if(CLUBS.length) renderDropdown(filterClubs(q.value),q.value.trim()); });
@@ -119,6 +216,47 @@ q.addEventListener("keydown",e=>{
 dd.addEventListener("mousedown",e=>{ const li=e.target.closest("li[data-idx]"); if(li) selectClub(shown[+li.dataset.idx]); });
 document.addEventListener("click",e=>{ if(!e.target.closest(".combo")) closeDropdown(); });
 
+/* ---- clubs near me (#1) ---- */
+async function applyDistances(){
+  const locs = await getLocations();
+  for(const c of CLUBS){ const l=USERLOC?locs[c.siteId]:null; c._mi = l? distMiles(USERLOC,l) : null; }
+}
+async function afterLocation(){
+  await applyDistances();
+  const nm=qs("#nm-status");
+  const nearest=CLUBS.filter(c=>c._mi!=null).sort((a,b)=>a._mi-b._mi)[0];
+  if(nm){ nm.innerHTML = `<span class="ok">◆</span> ${esc(USERLABEL)} — nearest is <b>${esc(nearest?nearest.clubName:"—")}</b>${nearest?` · ${fmtMiles(nearest._mi)}`:""} <button id="nm-clear" class="nm-clear" type="button">clear</button>`;
+    qs("#nm-clear")?.addEventListener("click", clearNearMe); }
+  renderDropdown(filterClubs(q.value), q.value.trim()); q.focus();
+  if(!qs("#league").hidden) renderLeague();
+}
+async function setNearMeByPostcode(pc){
+  pc=(pc||"").trim(); if(!pc) return;
+  const nm=qs("#nm-status"); if(nm) nm.textContent="Locating…";
+  try{
+    const r=await fetch(`https://api.postcodes.io/postcodes/${encodeURIComponent(pc)}`);
+    if(!r.ok) throw 0; const j=await r.json(); const res=j.result||{};
+    USERLOC={lat:res.latitude,lng:res.longitude}; USERLABEL=res.postcode||pc.toUpperCase();
+    await afterLocation();
+  }catch{ if(nm) nm.textContent="Postcode not found — try a full UK postcode."; }
+}
+function setNearMeByGeo(){
+  const nm=qs("#nm-status");
+  if(!navigator.geolocation){ if(nm) nm.textContent="Location not available on this device."; return; }
+  if(nm) nm.textContent="Locating…";
+  navigator.geolocation.getCurrentPosition(async pos=>{
+    USERLOC={lat:pos.coords.latitude,lng:pos.coords.longitude}; USERLABEL="Your location";
+    await afterLocation();
+  }, ()=>{ if(nm) nm.textContent="Location permission denied — enter a postcode instead."; }, {timeout:8000});
+}
+function clearNearMe(){
+  USERLOC=null; USERLABEL=""; for(const c of CLUBS) c._mi=null;
+  const nm=qs("#nm-status"); if(nm) nm.textContent="";
+  const pcIn=qs("#nm-pc"); if(pcIn) pcIn.value="";
+  renderDropdown(filterClubs(q.value),q.value.trim());
+  if(!qs("#league").hidden) renderLeague();
+}
+
 /* ---- select a club ---- */
 async function selectClub(club, fromUrl){
   CURRENT=club; const my=++token;
@@ -130,9 +268,13 @@ async function selectClub(club, fromUrl){
   if(fromUrl) history.replaceState({}, "", url); else history.pushState({}, "", url);
   document.title=`${club.clubName} — The Price Book`;
   const panel=qs("#panel"); panel.hidden=false;
+  DETAIL=null;
   qs("#clubname").textContent=club.clubName;
-  qs("#clubsub").innerHTML=`<span class="pin">◆</span> ${club.country||"—"} <span class="sep">/</span> Site #${club.siteId} <span class="sep">/</span> prices in ${club.currency}`;
+  const distChip = (USERLOC && club._mi!=null) ? ` <span class="sep">/</span> <span class="mi">${fmtMiles(club._mi)} away</span>` : "";
+  qs("#clubsub").innerHTML=`<span class="pin">◆</span> ${esc(club.country||"—")} <span class="sep">/</span> Site #${club.siteId} <span class="sep">/</span> prices in ${esc(club.currency)}${distChip}`;
   qs("#pricetable").hidden=true; qs("#empty").hidden=true; qs("#foot-note").hidden=true; qs("#addons").hidden=true; qs("#share").hidden=true;
+  const profEl=qs("#profile"); if(profEl) profEl.hidden=true;
+  const promoEl=qs("#promos"); if(promoEl) promoEl.hidden=true;
   qs("#durations").innerHTML="";
   const status=qs("#status"); status.hidden=false;
   status.innerHTML=`<span class="spin"></span><span>Pulling live prices…</span>`;
@@ -153,6 +295,9 @@ async function selectClub(club, fromUrl){
     if(!durs.includes(CURDUR)) CURDUR = durs[0] || "STANDARD";
     buildDurations(durs);
     renderTable();
+    // Profile card (#3/#4) + price trend (#12) load after the prices, non-blocking.
+    Promise.all([getSports(), getDetail(club.siteId).catch(()=>null), getHistory().catch(()=>null)])
+      .then(([, detail])=>{ if(my!==token) return; DETAIL=detail; renderProfile(); });
   }catch(e){
     if(my!==token) return;
     status.hidden=true; qs("#pricetable").hidden=true;
@@ -200,6 +345,8 @@ function renderTable(){
               `<div class="access-list">${names.join(" · ")}</div></details>`;
     }
     const pop = p.packageKey===MOSTPOP ? `<span class="pop">Most popular</span>` : "";
+    const tr = trendFor(p.packageKey);
+    const trendHtml = tr ? `<div class="trend ${tr.up?"up":"down"}" title="Individual ${DUR_LABEL[dur]} price change">${tr.up?"▲":"▼"} ${fmt(Math.abs(tr.delta),cur)} since ${esc(fmtDate(tr.since))}</div>` : "";
     const cells=activeTypes.map(t=>{
       const v=priceAt(p,t);
       if(v==null) return `<td class="cell na">—</td>`;
@@ -207,9 +354,10 @@ function renderTable(){
              `<div class="join">${jf?`+ ${fmt(jf,cur)} joining`:`no joining fee`}</div></td>`;
     }).join("");
     return `<tr><td class="plan"><div class="pn">${prettyPlan(p.packageKey)}${pop}</div>`+
-           `<div class="pk">${p.packageKey}</div>${benHtml}${accHtml}</td>${cells}</tr>`;
+           `<div class="pk">${p.packageKey}</div>${trendHtml}${benHtml}${accHtml}</td>${cells}</tr>`;
   }).join("");
   table.hidden=false; empty.hidden=true;
+  renderPromos(dur);
 
   // add-ons (optional extras) for the current duration
   const ao=(DATA.addOns||[]).map(a=>{ const d=a.prices&&a.prices[dur]; if(!d||d.price==null) return null;
@@ -236,6 +384,142 @@ function renderTable(){
     annual: dur==="ANNUAL",
   };
   qs("#share").hidden=false;
+}
+
+/* ---- price trend (#12) — from committed history.json ---- */
+function trendFor(key){
+  if(!HISTORY||!CURRENT||CURDUR==="FLEXIBLE") return null;   // history tracks Standard + Annual
+  const field = CURDUR==="ANNUAL"?"iA":"iS";
+  const arr = (((HISTORY.series||{})[String(CURRENT.siteId)]||{})[key]||{})[field];
+  if(!arr||arr.length<2) return null;
+  const cur=arr[arr.length-1][1], prev=arr[arr.length-2];
+  if(cur===prev[1]) return null;
+  return { delta: cur-prev[1], since: prev[0], up: cur>prev[1] };
+}
+
+/* ---- live promotions (#10) ---- */
+function currentPromos(dur){
+  const seen=new Map();
+  for(const p of (DATA.packages||[])){
+    const d=p.prices&&p.prices[dur]; if(!d) continue;
+    for(const pm of (d.promotions||[])){
+      if(pm.inHiddenMenuInClub || seen.has(pm.promotionId)) continue;
+      const t=promoText(pm); if(!t) continue;
+      seen.set(pm.promotionId, { text:t, end:pm.endDate });
+    }
+  }
+  return [...seen.values()];
+}
+function renderPromos(dur){
+  const el=qs("#promos"); if(!el) return;
+  const promos=currentPromos(dur);
+  if(!promos.length){ el.hidden=true; el.innerHTML=""; return; }
+  el.hidden=false;
+  el.innerHTML=`<span class="promo-k">Current offers</span>`+
+    promos.map(p=>`<span class="promo"><span class="promo-t">${esc(p.text)}</span>`+
+      `${p.end?`<span class="promo-end">ends ${esc(fmtDate(p.end))}</span>`:""}</span>`).join("")+
+    `<span class="promo-note">Applied at checkout on David&nbsp;Lloyd’s site — indicative.</span>`;
+}
+
+/* ---- club profile card + facility badges (#3/#4) ---- */
+function openHoursHtml(detail){
+  const w=(detail.clubOpeningTimes||{}).weeklyOpeningTimes; if(!w) return "";
+  const days=[["mon","Mon"],["tue","Tue"],["wed","Wed"],["thu","Thu"],["fri","Fri"],["sat","Sat"],["sun","Sun"]];
+  const rng=list=>(list&&list.length)?list.map(s=>`${s.from}–${s.to}`).join(", "):"Closed";
+  return `<div class="hours">`+days.map(([k,lbl])=>`<div class="hrow"><span class="hd">${lbl}</span><span class="ht">${esc(rng(w[k]))}</span></div>`).join("")+`</div>`;
+}
+function renderProfile(){
+  const el=qs("#profile"); if(!el) return;
+  const d=DETAIL; if(!d){ el.hidden=true; el.innerHTML=""; return; }
+  const badges=facilitiesOf(d);
+  const badgeHtml = badges.length ? `<div class="badges">`+badges.map(b=>`<span class="badge${b.hot?" hot":""}">${esc(b.k)}</span>`).join("")+`</div>` : "";
+  // Count courts only for sports David Lloyd actually names (/sports) — skip
+  // internal court types with no public name rather than label them "Court".
+  const courtsBySport={};
+  for(const c of (d.courts||[])){ const n=SPORTS[c.sportId]; if(n) courtsBySport[n]=(courtsBySport[n]||0)+1; }
+  const courtsHtml = Object.keys(courtsBySport).length
+    ? `<div class="pf-item"><span class="pf-k">Racquet courts</span><span class="pf-v">${Object.entries(courtsBySport).sort((a,b)=>b[1]-a[1]).map(([n,ct])=>`${ct} ${esc(n)}`).join(" · ")}</span></div>` : "";
+  const telHtml = d.telephone ? `<div class="pf-item"><span class="pf-k">Phone</span><span class="pf-v"><a href="tel:${esc((d.telephone||"").replace(/\s+/g,""))}">${esc(d.telephone)}</a></span></div>` : "";
+  const hours=openHoursHtml(d);
+  const hoursHtml = hours ? `<div class="pf-item pf-hours"><span class="pf-k">Opening hours</span>${hours}</div>` : "";
+  el.hidden=false;
+  el.innerHTML=`<div class="pf-head"><h3>Club facilities</h3>${badgeHtml}</div>`+
+    `<div class="pf-grid">${telHtml}${courtsHtml}${hoursHtml}</div>`+
+    `<p class="pf-src">From David&nbsp;Lloyd’s club record · site #${d.siteId||CURRENT.siteId}</p>`;
+}
+
+/* ---- national price league (#6) — from committed latest.json ---- */
+let LEAGUE_METRIC={ plan:"CLUB_PLATINUM", type:"i", dur:"S" };
+const DUR_SHORT={ S:"Standard · 12-mo", F:"Flexible · 3-mo", A:"Annual total" };
+const TYPE_SHORT={ i:"Individual", c:"Couple", f:"Family" };
+async function openLeague(){
+  setView("league");
+  const box=qs("#league"); box.hidden=false;
+  qs("#league-status").hidden=false; qs("#league-table").hidden=true;
+  await Promise.all([getLatest(), USERLOC?applyDistances():null]);
+  buildLeagueControls();
+  renderLeague();
+}
+function planUniverse(){
+  const set=new Set();
+  for(const c of (LATEST.clubs||[])) for(const k of Object.keys(c.plans||{})) set.add(k);
+  return [...set].sort((a,b)=> (planRank(a)-planRank(b)) || a.localeCompare(b));
+}
+function buildLeagueControls(){
+  const wrap=qs("#league-controls"); if(!wrap) return;
+  const plans=planUniverse();
+  if(!plans.includes(LEAGUE_METRIC.plan)) LEAGUE_METRIC.plan = plans.includes("CLUB_PLATINUM")?"CLUB_PLATINUM":plans[0];
+  const opt=(v,l,sel)=>`<option value="${v}"${v===sel?" selected":""}>${esc(l)}</option>`;
+  wrap.innerHTML=
+    `<label>Plan <select id="lg-plan">${plans.map(p=>opt(p,prettyPlan(p),LEAGUE_METRIC.plan)).join("")}</select></label>`+
+    `<label>Who <select id="lg-type">${Object.entries(TYPE_SHORT).map(([v,l])=>opt(v,l,LEAGUE_METRIC.type)).join("")}</select></label>`+
+    `<label>Term <select id="lg-dur">${Object.entries(DUR_SHORT).map(([v,l])=>opt(v,l,LEAGUE_METRIC.dur)).join("")}</select></label>`;
+  qs("#lg-plan").onchange=e=>{ LEAGUE_METRIC.plan=e.target.value; renderLeague(); };
+  qs("#lg-type").onchange=e=>{ LEAGUE_METRIC.type=e.target.value; renderLeague(); };
+  qs("#lg-dur").onchange=e=>{ LEAGUE_METRIC.dur=e.target.value; renderLeague(); };
+}
+function renderLeague(){
+  const box=qs("#league"); if(!box || box.hidden) return;
+  const {plan,type,dur}=LEAGUE_METRIC;
+  const rows=[];
+  for(const c of (LATEST.clubs||[])){
+    const cell=(c.plans[plan]||{})[dur];
+    const v=cell?cell[type]:null;
+    if(v==null) continue;
+    rows.push({ name:c.name, country:c.country, siteId:c.siteId, cur:c.currency, val:v,
+      mi: USERLOC ? (CLUBS.find(x=>x.siteId===c.siteId)?._mi ?? null) : null });
+  }
+  rows.sort((a,b)=>a.val-b.val);
+  qs("#league-status").hidden=true;
+  const t=qs("#league-table"); t.hidden=false;
+  const unit = dur==="A" ? "/yr" : "/mo";
+  const showMi = USERLOC && rows.some(r=>r.mi!=null);
+  const cheapest = rows.length?rows[0].val:0, dearest=rows.length?rows[rows.length-1].val:0;
+  qs("#league-sub").textContent =
+    `${rows.length} clubs with ${prettyPlan(plan)} · ${TYPE_SHORT[type]} · ${DUR_SHORT[dur]} — from ${fmt(cheapest,rows[0]?.cur||"GBP")} to ${fmt(dearest,rows[rows.length-1]?.cur||"GBP")}${unit}`;
+  t.innerHTML=
+    `<thead><tr><th>#</th><th>Club</th><th>Country</th>${showMi?`<th class="num">Distance</th>`:""}<th class="num">${TYPE_SHORT[type]} ${unit}</th></tr></thead>`+
+    `<tbody>`+rows.map((r,i)=>`<tr data-site="${r.siteId}">`+
+      `<td class="lg-rank">${i+1}</td>`+
+      `<td class="lg-name">${esc(r.name)}</td>`+
+      `<td class="lg-country">${esc(r.country||"")}</td>`+
+      `${showMi?`<td class="num">${r.mi!=null?fmtMiles(r.mi):"—"}</td>`:""}`+
+      `<td class="num lg-price">${fmt(r.val,r.cur)}<span class="per">${unit}</span></td></tr>`).join("")+
+    `</tbody>`;
+  t.querySelectorAll("tbody tr").forEach(tr=>tr.onclick=()=>{
+    const club=CLUBS.find(c=>c.siteId===+tr.dataset.site); if(club){ setView("lookup"); selectClub(club); }
+  });
+}
+
+/* ---- view switching (lookup <-> league) ---- */
+function setView(v){
+  const isLeague = v==="league";
+  qs("#league").hidden = !isLeague;
+  qs(".hero").hidden = isLeague;
+  qs(".search").hidden = isLeague;
+  const panel=qs("#panel"); if(isLeague) panel.hidden=true; else if(CURRENT) panel.hidden=false;
+  document.querySelectorAll(".nav button").forEach(b=>b.setAttribute("aria-selected", b.dataset.view===v));
+  if(isLeague) qs("#league").scrollIntoView({behavior:"smooth",block:"start"});
 }
 
 /* ---- shareable image (custom-drawn canvas in the site's style) ---- */
@@ -323,6 +607,13 @@ qs("#do-copy").addEventListener("click", copyImg);
 qs("#do-download").addEventListener("click", ()=>{ if(CURCANVAS) downloadCanvas(CURCANVAS); });
 qs("#do-link").addEventListener("click", copyLink);
 document.addEventListener("keydown", e=>{ if(e.key==="Escape" && !qs("#sharemodal").hidden) closeShare(); });
+
+/* ---- nav + near-me wiring ---- */
+document.querySelectorAll(".nav button").forEach(b=>b.addEventListener("click",()=>{
+  if(b.dataset.view==="league") openLeague(); else setView("lookup");
+}));
+qs("#nm-geo")?.addEventListener("click", setNearMeByGeo);
+qs("#nm-form")?.addEventListener("submit", e=>{ e.preventDefault(); setNearMeByPostcode(qs("#nm-pc").value); });
 
 /* ---- boot ---- */
 (async function(){

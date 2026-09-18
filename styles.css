@@ -184,6 +184,96 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--disp);
 .sitefoot p{margin:0;font-family:var(--mono);font-size:.68rem;line-height:1.7;color:#b9b4a7;max-width:none}
 .sitefoot .fs-mk{color:var(--accent);font-weight:700;margin-right:8px;letter-spacing:.08em}
 
+/* topbar nav (#6 view switch) */
+.nav{display:flex;border:2px solid var(--ink)}
+.nav button{font-family:var(--mono);font-size:.66rem;letter-spacing:.06em;text-transform:uppercase;font-weight:700;
+  background:var(--paper);color:var(--ink);border:0;border-left:2px solid var(--ink);padding:7px 12px;cursor:pointer;transition:background .1s}
+.nav button:first-child{border-left:0}
+.nav button:hover{background:var(--paper-2)}
+.nav button[aria-selected="true"]{background:var(--ink);color:var(--paper)}
+
+/* clubs near me (#1) */
+.nearme{margin-top:14px}
+.nm-form{display:flex;flex-wrap:wrap;gap:8px}
+#nm-pc{font-family:var(--mono);font-size:.82rem;letter-spacing:.06em;text-transform:uppercase;
+  background:var(--paper);border:2px solid var(--ink);padding:9px 12px;width:min(200px,42vw);outline:none}
+#nm-pc:focus{box-shadow:3px 3px 0 var(--ink);transform:translate(-1px,-1px)}
+#nm-pc::placeholder{color:rgba(11,11,10,.34)}
+.nm-btn{font-family:var(--mono);font-size:.68rem;letter-spacing:.05em;text-transform:uppercase;font-weight:700;
+  background:var(--ink);color:var(--paper);border:2px solid var(--ink);padding:9px 13px;cursor:pointer;transition:background .1s,transform .05s}
+.nm-btn.ghost{background:var(--paper);color:var(--ink)}
+.nm-btn:hover{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.nm-btn:active{transform:translate(1px,1px)}
+.nm-status{margin-top:10px;font-family:var(--mono);font-size:.72rem;color:var(--muted);min-height:1em}
+.nm-status .ok{color:var(--accent)}
+.nm-status b{color:var(--ink)}
+.nm-clear{font-family:var(--mono);font-size:.62rem;text-transform:uppercase;letter-spacing:.05em;
+  background:none;border:1px solid var(--line-soft);color:var(--muted);padding:2px 7px;margin-left:8px;cursor:pointer}
+.nm-clear:hover{border-color:var(--ink);color:var(--ink)}
+.dropdown .cl.mi{color:var(--accent);font-weight:700}
+.clubsub .mi{color:var(--accent);font-weight:700}
+
+/* live promotions (#10) */
+.promos{margin-top:16px;display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center;
+  border:2px solid var(--ink);background:var(--paper-2);padding:12px 14px}
+.promos .promo-k{font-family:var(--mono);font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  background:var(--accent);color:var(--accent-ink);padding:3px 8px}
+.promos .promo{display:inline-flex;align-items:baseline;gap:8px;font-family:var(--disp);font-weight:600;font-size:.92rem}
+.promos .promo-end{font-family:var(--mono);font-size:.62rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.promos .promo-note{flex-basis:100%;font-family:var(--mono);font-size:.62rem;color:var(--muted)}
+
+/* price trend chip (#12) */
+.trend{margin-top:6px;font-family:var(--mono);font-size:.64rem;font-weight:700;letter-spacing:.03em;
+  display:inline-block;padding:2px 6px;border:1px solid var(--line-soft)}
+.trend.up{color:#b23400}.trend.down{color:#116b2e}
+
+/* club profile card (#3) + facility badges (#4) */
+.profile{margin-top:20px;border:2px solid var(--ink);background:var(--paper);box-shadow:var(--shadow)}
+.pf-head{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;
+  padding:14px 16px;border-bottom:2px solid var(--ink);background:var(--paper-2)}
+.pf-head h3{margin:0;font-family:var(--disp);font-weight:800;font-size:1.2rem;letter-spacing:-.01em}
+.badges{display:flex;flex-wrap:wrap;gap:6px}
+.badge{font-family:var(--mono);font-size:.62rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+  border:2px solid var(--ink);padding:4px 8px;background:var(--paper)}
+.badge.hot{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.pf-grid{display:grid;grid-template-columns:1fr 1fr;gap:0}
+.pf-item{padding:14px 16px;border-bottom:1px solid var(--line-soft)}
+.pf-item:nth-child(odd){border-right:1px solid var(--line-soft)}
+.pf-hours{grid-column:1/-1;border-right:0}
+.pf-k{display:block;font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.pf-v{font-family:var(--disp);font-weight:600;font-size:.98rem}
+.pf-v a{color:var(--ink);text-decoration:none;border-bottom:2px solid var(--accent)}
+.hours{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:4px 16px}
+.hrow{display:flex;justify-content:space-between;gap:10px;font-family:var(--mono);font-size:.72rem;border-bottom:1px solid var(--line-soft);padding:3px 0}
+.hrow .hd{color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.hrow .ht{font-weight:700}
+.pf-src{margin:0;padding:11px 16px;border-top:1px solid var(--line-soft);font-family:var(--mono);font-size:.62rem;color:var(--muted)}
+
+/* national price league (#6) */
+.league{padding:clamp(20px,3vw,32px) clamp(16px,3vw,28px)}
+.lg-head h2{font-family:var(--disp);font-weight:800;font-size:clamp(1.9rem,4.4vw,3rem);line-height:.98;margin:0;letter-spacing:-.02em}
+.lg-lede{margin:12px 0 0;max-width:62ch;color:var(--muted);font-size:.98rem}
+.league-controls{display:flex;flex-wrap:wrap;gap:12px 18px;margin:20px 0 6px}
+.league-controls label{font-family:var(--mono);font-size:.64rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+  display:flex;flex-direction:column;gap:5px}
+.league-controls select{font-family:var(--disp);font-weight:600;font-size:.95rem;color:var(--ink);
+  background:var(--paper);border:2px solid var(--ink);padding:8px 10px;cursor:pointer;min-width:150px}
+.league-sub{font-family:var(--mono);font-size:.72rem;color:var(--muted);margin:6px 0 0}
+.league-table{min-width:520px}
+.league-table thead th{font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink);font-weight:700;text-align:left;padding:0 14px 10px;border-bottom:2px solid var(--ink);white-space:nowrap}
+.league-table thead th.num{text-align:right}
+.league-table tbody td{padding:11px 14px;border-bottom:1px solid var(--line-soft);vertical-align:middle}
+.league-table tbody td.num{text-align:right;font-family:var(--mono)}
+.league-table tbody tr{cursor:pointer}
+.league-table tbody tr:hover{background:rgba(255,61,0,.07)}
+.lg-rank{font-family:var(--mono);font-weight:700;color:var(--muted);width:3ch}
+.lg-name{font-family:var(--disp);font-weight:700;font-size:1.02rem}
+.lg-country{font-family:var(--mono);font-size:.7rem;color:var(--muted)}
+.lg-price{font-weight:700;font-size:1.02rem}
+.lg-price .per{font-size:.62rem;color:var(--muted);font-weight:400;margin-left:2px}
+.lg-foot{margin:16px 0 0;font-family:var(--mono);font-size:.66rem;color:var(--muted)}
+
 /* reveal */
 .hero-main>*,.spec-row{opacity:0;animation:fade .5s ease forwards}
 .hero h1{animation-delay:.04s}.lede{animation-delay:.12s}
@@ -205,6 +295,12 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--disp);
   .durations button{width:100%;text-align:center;border-left:0;border-top:2px solid var(--ink)}
   .durations button:first-child{border-top:0}
   .share{width:100%;justify-content:center}
+  .pf-grid{grid-template-columns:1fr}
+  .pf-item:nth-child(odd){border-right:0}
+  .nm-form{flex-direction:column;align-items:stretch}
+  #nm-pc{width:100%}
+  .nm-btn{width:100%}
+  .league-controls label{flex:1;min-width:140px}
 }
 @media (prefers-reduced-motion:reduce){
   .hero-main>*,.spec-row{opacity:1;animation:none;transform:none}.spin{animation:none}

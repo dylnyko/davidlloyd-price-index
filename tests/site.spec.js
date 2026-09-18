@@ -8,6 +8,12 @@ const clubs = FX("clubs.json");
 const packages = FX("packages_75.json");
 const settings = FX("settings_75.json");
 const accessible = FX("accessible_75.json");
+const detail = FX("club_75.json");
+const sports = { sports: [
+  { sportId: 13, sportName: "Tennis" }, { sportId: 14, sportName: "Badminton" },
+  { sportId: 15, sportName: "Squash" }, { sportId: 19, sportName: "Padel" },
+  { sportId: 22, sportName: "Pickleball" },
+] };
 
 // Mock every David Lloyd endpoint from fixtures; block fonts/analytics so the
 // suite never touches the network. Any club id resolves to the West End fixture,
@@ -21,9 +27,20 @@ async function mockDL(page) {
     if (/\/accessible-clubs/.test(url)) return json(accessible);
     if (/\/packages\/online/.test(url)) return json(packages);
     if (/\/membership-settings/.test(url)) return json(settings);
+    if (/\/sports\b/.test(url)) return json(sports);
+    if (/\/clubs\/locations/.test(url)) return json({ clubLocations: {} });
+    if (/\/clubs\/\d+(\?|$)/.test(url)) return json(detail); // single-club detail
     if (/\/clubs(\?|$)/.test(url)) return json(clubs);
     return route.continue();
   });
+  // Geocoder for "clubs near me" — fixed point near Glasgow.
+  await page.route(/api\.postcodes\.io/, (r) =>
+    r.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ result: { latitude: 55.86, longitude: -4.25, postcode: "G1 1AA" } }),
+    })
+  );
 }
 
 // Deep-link straight to a selected club and wait for the price table.
@@ -136,6 +153,54 @@ test("builds a shareable image + link", async ({ page }) => {
 test("deep-links restore a club from the URL", async ({ page }) => {
   await page.goto("/?club=glasgow-west-end");
   await expect(page.locator("#clubname")).toHaveText("Glasgow West End");
+});
+
+test("shows a club profile card with facility badges (#3/#4)", async ({ page }) => {
+  await openWestEnd(page);
+  const profile = page.locator("#profile");
+  await expect(profile).toBeVisible();
+  await expect(profile.locator(".pf-head h3")).toContainText("facilities");
+  const badges = profile.locator(".badge");
+  await expect(badges.filter({ hasText: "Pool" })).toHaveCount(1);
+  await expect(badges.filter({ hasText: "Tennis" })).toHaveCount(1);
+  // opening hours + phone from the club record
+  await expect(profile).toContainText("Opening hours");
+  await expect(profile).toContainText(detail.telephone || detail.club?.telephone || "");
+});
+
+test("surfaces live promotions on a duration that has them (#10)", async ({ page }) => {
+  await openWestEnd(page);
+  await page.locator('#durations button[data-dur="FLEXIBLE"]').click();
+  const promos = page.locator("#promos");
+  await expect(promos).toBeVisible();
+  await expect(promos.locator(".promo-k")).toContainText("Current offers");
+  await expect(promos.locator(".promo")).not.toHaveCount(0);
+});
+
+test("opens the national price league and ranks clubs cheapest-first (#6)", async ({ page }) => {
+  await page.goto("/");
+  await page.locator('.nav button[data-view="league"]').click();
+  const table = page.locator("#league-table");
+  await expect(table).toBeVisible();
+  const rows = table.locator("tbody tr");
+  expect(await rows.count()).toBeGreaterThan(20);
+  // prices must be non-decreasing down the table
+  const prices = await table.locator("tbody td.lg-price").allInnerTexts();
+  const nums = prices.map((t) => parseFloat(t.replace(/[^0-9.]/g, "")));
+  for (let i = 1; i < nums.length; i++) expect(nums[i]).toBeGreaterThanOrEqual(nums[i - 1]);
+  // clicking a row jumps back to that club's lookup
+  await rows.first().click();
+  await expect(page.locator("#pricetable")).toBeVisible();
+});
+
+test("ranks clubs by distance from a postcode (#1)", async ({ page }) => {
+  await page.goto("/");
+  await page.fill("#nm-pc", "G1 1AA");
+  await page.locator("#nm-form button[type=submit]").click();
+  await expect(page.locator("#nm-status")).toContainText("nearest is");
+  // focus search to show the distance-sorted dropdown
+  await page.locator("#q").click();
+  await expect(page.locator("#results-list .cl.mi").first()).toContainText("mi");
 });
 
 test("duration control does not overflow on mobile", async ({ page }) => {
