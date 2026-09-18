@@ -43,7 +43,7 @@ h1 em{font-style:italic;font-weight:500;color:var(--brass-2)}
 .lede .hl{color:var(--paper);box-shadow:inset 0 -.5em 0 rgba(201,162,75,.22)}
 
 /* search */
-.search{margin-top:clamp(30px,5vw,52px)}
+.search{margin-top:clamp(30px,5vw,52px);position:relative;z-index:50}
 .combo{position:relative}
 .search-ico{position:absolute;left:20px;top:50%;transform:translateY(-50%);width:22px;height:22px;
   fill:none;stroke:var(--faint);stroke-width:1.8;stroke-linecap:round;pointer-events:none;transition:stroke .2s}

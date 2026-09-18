@@ -19,6 +19,13 @@ const FALLBACK = {
   durations: ["STANDARD","FLEXIBLE","ANNUAL"],
 };
 const TYPE_LABEL = { INDIVIDUAL:"Individual", COUPLE:"Couple", FAMILY:"Family" };
+const TYPE_ORDER = ["INDIVIDUAL","COUPLE","FAMILY"];
+function orderedTypes(){
+  let ts = ENUMS.types.filter(t=>TYPE_LABEL[t]);
+  if(!ts.length) ts = FALLBACK.types.slice();
+  return ts.sort((a,b)=>{ const ia=TYPE_ORDER.indexOf(a), ib=TYPE_ORDER.indexOf(b);
+    return (ia<0?99:ia)-(ib<0?99:ib); });
+}
 const DUR_LABEL  = { STANDARD:"Monthly rolling", FLEXIBLE:"Flexible", ANNUAL:"Paid annually" };
 
 const $ = s => document.querySelector(s);
@@ -171,7 +178,7 @@ async function loadPrices(my){
   status.hidden=false; status.innerHTML=`<span class="spin"></span><span>Pulling live prices…</span><span class="bar"><i></i></span>`;
   const bar=status.querySelector(".bar i");
 
-  const types=ENUMS.types.filter(t=>TYPE_LABEL[t]).length?ENUMS.types.filter(t=>TYPE_LABEL[t]):FALLBACK.types;
+  const types=orderedTypes();
   const pkgs=ENUMS.packages;
   const jobs=[]; for(const p of pkgs) for(const t of types) jobs.push([p,t]);
   const ctrl=new AbortController();
@@ -191,7 +198,7 @@ async function loadPrices(my){
 function renderTable(data,cur){
   const table=$("#pricetable"), thead=$("#thead-row"), tbody=$("#tbody"), status=$("#status"), empty=$("#empty"), foot=$("#foot-note");
   status.hidden=true;
-  const types=ENUMS.types.filter(t=>TYPE_LABEL[t]);
+  const types=orderedTypes();
   const offered=Object.keys(data);
   if(!offered.length){ table.hidden=true; empty.hidden=false; foot.hidden=true; return; }
 
