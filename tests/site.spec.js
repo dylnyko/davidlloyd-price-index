@@ -33,6 +33,11 @@ async function mockDL(page) {
     if (/\/clubs(\?|$)/.test(url)) return json(clubs);
     return route.continue();
   });
+  // Force the live-fallback path for deterministic fixture-based assertions
+  // (the committed per-club bundles are exercised by their own test below).
+  await page.route(/\/data\/clubs\//, (r) =>
+    r.fulfill({ status: 404, contentType: "application/json", body: "{}" })
+  );
   // Geocoder for "clubs near me" — fixed point near Glasgow.
   await page.route(/api\.postcodes\.io/, (r) =>
     r.fulfill({
@@ -55,7 +60,10 @@ test.beforeEach(async ({ page }) => {
 
 test("boots, counts clubs and filters the search", async ({ page }) => {
   await page.goto("/");
-  await expect(page.locator("#clubcount")).toHaveText("160");
+  // Club list comes from the committed snapshot now (data/latest.json).
+  await expect
+    .poll(async () => Number(await page.locator("#clubcount").textContent()))
+    .toBeGreaterThan(100);
   await page.locator("#q").click();
   await expect(page.locator("#results-list li").first()).toBeVisible();
   await page.fill("#q", "glasgow");
@@ -70,29 +78,6 @@ test("applies the Edinburgh Shawfair country override (England -> Scotland)", as
   // and it carries through to the club header after selection
   await li.click();
   await expect(page.locator("#clubsub")).toContainText("Scotland");
-});
-
-test("country override applies even to a stale cached club list", async ({ page }) => {
-  // Simulate a returning visitor whose localStorage holds the pre-fix list
-  // (Shawfair tagged England). The override must still correct it on read.
-  await page.addInitScript(() => {
-    localStorage.setItem(
-      "pb_clubs",
-      JSON.stringify({
-        t: Date.now(),
-        ttl: 86400000,
-        d: [
-          { siteId: 156, clubName: "Edinburgh Shawfair", country: "England", currency: "GBP", status: "active" },
-          { siteId: 75, clubName: "Glasgow West End", country: "Scotland", currency: "GBP", status: "active" },
-        ],
-      })
-    );
-  });
-  await page.goto("/");
-  await page.fill("#q", "Shawfair");
-  await expect(
-    page.locator("#results-list li", { hasText: "Edinburgh Shawfair" }).first().locator(".cl")
-  ).toHaveText("Scotland");
 });
 
 test("renders the price table 1:1 with the fixture", async ({ page }) => {
@@ -217,6 +202,30 @@ test("ranks clubs by distance from a postcode (#1)", async ({ page }) => {
   // focus search to show the distance-sorted dropdown
   await page.locator("#q").click();
   await expect(page.locator("#results-list .cl.mi").first()).toContainText("mi");
+});
+
+test("club view is served from the committed bundle — no per-club DL calls (#12)", async ({ page }) => {
+  const dlCalls = [];
+  // The shared mock 404s data/clubs to force fallbacks elsewhere; here we want the
+  // real committed bundles served from the repo, so lift that interception.
+  await page.unroute(/\/data\/clubs\//);
+  await page.route(/fonts\.(googleapis|gstatic)\.com|cloudflareinsights\.com/, (r) => r.abort());
+  await page.route(/mobile-app-back\.davidlloyd\.co\.uk/, (route) => {
+    const u = route.request().url();
+    dlCalls.push(u);
+    // Only the club list is allowed live; any per-club endpoint must NOT be needed.
+    if (/\/clubs(\?|$)/.test(u))
+      return route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(clubs) });
+    return route.abort();
+  });
+  // data/clubs/75.json, data/latest.json etc. are served from the repo by the web server.
+  await page.goto("/?club=glasgow-west-end");
+  await expect(page.locator("#pricetable")).toBeVisible();
+  await expect(page.locator("#profile")).toBeVisible();
+  const perClub = dlCalls.filter((u) =>
+    /packages\/online|membership-settings|accessible-clubs|\/clubs\/\d+(\?|$)/.test(u)
+  );
+  expect(perClub).toHaveLength(0);
 });
 
 test("duration control does not overflow on mobile", async ({ page }) => {

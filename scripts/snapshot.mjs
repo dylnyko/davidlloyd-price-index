@@ -72,6 +72,78 @@ function plansFromPackages(pkg) {
   return plans;
 }
 
+async function postJSON(url, body, tries = 3) {
+  for (let a = 1; a <= tries; a++) {
+    try {
+      const r = await fetch(url, { method: "POST",
+        headers: { "content-type": "application/json", accept: "application/json" },
+        body: JSON.stringify(body) });
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      return await r.json();
+    } catch (e) {
+      if (a === tries) throw e;
+      await new Promise((res) => setTimeout(res, 500 * a));
+    }
+  }
+}
+
+/* ---- per-club bundle: exactly what the club page renders, trimmed ----
+ * Keeps DL's own field names/nesting so the front-end render code is unchanged;
+ * strips the megabytes of unused multi-language promo text and other cruft. */
+const DURS = ["STANDARD", "FLEXIBLE", "ANNUAL"];
+function trimPromo(pm) {
+  const en = ((pm.textByLanguage || {})["en-gb"]) || {};
+  return {
+    promotionId: pm.promotionId,
+    name: pm.name,
+    endDate: pm.endDate,
+    inHiddenMenuInClub: !!pm.inHiddenMenuInClub,
+    textByLanguage: { "en-gb": { shortDescription: en.shortDescription || "", rateCardBannerTitle: en.rateCardBannerTitle || "" } },
+    promotionItems: (pm.promotionItems || []).map((it) => ({ type: it.type, savingType: it.savingType, savingAmount: it.savingAmount })),
+  };
+}
+function trimPackages(pkg) {
+  return (pkg.packages || []).map((p) => {
+    const prices = {};
+    for (const dur of DURS) {
+      const d = p.prices && p.prices[dur];
+      if (!d) continue;
+      prices[dur] = { individual: d.individual ?? null, couple: d.couple ?? null, family: d.family ?? null,
+        joiningFee: d.joiningFee ?? 0, promotions: (d.promotions || []).map(trimPromo) };
+    }
+    const ben = ((p.packageInformationGroupedByType || {}).BENEFIT || []).map((b) => ({
+      orderingPriority: b.orderingPriority,
+      displayTextByLanguage: { "en-gb": { text: ((b.displayTextByLanguage || {})["en-gb"] || {}).text || "" } },
+    }));
+    return { packageKey: p.packageKey, prices, packageInformationGroupedByType: { BENEFIT: ben } };
+  });
+}
+function trimAddOns(pkg) {
+  return (pkg.addOns || []).map((a) => {
+    const prices = {};
+    for (const dur of DURS) { const d = a.prices && a.prices[dur]; if (d && d.price != null) prices[dur] = { price: d.price }; }
+    return { addOnKey: a.addOnKey, prices };
+  });
+}
+function trimDetail(club, siteId) {
+  return {
+    siteId,
+    telephone: club.telephone || null,
+    isBlaze: !!club.isBlaze,
+    isAdultOnly: !!club.isAdultOnly,
+    swimmingEmailAddress: club.swimmingEmailAddress || null,
+    spaBookingsEmailAddress: club.spaBookingsEmailAddress || null,
+    sportIdsAvailable: club.sportIdsAvailable || [],
+    courts: (club.courts || []).map((c) => ({ sportId: c.sportId })),
+    clubOpeningTimes: { weeklyOpeningTimes: (club.clubOpeningTimes || {}).weeklyOpeningTimes || null },
+  };
+}
+function accessFromResp(resp) {
+  const map = {};
+  for (const e of (resp.awayClubsByPackageKeys || [])) map[e.packageKey] = ((e.awayClubs || {}).clubsInTheSameTierOrLower || []);
+  return map;
+}
+
 async function main() {
   if (!existsSync(DATA)) mkdirSync(DATA, { recursive: true });
 
@@ -95,23 +167,40 @@ async function main() {
     if (Number.isFinite(lat) && Number.isFinite(lng)) locations[sid] = { lat, lng };
   }
 
-  console.log(`Fetching packages for ${clubs.length} clubs…`);
-  let ok = 0, fail = 0;
+  const CLUBDIR = `${DATA}/clubs`;
+  if (!existsSync(CLUBDIR)) mkdirSync(CLUBDIR, { recursive: true });
+
+  console.log(`Fetching full data for ${clubs.length} clubs…`);
+  let ok = 0, fail = 0, bundles = 0;
   const out = await pool(clubs, async (c) => {
     try {
-      const [pkg, settings] = await Promise.all([
-        getJSON(`${API}/clubs/${c.siteId}/packages/online`),
-        getJSON(`${API}/clubs/${c.siteId}/membership-settings`).catch(() => ({})),
-      ]);
+      const pkg = await getJSON(`${API}/clubs/${c.siteId}/packages/online`);
       const plans = plansFromPackages(pkg);
       if (!Object.keys(plans).length) { fail++; return null; }
+      const keys = (pkg.packages || []).map((p) => p.packageKey);
+      // The other three per-club calls the browser used to make — now server-side.
+      const [settings, access, detail] = await Promise.all([
+        getJSON(`${API}/clubs/${c.siteId}/membership-settings`).catch(() => ({})),
+        postJSON(`${API}/accessible-clubs`, { siteId: String(c.siteId), packageKeys: keys }).catch(() => ({})),
+        getJSON(`${API}/clubs/${c.siteId}`).catch(() => ({})),
+      ]);
+      const club = detail.club || detail || {};
+      const country = COUNTRY_FIX[c.siteId] || c.country;
+      // Full bundle the club page renders entirely from (no live DL calls needed).
+      const bundle = {
+        siteId: c.siteId, name: c.clubName, country, currency: c.currency,
+        settings: { packageSettings: { standardMostPopularPackage: (settings.packageSettings || {}).standardMostPopularPackage || null } },
+        access: accessFromResp(access),
+        packages: trimPackages(pkg),
+        addOns: trimAddOns(pkg),
+        detail: trimDetail(club, c.siteId),
+      };
+      writeFileSync(`${CLUBDIR}/${c.siteId}.json`, JSON.stringify(bundle));
+      bundles++;
       ok++;
       return {
-        siteId: c.siteId,
-        name: c.clubName,
-        country: COUNTRY_FIX[c.siteId] || c.country,
-        currency: c.currency,
-        mostPopular: (settings.packageSettings || {}).standardMostPopularPackage || null,
+        siteId: c.siteId, name: c.clubName, country, currency: c.currency,
+        mostPopular: bundle.settings.packageSettings.standardMostPopularPackage,
         plans,
       };
     } catch (e) {
@@ -120,6 +209,7 @@ async function main() {
       return null;
     }
   });
+  console.log(`Wrote ${bundles} per-club bundles to data/clubs/.`);
 
   const clubData = out.filter(Boolean);
   const latest = {

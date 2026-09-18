@@ -22,7 +22,7 @@ Nothing is hardcoded:
 - **Clubs** are read live from the public `/clubs` list, so new clubs appear automatically.
 - **Plans, membership types and durations** come from the API's own responses at runtime, so new tiers show up with no code changes.
 
-It's a single static page (HTML/CSS/JS) with no backend — all pricing calls happen in the browser, and the API sends `Access-Control-Allow-Origin: *`, so it can be hosted anywhere, including GitHub Pages. Postcode geocoding uses the free, open [postcodes.io](https://postcodes.io).
+It's a single static page (HTML/CSS/JS) with no backend. Prices, club profiles, offers and club-access lists are all served from a nightly snapshot committed to this repo (see below), so a normal visit makes **no requests to David Lloyd at all** — the live endpoints are only a fallback for a brand-new club not yet in the snapshot. Postcode geocoding uses the free, open [postcodes.io](https://postcodes.io).
 
 ## Nightly snapshot (data pipeline)
 
@@ -46,7 +46,7 @@ npm test
 ## Notes
 
 - Figures are **standard rates before any promotion**. A real quote varies with current offers and your start date — always confirm with the club.
-- **Privacy:** the site sets no cookies and stores no personal data. It uses [Cloudflare Web Analytics](https://www.cloudflare.com/web-analytics/) — a cookieless, privacy-first page-view counter — and records which club pages are viewed (via the URL) so popular clubs can be seen in aggregate. No accounts, no tracking across sites, nothing sold. Prices are cached in your browser's `localStorage` only to speed up repeat visits.
+- **Privacy:** the site sets no cookies and stores nothing in your browser (no `localStorage`, no accounts). It uses [Cloudflare Web Analytics](https://www.cloudflare.com/web-analytics/) — a cookieless, privacy-first page-view counter — and records which club pages are viewed (via the URL) so popular clubs can be seen in aggregate. No tracking across sites, nothing sold.
 
 ## Disclaimer
 

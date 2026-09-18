@@ -16,7 +16,10 @@ module.exports = defineConfig({
     trace: "on-first-retry",
   },
   webServer: {
-    command: "python3 -m http.server 4173",
+    // Threaded server: the default http.server is single-threaded and stalls the
+    // JSON fetches under parallel workers. ThreadingHTTPServer handles them concurrently.
+    command:
+      "python3 -c \"from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler; ThreadingHTTPServer(('127.0.0.1', 4173), SimpleHTTPRequestHandler).serve_forever()\"",
     url: "http://127.0.0.1:4173/index.html",
     reuseExistingServer: !process.env.CI,
     timeout: 30000,

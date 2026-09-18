@@ -20,58 +20,81 @@ const DUR_ORDER  = ["STANDARD","FLEXIBLE","ANNUAL"];
 const DUR_LABEL  = { STANDARD:"Standard · 12-mo", FLEXIBLE:"Flexible · 3-mo", ANNUAL:"Annual · paid yearly" };
 
 const qs = s => document.querySelector(s);
-const cacheGet = k => { try{ const v=JSON.parse(localStorage.getItem(k)); if(v&&Date.now()-v.t<v.ttl) return v.d; }catch{} return null; };
-const cacheSet = (k,d,ttl) => { try{ localStorage.setItem(k,JSON.stringify({t:Date.now(),ttl,d})); }catch{} };
+// No browser storage: all data is same-origin static JSON (HTTP-cached by the
+// browser) plus in-memory caches for the current visit, so nothing is persisted.
+const cacheGet = () => null;
+const cacheSet = () => {};
 
-// David Lloyd's /clubs feed mis-tags a few clubs' country. Audited 18 Sep 2026:
-// only Edinburgh Shawfair (site 156) is wrong — it returns "England" while every
-// other Scottish club is correct.
+// David Lloyd's /clubs feed mis-tags a few clubs' country (audited 18 Sep 2026:
+// only Edinburgh Shawfair, site 156, is wrong — "England" vs "Scotland"). The
+// snapshot already corrects it, and this belt-and-braces override covers the
+// live-fallback path too.
 const COUNTRY_FIX = { 156: "Scotland" };
-// Applied on EVERY return path (fresh AND cached) — a returning visitor may hold a
-// pre-fix club list in localStorage, so overriding only on fetch left it stale.
 const fixCountry = c => COUNTRY_FIX[c.siteId] ? {...c, country: COUNTRY_FIX[c.siteId]} : c;
 
 /* ---- data ---- */
+// Club list comes from the committed snapshot (data/latest.json) so a normal
+// visit makes no calls to David Lloyd at all; live /clubs is only a fallback.
 async function getClubs(){
-  let clubs = cacheGet("pb_clubs");
+  let clubs;
+  try{
+    const L = await getLatest();
+    if(L && L.clubs && L.clubs.length)
+      clubs = L.clubs.map(c=>({ clubName:c.name, siteId:c.siteId, country:c.country, currency:c.currency }));
+  }catch{}
   if(!clubs){
     const r = await fetch(`${API}/clubs`); const j = await r.json();
-    clubs = (j.clubs||[]).filter(c=>c.status==="active").sort((a,b)=>a.clubName.localeCompare(b.clubName));
-    cacheSet("pb_clubs", clubs, DAY);
+    clubs = (j.clubs||[]).filter(c=>c.status==="active")
+      .map(c=>({ clubName:c.clubName, siteId:c.siteId, country:c.country, currency:c.currency }));
   }
+  clubs.sort((a,b)=>a.clubName.localeCompare(b.clubName));
   return clubs.map(fixCountry);
 }
+// Everything a club page renders is served from a committed nightly bundle
+// (data/clubs/<id>.json) so visitors don't hit David Lloyd at all. If the file
+// is missing (e.g. a brand-new club not yet snapshotted), fall back to the live
+// endpoints so nothing breaks. One fetch per club, cached in memory + localStorage.
+const _bundles = {};
+async function getClubBundle(siteId){
+  if(_bundles[siteId]!==undefined) return _bundles[siteId];
+  const ck=`pb_bundle_${siteId}`; const c=cacheGet(ck);
+  if(c){ _bundles[siteId]=c; return c; }
+  let b=null;
+  try{ const r=await fetch(`data/clubs/${siteId}.json?t=${Math.floor(Date.now()/36e5)}`);
+    if(r.ok){ b=await r.json(); cacheSet(ck,b,DAY/2); } }catch{}
+  _bundles[siteId]=b; return b;
+}
 async function getPackages(siteId){
-  const ck = `pb_pkg_${siteId}`; const c = cacheGet(ck); if(c) return c;
-  const r = await fetch(`${API}/clubs/${siteId}/packages/online`);
+  const b=await getClubBundle(siteId);
+  if(b) return { packages:b.packages||[], addOns:b.addOns||[] };
+  const r = await fetch(`${API}/clubs/${siteId}/packages/online`);      // live fallback
   if(!r.ok) throw new Error(`HTTP ${r.status}`);
-  const j = await r.json();
-  cacheSet(ck, j, DAY/2);
-  return j;
+  return await r.json();
 }
 async function getSettings(siteId){
-  const ck = `pb_set_${siteId}`; const c = cacheGet(ck); if(c) return c;
-  const r = await fetch(`${API}/clubs/${siteId}/membership-settings`);
+  const b=await getClubBundle(siteId);
+  if(b) return b.settings||{};
+  const r = await fetch(`${API}/clubs/${siteId}/membership-settings`);   // live fallback
   if(!r.ok) throw new Error(`HTTP ${r.status}`);
-  const j = await r.json(); cacheSet(ck, j, DAY/2); return j;
+  return await r.json();
 }
 async function getAccess(siteId, keys){                 // clubs each plan can visit
-  const ck = `pb_acc_${siteId}`; const c = cacheGet(ck); if(c) return c;
+  const b=await getClubBundle(siteId);
+  if(b) return b.access||{};
   const r = await fetch(`${API}/accessible-clubs`,{method:"POST",headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({siteId:String(siteId),packageKeys:keys})});
+    body:JSON.stringify({siteId:String(siteId),packageKeys:keys})});     // live fallback
   if(!r.ok) throw new Error(`HTTP ${r.status}`);
   const j = await r.json(); const map={};
-  // Accessible set = clubsInTheSameTierOrLower ONLY (higher/exclusive tiers are
-  // NOT accessible). Store the site IDs so we can list the clubs by name, 1:1
-  // with the site's "clubs I can access" list.
+  // Accessible set = clubsInTheSameTierOrLower ONLY (higher/exclusive tiers are NOT accessible).
   for(const e of (j.awayClubsByPackageKeys||[])) map[e.packageKey]=((e.awayClubs||{}).clubsInTheSameTierOrLower||[]);
-  cacheSet(ck, map, DAY/2); return map;
+  return map;
 }
 async function getDetail(siteId){                        // full club profile (#3/#4)
-  const ck = `pb_det_${siteId}`; const c = cacheGet(ck); if(c) return c;
-  const r = await fetch(`${API}/clubs/${siteId}`);
+  const b=await getClubBundle(siteId);
+  if(b) return b.detail||null;
+  const r = await fetch(`${API}/clubs/${siteId}`);                        // live fallback
   if(!r.ok) throw new Error(`HTTP ${r.status}`);
-  const j = await r.json(); const club = j.club||j; cacheSet(ck, club, DAY); return club;
+  const j = await r.json(); return j.club||j;
 }
 let SPORTS = {};                                         // sportId -> name
 async function getSports(){
@@ -414,7 +437,7 @@ function renderPromos(dur){
   el.hidden=false;
   el.innerHTML=`<span class="promo-k">Offers</span>`+
     `<span class="promo-note">★ current offers are shown on the plans they apply to`+
-    `${earliestEnd?` · ends ${esc(fmtDate(earliestEnd))}`:""} · applied at checkout on David&nbsp;Lloyd’s site.</span>`;
+    `${earliestEnd?` · ends ${esc(fmtDate(earliestEnd))}`:""}</span>`;
 }
 
 /* ---- club profile card + facility badges (#3/#4) ---- */
@@ -496,10 +519,11 @@ function renderLeague(){
   const unit = dur==="A" ? "/yr" : "/mo";
   const showMi = USERLOC && rows.some(r=>r.mi!=null);
   const cheapest = rows.length?rows[0].val:0, dearest=rows.length?rows[rows.length-1].val:0;
+  const pp = type!=="i";   // couple/family rates are per person (as in the club tables)
   qs("#league-sub").textContent =
-    `${rows.length} clubs with ${prettyPlan(plan)} · ${TYPE_SHORT[type]} · ${DUR_SHORT[dur]} — from ${fmt(cheapest,rows[0]?.cur||"GBP")} to ${fmt(dearest,rows[rows.length-1]?.cur||"GBP")}${unit}`;
+    `${rows.length} clubs with ${prettyPlan(plan)} · ${TYPE_SHORT[type]}${pp?" (per person)":""} · ${DUR_SHORT[dur]} — from ${fmt(cheapest,rows[0]?.cur||"GBP")} to ${fmt(dearest,rows[rows.length-1]?.cur||"GBP")}${unit}`;
   t.innerHTML=
-    `<thead><tr><th>#</th><th>Club</th><th>Country</th>${showMi?`<th class="num">Distance</th>`:""}<th class="num">${TYPE_SHORT[type]} ${unit}</th></tr></thead>`+
+    `<thead><tr><th>#</th><th>Club</th><th>Country</th>${showMi?`<th class="num">Distance</th>`:""}<th class="num">${TYPE_SHORT[type]} ${unit}${pp?`<span class="th-sub">per person</span>`:""}</th></tr></thead>`+
     `<tbody>`+rows.map((r,i)=>`<tr data-site="${r.siteId}">`+
       `<td class="lg-rank">${i+1}</td>`+
       `<td class="lg-name">${esc(r.name)}</td>`+
