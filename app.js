@@ -421,7 +421,7 @@ function renderTable(){
     const hasMore = bens.length || accNames.length || desc;
     if(hasMore) PLANINFO[p.packageKey] = { name:prettyPlan(p.packageKey), desc, bens, access:accNames };
     const bits=[]; if(bens.length) bits.push(`${bens.length} perk${bens.length>1?"s":""}`);
-    if(accNames.length) bits.push(`${accNames.length} club${accNames.length>1?"s":""} to visit`);
+    if(accNames.length) bits.push(`${accNames.length} clubs you can access`);
     const moreHtml = hasMore
       ? `<button class="pn-more" type="button" data-key="${esc(p.packageKey)}">What’s included${bits.length?` · ${bits.join(" · ")}`:""} <span class="chev">›</span></button>` : "";
     return `<tr><td class="plan"><div class="pn"><span class="pn-name">${prettyPlan(p.packageKey)}</span>${pop}</div>`+
