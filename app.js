@@ -738,10 +738,11 @@ function buildComparePickers(){
 function renderCompare(){
   const box=qs("#compare"); if(!box || box.hidden) return;
   const picked=CMP.map(n=>n?(LATEST.clubs||[]).find(c=>c.name===n):null).filter(Boolean);
-  const t=qs("#cmp-table"), empty=qs("#cmp-empty");
-  if(!picked.length){ t.hidden=true; empty.hidden=false; return; }
+  const t=qs("#cmp-table"), empty=qs("#cmp-empty"), note=qs("#cmp-note");
+  if(!picked.length){ t.hidden=true; empty.hidden=false; if(note) note.hidden=true; return; }
   empty.hidden=true; t.hidden=false;
   const dur=CMP_DUR, type=CMP_TYPE, unit=dur==="A"?"/yr":"/mo";
+  if(note){ note.hidden = type==="i"; note.textContent = type!=="i" ? `${TYPE_SHORT[type]} rates shown are per person.` : ""; }
   // union of plans across picked clubs that have an individual/couple value
   const planSet=new Set();
   for(const c of picked) for(const [k,byd] of Object.entries(c.plans||{}))
