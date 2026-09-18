@@ -84,6 +84,12 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--disp);
   color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center}
 .clubsub .pin{color:var(--accent)}
 .clubsub .sep{opacity:.5}
+.cmp-open{display:inline-flex;align-items:center;gap:7px;margin-top:12px;font-family:var(--mono);font-size:.68rem;
+  letter-spacing:.05em;text-transform:uppercase;font-weight:700;color:var(--ink);background:var(--paper);
+  border:2px solid var(--ink);padding:7px 11px;cursor:pointer;transition:background .1s,color .1s}
+.cmp-open svg{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+.cmp-open:hover{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.cmp-open:active{transform:translate(1px,1px)}
 
 .durations{display:inline-flex;border:2px solid var(--ink)}
 .durations button{font-family:var(--mono);font-size:.72rem;letter-spacing:.05em;text-transform:uppercase;

@@ -265,6 +265,15 @@ test("compare view puts clubs side by side (#13)", async ({ page }) => {
   expect(await page.locator("#cmp-table tbody tr").count()).toBeGreaterThan(0);
 });
 
+test("compare button on a club opens Compare pre-filled (#13)", async ({ page }) => {
+  await page.goto("/?club=glasgow-west-end");
+  await expect(page.locator("#do-compare")).toBeVisible();
+  await page.locator("#do-compare").click();
+  await expect(page.locator("#compare")).toBeVisible();
+  await expect(page.locator('.cmp-pick[data-i="0"]')).toHaveValue("Glasgow West End");
+  await expect(page.locator("#cmp-table")).toBeVisible();
+});
+
 test("biggest movers view loads with an empty state before history accrues (#16)", async ({ page }) => {
   await page.goto("/?view=movers");
   await expect(page.locator("#movers")).toBeVisible();

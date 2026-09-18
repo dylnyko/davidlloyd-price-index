@@ -332,6 +332,7 @@ async function selectClub(club, fromUrl){
   qs("#pricetable").hidden=true; qs("#empty").hidden=true; qs("#foot-note").hidden=true; qs("#addons").hidden=true; qs("#share").hidden=true;
   const profEl=qs("#profile"); if(profEl) profEl.hidden=true;
   const promoEl=qs("#promos"); if(promoEl) promoEl.hidden=true;
+  const cmpBtn=qs("#do-compare"); if(cmpBtn) cmpBtn.hidden=false;
   qs("#durations").innerHTML="";
   const status=qs("#status"); status.hidden=false;
   status.innerHTML=`<span class="spin"></span><span>Pulling live prices…</span>`;
@@ -956,6 +957,8 @@ document.querySelectorAll(".nav button").forEach(b=>b.addEventListener("click",(
 }));
 qs("#nm-geo")?.addEventListener("click", setNearMeByGeo);
 qs("#nm-form")?.addEventListener("submit", e=>{ e.preventDefault(); setNearMeByPostcode(qs("#nm-pc").value); });
+// Compare button on a club opens the Compare view with that club pre-filled.
+qs("#do-compare")?.addEventListener("click", ()=>{ if(!CURRENT) return; CMP=[CURRENT.clubName,null,null]; openCompare(); });
 
 // Back/forward between league and club views.
 window.addEventListener("popstate",()=>{
