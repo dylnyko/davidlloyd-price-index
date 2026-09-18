@@ -418,7 +418,10 @@ function renderTable(){
              `<div class="join">${jf?`+ ${fmt(jf,cur)} joining`:`no joining fee`}</div></td>`;
     }).join("");
     const desc = descOf(p);
-    const nameHtml = `<span class="pn-name${desc?" has-desc":""}"${desc?` title="${esc(desc)}"`:""}>${prettyPlan(p.packageKey)}</span>`;
+    // Tooltip = DL's plan description plus the full benefit list.
+    const tipParts=[]; if(desc) tipParts.push(desc); if(bens.length) tipParts.push("Includes: "+bens.join(" · "));
+    const tip = tipParts.join("\n\n");
+    const nameHtml = `<span class="pn-name${tip?" has-desc":""}"${tip?` title="${esc(tip)}"`:""}>${prettyPlan(p.packageKey)}</span>`;
     return `<tr><td class="plan"><div class="pn">${nameHtml}${pop}</div>`+
            `${offerHtml}${trendHtml}${benHtml}${accHtml}</td>${cells}</tr>`;
   }).join("");
