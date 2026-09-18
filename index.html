@@ -7,25 +7,35 @@
 <meta name="description" content="Look up live David Lloyd membership prices for any club. An independent, unofficial tool." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..600&family=Schibsted+Grotesk:wght@400..700&display=swap" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Space+Mono:wght@400;700&display=swap" />
 <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-<div class="grain" aria-hidden="true"></div>
-<div class="glow" aria-hidden="true"></div>
+<div class="frame">
 
-<div class="wrap">
-  <header class="masthead">
-    <p class="kicker reveal" style="--d:0"><span class="tick">●</span> Independent &amp; unofficial — not affiliated with David&nbsp;Lloyd Leisure</p>
-    <h1 class="reveal" style="--d:1">The Price <em>Book</em></h1>
-    <p class="lede reveal" style="--d:2">The membership fees they don't put on the website. Search any club to pull its <span class="hl">live standard rates</span>.</p>
+  <header class="topbar">
+    <span class="mark">THE&nbsp;PRICE&nbsp;BOOK</span>
+    <span class="tag">UNOFFICIAL · NOT DAVID&nbsp;LLOYD</span>
   </header>
 
-  <section class="search reveal" style="--d:3" aria-label="Find a club">
+  <section class="hero">
+    <div class="hero-main">
+      <h1>The membership fees<br>they <span class="mk">hide.</span></h1>
+      <p class="lede">Search any David&nbsp;Lloyd club — pull its <strong>live standard rates</strong>, straight from the pricing service that quotes their own join flow.</p>
+    </div>
+    <aside class="spec" aria-label="About the data">
+      <div class="spec-row"><span class="k">Source</span><span class="v">Live pricing API</span></div>
+      <div class="spec-row"><span class="k">Coverage</span><span class="v" id="spec-clubs">Loading…</span></div>
+      <div class="spec-row"><span class="k">Updates</span><span class="v">Auto · reads new plans</span></div>
+      <div class="spec-row"><span class="k">Rates</span><span class="v">Standard · pre-promo</span></div>
+    </aside>
+  </section>
+
+  <section class="search" aria-label="Find a club">
+    <label class="lbl" for="q">Find a club</label>
     <div class="combo">
-      <svg class="search-ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
       <input id="q" type="text" autocomplete="off" spellcheck="false"
-             placeholder="Notting Hill, Leeds, Glasgow…"
+             placeholder="NOTTING HILL / LEEDS / GLASGOW"
              role="combobox" aria-expanded="false" aria-controls="results-list" aria-autocomplete="list" />
       <span id="clubcount" class="clubcount" aria-hidden="true"></span>
       <ul id="results-list" class="dropdown" role="listbox" hidden></ul>
@@ -54,17 +64,10 @@
     <p id="foot-note" class="foot-note" hidden></p>
   </main>
 
-  <section class="intro reveal" style="--d:4" id="intro">
-    <ol class="ledger">
-      <li><span class="num">01</span><h3>Live, never cached</h3><p>Figures are pulled the instant you choose a club — the same numbers their join flow quotes.</p></li>
-      <li><span class="num">02</span><h3>Reads itself</h3><p>Plans, membership types and durations come from the API, so new tiers appear here with no edits.</p></li>
-      <li><span class="num">03</span><h3>Standard rates</h3><p>The plain monthly fee and joining fee — before any promotion. Your real quote shifts with current offers.</p></li>
-    </ol>
-  </section>
-
   <footer class="sitefoot">
-    <p><strong>Disclaimer.</strong> An independent, unofficial tool with no affiliation to, endorsement by, or connection with David&nbsp;Lloyd Leisure. "David&nbsp;Lloyd" is a trademark of its owner. Prices are indicative standard rates pulled live from a public endpoint and may be inaccurate, out of date, or differ from an actual quote — always confirm with the club. No data is collected.</p>
+    <p><span class="fs-mk">DISCLAIMER</span> Independent and unofficial — no affiliation with, endorsement by, or connection to David&nbsp;Lloyd Leisure. "David&nbsp;Lloyd" is a trademark of its owner. Prices are indicative standard rates pulled live from a public endpoint and may be inaccurate or out of date — always confirm with the club. No data is collected.</p>
   </footer>
+
 </div>
 <script src="app.js"></script>
 </body>

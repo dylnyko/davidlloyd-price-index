@@ -154,7 +154,6 @@ document.addEventListener("click",e=>{ if(!e.target.closest(".combo")) closeDrop
 async function selectClub(club){
   CURRENT=club; token++; const my=token;
   q.value=club.clubName; closeDropdown(); q.blur();
-  $("#intro").style.display="none";
   const panel=$("#panel"); panel.hidden=false;
   $("#clubname").textContent=club.clubName;
   $("#clubsub").innerHTML=`<span class="pin">◆</span> ${club.country||"—"} <span class="sep">/</span> site #${club.siteId} <span class="sep">/</span> prices in ${club.currency}`;
@@ -222,7 +221,7 @@ function renderTable(data,cur){
 
   // Group order: Club* → Junior* → Team* → everything else; then cheapest first.
   const minMonthly=p=>Math.min(...types.map(t=>data[p][t]?.monthly ?? Infinity));
-  const rank=p=> p.startsWith("CLUB")?0 : p.startsWith("JUNIOR")?1 : p.startsWith("TEAM")?2 : 3;
+  const rank=p=> p.startsWith("CLUB")?0 : p.startsWith("JUNIOR")?1 : p.startsWith("YOUNG_ADULT")?2 : p.startsWith("TEAM")?3 : 4;
   offered.sort((a,b)=> (rank(a)-rank(b)) || (minMonthly(a)-minMonthly(b)) || a.localeCompare(b));
   const cheapest=offered.reduce((m,p)=>minMonthly(p)<minMonthly(m)?p:m,offered[0]);
 
@@ -247,7 +246,8 @@ function renderTable(data,cur){
   try{
     ENUMS=await getEnums();
     CLUBS=await getClubs();
-    $("#clubcount").textContent=`${CLUBS.length} clubs`;
+    $("#clubcount").textContent=`${CLUBS.length}`;
+    const spec=$("#spec-clubs"); if(spec) spec.textContent=`${CLUBS.length} clubs`;
     if(document.activeElement===q) renderDropdown(filterClubs(q.value),q.value.trim());
   }catch(e){
     $("#q").placeholder="Couldn't reach the pricing service — try again later";
