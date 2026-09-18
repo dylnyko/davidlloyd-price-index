@@ -311,6 +311,11 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--disp);
 }
 @media (max-width:560px){
   .frame{margin:10px;box-shadow:3px 3px 0 var(--ink)}
+  /* Nav: the segmented strip wraps badly with 5 tabs, so on mobile give each
+     tab its own bordered chip in a full-width wrapping grid. */
+  .topbar{gap:10px}
+  .nav{width:100%;border:0;display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+  .nav button{border:2px solid var(--ink)!important;text-align:center;padding:9px 6px;font-size:.62rem}
   .panelhead{flex-direction:column;align-items:flex-start}
   .head-actions{width:100%}
   /* Stack the segmented control on mobile: equal columns can't fit the longest
