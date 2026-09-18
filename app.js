@@ -963,6 +963,8 @@ qs("#nm-geo")?.addEventListener("click", setNearMeByGeo);
 qs("#nm-form")?.addEventListener("submit", e=>{ e.preventDefault(); setNearMeByPostcode(qs("#nm-pc").value); });
 // Compare button on a club opens the Compare view with that club pre-filled.
 qs("#do-compare")?.addEventListener("click", ()=>{ if(!CURRENT) return; CMP=[CURRENT.clubName,null,null]; openCompare(); });
+// Back from Compare → the club you were viewing (or the home lookup).
+qs("#cmp-back")?.addEventListener("click", gotoLookup);
 
 // Back/forward between league and club views.
 window.addEventListener("popstate",()=>{

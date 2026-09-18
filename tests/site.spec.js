@@ -273,6 +273,10 @@ test("compare button on a club opens Compare pre-filled (#13)", async ({ page })
   await expect(page.locator("#compare")).toBeVisible();
   await expect(page.locator('.cmp-pick[data-i="0"]')).toHaveValue("Glasgow West End");
   await expect(page.locator("#cmp-table")).toBeVisible();
+  // Back returns to the club you came from
+  await page.locator("#cmp-back").click();
+  await expect(page.locator("#pricetable")).toBeVisible();
+  await expect(page.locator("#clubname")).toHaveText("Glasgow West End");
 });
 
 test("biggest movers view loads with an empty state before history accrues (#16)", async ({ page }) => {

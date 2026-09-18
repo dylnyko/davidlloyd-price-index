@@ -292,6 +292,11 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--disp);
 .lg-foot{margin:16px 0 0;font-family:var(--mono);font-size:.66rem;color:var(--muted)}
 
 /* compare (#13) */
+.backbtn{display:inline-block;margin-bottom:12px;font-family:var(--mono);font-size:.66rem;letter-spacing:.05em;
+  text-transform:uppercase;font-weight:700;background:var(--paper);border:2px solid var(--ink);color:var(--ink);
+  padding:6px 11px;cursor:pointer;transition:background .1s,color .1s}
+.backbtn:hover{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.backbtn:active{transform:translate(1px,1px)}
 .cmp-slots{display:flex;flex-wrap:wrap;gap:10px}
 .cmp-pick{font-family:var(--disp);font-weight:600;font-size:.95rem;color:var(--ink);
   background:var(--paper);border:2px solid var(--ink);padding:9px 11px;cursor:pointer;flex:1;min-width:180px}
