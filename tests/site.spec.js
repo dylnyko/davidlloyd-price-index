@@ -228,6 +228,18 @@ test("club view is served from the committed bundle — no per-club DL calls (#1
   expect(perClub).toHaveLength(0);
 });
 
+test("remembers the postcode across refresh via the URL (#1)", async ({ page }) => {
+  await page.goto("/");
+  await page.fill("#nm-pc", "G1 1AA");
+  await page.locator("#nm-form button[type=submit]").click();
+  await expect(page.locator("#nm-status")).toContainText("nearest is");
+  await expect(page).toHaveURL(/pc=/);
+  // arriving fresh with the pc in the URL restores it (as a refresh would)
+  await page.goto("/?pc=G1%201AA");
+  await expect(page.locator("#nm-status")).toContainText("nearest is");
+  await expect(page.locator("#nm-pc")).toHaveValue("G1 1AA");
+});
+
 test("duration control does not overflow on mobile", async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 800 });
   await openWestEnd(page);

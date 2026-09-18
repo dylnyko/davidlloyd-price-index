@@ -191,7 +191,24 @@ const fmtDate = iso => { try{ return new Date(iso).toLocaleDateString("en-GB",{d
 
 /* ---- state ---- */
 let CLUBS=[], CURRENT=null, DATA=null, CURDUR="STANDARD", token=0, LASTIMG=null, MOSTPOP=null, ACCESS={}, CLUBBY={};
-let DETAIL=null, USERLOC=null, USERLABEL="";   // club profile + "near me" origin
+let DETAIL=null, USERLOC=null, USERLABEL="", PC=null;   // club profile + "near me" origin (PC persists in the URL)
+
+// Build a URL for the current view, always carrying the postcode (?pc=) so a
+// refresh or shared link keeps "clubs near me" — no browser storage needed.
+function buildURL(params){
+  const u=new URLSearchParams();
+  for(const [k,v] of Object.entries(params)) if(v!=null && v!=="") u.set(k,v);
+  if(PC) u.set("pc", PC);
+  const s=u.toString();
+  return s ? `?${s}` : location.pathname;
+}
+function syncURL(){
+  let u;
+  if(!qs("#league").hidden) u=leagueURL();
+  else if(CURRENT) u=buildURL({club:slugify(CURRENT.clubName)});
+  else u=buildURL({});
+  history.replaceState({},"",u);
+}
 
 /* ---- search / dropdown ---- */
 const q=qs("#q"), dd=qs("#results-list");
@@ -244,23 +261,25 @@ async function applyDistances(){
   const locs = await getLocations();
   for(const c of CLUBS){ const l=USERLOC?locs[c.siteId]:null; c._mi = l? distMiles(USERLOC,l) : null; }
 }
-async function afterLocation(){
+async function afterLocation(boot){
   await applyDistances();
   const nm=qs("#nm-status");
   const nearest=CLUBS.filter(c=>c._mi!=null).sort((a,b)=>a._mi-b._mi)[0];
   if(nm){ nm.innerHTML = `<span class="ok">◆</span> ${esc(USERLABEL)} — nearest is <b>${esc(nearest?nearest.clubName:"—")}</b>${nearest?` · ${fmtMiles(nearest._mi)}`:""} <button id="nm-clear" class="nm-clear" type="button">clear</button>`;
     qs("#nm-clear")?.addEventListener("click", clearNearMe); }
-  renderDropdown(filterClubs(q.value), q.value.trim()); q.focus();
   if(!qs("#league").hidden) renderLeague();
+  if(!boot){ renderDropdown(filterClubs(q.value), q.value.trim()); q.focus(); }
 }
-async function setNearMeByPostcode(pc){
+async function setNearMeByPostcode(pc, boot){
   pc=(pc||"").trim(); if(!pc) return;
   const nm=qs("#nm-status"); if(nm) nm.textContent="Locating…";
   try{
     const r=await fetch(`https://api.postcodes.io/postcodes/${encodeURIComponent(pc)}`);
     if(!r.ok) throw 0; const j=await r.json(); const res=j.result||{};
     USERLOC={lat:res.latitude,lng:res.longitude}; USERLABEL=res.postcode||pc.toUpperCase();
-    await afterLocation();
+    PC=USERLABEL;                       // persisted in the URL so refresh remembers it
+    if(!boot) syncURL();
+    await afterLocation(boot);
   }catch{ if(nm) nm.textContent="Postcode not found — try a full UK postcode."; }
 }
 function setNearMeByGeo(){
@@ -269,13 +288,15 @@ function setNearMeByGeo(){
   if(nm) nm.textContent="Locating…";
   navigator.geolocation.getCurrentPosition(async pos=>{
     USERLOC={lat:pos.coords.latitude,lng:pos.coords.longitude}; USERLABEL="Your location";
+    PC=null; syncURL();               // one-off; not persisted (would need coords in URL)
     await afterLocation();
   }, ()=>{ if(nm) nm.textContent="Location permission denied — enter a postcode instead."; }, {timeout:8000});
 }
 function clearNearMe(){
-  USERLOC=null; USERLABEL=""; for(const c of CLUBS) c._mi=null;
+  USERLOC=null; USERLABEL=""; PC=null; for(const c of CLUBS) c._mi=null;
   const nm=qs("#nm-status"); if(nm) nm.textContent="";
   const pcIn=qs("#nm-pc"); if(pcIn) pcIn.value="";
+  syncURL();
   renderDropdown(filterClubs(q.value),q.value.trim());
   if(!qs("#league").hidden) renderLeague();
 }
@@ -287,7 +308,7 @@ async function selectClub(club, fromUrl){
   // Give each club its own URL + title so Cloudflare's SPA tracking logs it as a
   // distinct page view — the dashboard's "Top pages" then shows which clubs get
   // looked up. Cookieless: it's just a path, no identifiers.
-  const url=`?club=${slugify(club.clubName)}`;
+  const url=buildURL({club:slugify(club.clubName)});
   if(fromUrl) history.replaceState({}, "", url); else history.pushState({}, "", url);
   document.title=`${club.clubName} — The Price Book`;
   const panel=qs("#panel"); panel.hidden=false;
@@ -394,7 +415,8 @@ function renderTable(){
   const ppTypes = activeTypes.filter(t=>t!=="INDIVIDUAL").map(t=>TYPE_LABEL[t]);
   const ppNote = ppTypes.length ? ` ${ppTypes.join(" & ")} rates are per person.` : "";
   foot.hidden=false;
-  foot.textContent=`Standard rates before any promotion · ${pkgs.length} plan${pkgs.length>1?"s":""} · pulled live ${new Date().toLocaleString("en-GB",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"})}. ${dur==="ANNUAL"?"Prices are the annual total.":"Monthly fees recur; joining fees are one-off."}${ppNote}`;
+  const snap = (LATEST&&LATEST.date) ? ` · from David Lloyd, snapshot ${fmtDate(LATEST.date)}` : "";
+  foot.textContent=`Standard rates before any promotion · ${pkgs.length} plan${pkgs.length>1?"s":""}${snap}. ${dur==="ANNUAL"?"Prices are the annual total.":"Monthly fees recur; joining fees are one-off."}${ppNote}`;
 
   // capture a model for the shareable image, and reveal the button
   LASTIMG = {
@@ -463,15 +485,14 @@ function renderProfile(){
   const hoursHtml = hours ? `<div class="pf-item pf-hours"><span class="pf-k">Opening hours</span>${hours}</div>` : "";
   el.hidden=false;
   el.innerHTML=`<div class="pf-head"><h3>Club facilities</h3>${badgeHtml}</div>`+
-    `<div class="pf-grid">${telHtml}${courtsHtml}${hoursHtml}</div>`+
-    `<p class="pf-src">From David&nbsp;Lloyd’s club record · site #${d.siteId||CURRENT.siteId}</p>`;
+    `<div class="pf-grid">${telHtml}${courtsHtml}${hoursHtml}</div>`;
 }
 
 /* ---- national price league (#6) — from committed latest.json ---- */
 let LEAGUE_METRIC={ plan:"CLUB_PLATINUM", type:"i", dur:"S" };
 const DUR_SHORT={ S:"Standard · 12-mo", F:"Flexible · 3-mo", A:"Annual total" };
 const TYPE_SHORT={ i:"Individual", c:"Couple", f:"Family" };
-const leagueURL = () => `?view=league&plan=${encodeURIComponent(LEAGUE_METRIC.plan)}&who=${LEAGUE_METRIC.type}&term=${LEAGUE_METRIC.dur}`;
+const leagueURL = () => buildURL({ view:"league", plan:LEAGUE_METRIC.plan, who:LEAGUE_METRIC.type, term:LEAGUE_METRIC.dur });
 async function openLeague(fromUrl){
   setView("league");
   const box=qs("#league"); box.hidden=false;
@@ -636,7 +657,7 @@ document.addEventListener("keydown", e=>{ if(e.key==="Escape" && !qs("#sharemoda
 /* ---- nav + near-me wiring ---- */
 function gotoLookup(){
   setView("lookup");
-  const u = CURRENT ? `?club=${slugify(CURRENT.clubName)}` : location.pathname;
+  const u = CURRENT ? buildURL({club:slugify(CURRENT.clubName)}) : buildURL({});
   history.pushState({},"",u);
   document.title = CURRENT ? `${CURRENT.clubName} — The Price Book` : "The Price Book — unofficial David Lloyd price lookup";
 }
@@ -667,8 +688,11 @@ window.addEventListener("popstate",()=>{
     CLUBBY=Object.fromEntries(CLUBS.map(c=>[c.siteId, c.clubName]));
     qs("#clubcount").textContent=`${CLUBS.length}`;
     const spec=qs("#spec-clubs"); if(spec) spec.textContent=`${CLUBS.length} clubs`;
-    // Deep links (shareable URLs): ?view=league[&plan&who&term] or ?club=<slug>.
+    // Deep links (shareable URLs): ?view=league[&plan&who&term] or ?club=<slug>,
+    // plus ?pc=<postcode> which restores "clubs near me" across refresh/shares.
     const params=new URLSearchParams(location.search);
+    const pc=params.get("pc");
+    if(pc){ const pcIn=qs("#nm-pc"); if(pcIn) pcIn.value=pc; await setNearMeByPostcode(pc, true); }
     if(params.get("view")==="league"){
       if(params.get("plan")) LEAGUE_METRIC.plan=params.get("plan");
       if(params.get("who")) LEAGUE_METRIC.type=params.get("who");
