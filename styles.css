@@ -193,8 +193,11 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--disp);
 .nav button[aria-selected="true"]{background:var(--ink);color:var(--paper)}
 
 /* clubs near me (#1) */
-.nearme{margin-top:14px}
-.nm-form{display:flex;flex-wrap:wrap;gap:8px}
+.nearme{margin-top:18px}
+.nearme .lbl{margin-bottom:10px}
+.nm-form{display:flex;flex-wrap:wrap;gap:8px;align-items:stretch}
+.nm-btn.icon{display:inline-flex;align-items:center;justify-content:center;padding:0 12px}
+.nm-btn.icon svg{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 #nm-pc{font-family:var(--mono);font-size:.82rem;letter-spacing:.06em;text-transform:uppercase;
   background:var(--paper);border:2px solid var(--ink);padding:9px 12px;width:min(200px,42vw);outline:none}
 #nm-pc:focus{box-shadow:3px 3px 0 var(--ink);transform:translate(-1px,-1px)}
@@ -213,14 +216,15 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--disp);
 .dropdown .cl.mi{color:var(--accent);font-weight:700}
 .clubsub .mi{color:var(--accent);font-weight:700}
 
-/* live promotions (#10) */
+/* live promotions (#10) — legend + per-plan chips */
 .promos{margin-top:16px;display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center;
-  border:2px solid var(--ink);background:var(--paper-2);padding:12px 14px}
+  border:2px solid var(--ink);background:var(--paper-2);padding:10px 14px}
 .promos .promo-k{font-family:var(--mono);font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
   background:var(--accent);color:var(--accent-ink);padding:3px 8px}
-.promos .promo{display:inline-flex;align-items:baseline;gap:8px;font-family:var(--disp);font-weight:600;font-size:.92rem}
-.promos .promo-end{font-family:var(--mono);font-size:.62rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
-.promos .promo-note{flex-basis:100%;font-family:var(--mono);font-size:.62rem;color:var(--muted)}
+.promos .promo-note{font-family:var(--mono);font-size:.64rem;color:var(--muted)}
+.offers{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;max-width:340px}
+.offers .offer{font-family:var(--mono);font-size:.62rem;font-weight:700;letter-spacing:.02em;
+  color:var(--accent);border:1px solid var(--accent);padding:2px 7px}
 
 /* price trend chip (#12) */
 .trend{margin-top:6px;font-family:var(--mono);font-size:.64rem;font-weight:700;letter-spacing:.03em;

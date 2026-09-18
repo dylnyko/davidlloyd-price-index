@@ -168,13 +168,16 @@ test("shows a club profile card with facility badges (#3/#4)", async ({ page }) 
   await expect(profile).toContainText(detail.telephone || detail.club?.telephone || "");
 });
 
-test("surfaces live promotions on a duration that has them (#10)", async ({ page }) => {
+test("surfaces live promotions per plan on a duration that has them (#10)", async ({ page }) => {
   await openWestEnd(page);
   await page.locator('#durations button[data-dur="FLEXIBLE"]').click();
+  // legend appears
   const promos = page.locator("#promos");
   await expect(promos).toBeVisible();
-  await expect(promos.locator(".promo-k")).toContainText("Current offers");
-  await expect(promos.locator(".promo")).not.toHaveCount(0);
+  await expect(promos.locator(".promo-k")).toContainText("Offers");
+  // offers render as chips on the plan rows they apply to — not globally
+  const offers = page.locator("#tbody .offers .offer");
+  expect(await offers.count()).toBeGreaterThan(0);
 });
 
 test("opens the national price league and ranks clubs cheapest-first (#6)", async ({ page }) => {

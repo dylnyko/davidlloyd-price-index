@@ -345,6 +345,9 @@ function renderTable(){
               `<div class="access-list">${names.join(" · ")}</div></details>`;
     }
     const pop = p.packageKey===MOSTPOP ? `<span class="pop">Most popular</span>` : "";
+    // Offers are attached per package by DL — show them on the plans they apply to (#10).
+    const offers=[...new Set((p.prices[dur].promotions||[]).filter(pm=>!pm.inHiddenMenuInClub).map(promoText).filter(Boolean))];
+    const offerHtml = offers.length ? `<div class="offers">${offers.map(t=>`<span class="offer">★ ${esc(t)}</span>`).join("")}</div>` : "";
     const tr = trendFor(p.packageKey);
     const trendHtml = tr ? `<div class="trend ${tr.up?"up":"down"}" title="Individual ${DUR_LABEL[dur]} price change">${tr.up?"▲":"▼"} ${fmt(Math.abs(tr.delta),cur)} since ${esc(fmtDate(tr.since))}</div>` : "";
     const cells=activeTypes.map(t=>{
@@ -354,7 +357,7 @@ function renderTable(){
              `<div class="join">${jf?`+ ${fmt(jf,cur)} joining`:`no joining fee`}</div></td>`;
     }).join("");
     return `<tr><td class="plan"><div class="pn">${prettyPlan(p.packageKey)}${pop}</div>`+
-           `<div class="pk">${p.packageKey}</div>${trendHtml}${benHtml}${accHtml}</td>${cells}</tr>`;
+           `<div class="pk">${p.packageKey}</div>${offerHtml}${trendHtml}${benHtml}${accHtml}</td>${cells}</tr>`;
   }).join("");
   table.hidden=false; empty.hidden=true;
   renderPromos(dur);
@@ -398,27 +401,20 @@ function trendFor(key){
 }
 
 /* ---- live promotions (#10) ---- */
-function currentPromos(dur){
-  const seen=new Map();
-  for(const p of (DATA.packages||[])){
-    const d=p.prices&&p.prices[dur]; if(!d) continue;
-    for(const pm of (d.promotions||[])){
-      if(pm.inHiddenMenuInClub || seen.has(pm.promotionId)) continue;
-      const t=promoText(pm); if(!t) continue;
-      seen.set(pm.promotionId, { text:t, end:pm.endDate });
-    }
-  }
-  return [...seen.values()];
-}
+// Offers differ per plan (DL attaches each promotion only to the packages it
+// covers), so they render inline per row; this is just the legend, shown when
+// at least one plan at this duration has a visible offer.
 function renderPromos(dur){
   const el=qs("#promos"); if(!el) return;
-  const promos=currentPromos(dur);
-  if(!promos.length){ el.hidden=true; el.innerHTML=""; return; }
+  let earliestEnd=null;
+  const any=(DATA.packages||[]).some(p=>{ const d=p.prices&&p.prices[dur]; if(!d) return false;
+    return (d.promotions||[]).some(pm=>{ if(pm.inHiddenMenuInClub||!promoText(pm)) return false;
+      if(pm.endDate && (!earliestEnd||pm.endDate<earliestEnd)) earliestEnd=pm.endDate; return true; }); });
+  if(!any){ el.hidden=true; el.innerHTML=""; return; }
   el.hidden=false;
-  el.innerHTML=`<span class="promo-k">Current offers</span>`+
-    promos.map(p=>`<span class="promo"><span class="promo-t">${esc(p.text)}</span>`+
-      `${p.end?`<span class="promo-end">ends ${esc(fmtDate(p.end))}</span>`:""}</span>`).join("")+
-    `<span class="promo-note">Applied at checkout on David&nbsp;Lloyd’s site — indicative.</span>`;
+  el.innerHTML=`<span class="promo-k">Offers</span>`+
+    `<span class="promo-note">★ current offers are shown on the plans they apply to`+
+    `${earliestEnd?` · ends ${esc(fmtDate(earliestEnd))}`:""} · applied at checkout on David&nbsp;Lloyd’s site.</span>`;
 }
 
 /* ---- club profile card + facility badges (#3/#4) ---- */

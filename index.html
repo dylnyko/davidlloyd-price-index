@@ -28,7 +28,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Space+Mono:wght@400;700&display=swap" />
-<link rel="stylesheet" href="styles.css?v=20" />
+<link rel="stylesheet" href="styles.css?v=21" />
 </head>
 <body>
 <div class="frame">
@@ -58,11 +58,14 @@
       <ul id="results-list" class="dropdown" role="listbox" hidden></ul>
     </div>
     <div class="nearme">
+      <label class="lbl" for="nm-pc">Or search by postcode</label>
       <form id="nm-form" class="nm-form">
         <input id="nm-pc" type="text" autocomplete="postal-code" spellcheck="false"
                placeholder="Your postcode" aria-label="Your postcode" />
-        <button class="nm-btn" type="submit">Rank by distance</button>
-        <button class="nm-btn ghost" id="nm-geo" type="button">Use my location</button>
+        <button class="nm-btn" type="submit">Search</button>
+        <button class="nm-btn ghost icon" id="nm-geo" type="button" aria-label="Use my location" title="Use my location">
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>
+        </button>
       </form>
       <div id="nm-status" class="nm-status" aria-live="polite"></div>
     </div>
@@ -102,7 +105,7 @@
   <section id="league" class="league" hidden aria-label="National price league">
     <div class="lg-head">
       <h2>National price league</h2>
-      <p class="lg-lede">Every David&nbsp;Lloyd club ranked by the plan you pick — cheapest to priciest. Set a postcode over in Club&nbsp;lookup to add a distance column, then come back.</p>
+      <p class="lg-lede">Every David&nbsp;Lloyd club ranked by the plan you pick — cheapest to priciest.</p>
     </div>
     <div id="league-controls" class="league-controls"></div>
     <p id="league-sub" class="league-sub"></p>
@@ -136,7 +139,7 @@
 </div>
 
 <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
-<script src="app.js?v=20"></script>
+<script src="app.js?v=21"></script>
 <!-- Cloudflare Web Analytics — cookieless, no personal data. Public site tag. -->
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "5661e49f2a504dd69734b894973090a0"}'></script>
 </body>
