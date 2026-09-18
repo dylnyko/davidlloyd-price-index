@@ -23,11 +23,18 @@ const qs = s => document.querySelector(s);
 const cacheGet = k => { try{ const v=JSON.parse(localStorage.getItem(k)); if(v&&Date.now()-v.t<v.ttl) return v.d; }catch{} return null; };
 const cacheSet = (k,d,ttl) => { try{ localStorage.setItem(k,JSON.stringify({t:Date.now(),ttl,d})); }catch{} };
 
+// David Lloyd's /clubs feed mis-tags a few clubs' country. Audited 18 Sep 2026:
+// only Edinburgh Shawfair (site 156) is wrong — it returns "England" while every
+// other Scottish club is correct. Override at load so Country is right everywhere.
+const COUNTRY_FIX = { 156: "Scotland" };
+
 /* ---- data ---- */
 async function getClubs(){
   const c = cacheGet("pb_clubs"); if(c) return c;
   const r = await fetch(`${API}/clubs`); const j = await r.json();
-  const clubs = (j.clubs||[]).filter(c=>c.status==="active").sort((a,b)=>a.clubName.localeCompare(b.clubName));
+  const clubs = (j.clubs||[]).filter(c=>c.status==="active")
+    .map(c => COUNTRY_FIX[c.siteId] ? {...c, country: COUNTRY_FIX[c.siteId]} : c)
+    .sort((a,b)=>a.clubName.localeCompare(b.clubName));
   cacheSet("pb_clubs", clubs, DAY);
   return clubs;
 }
@@ -82,7 +89,7 @@ function renderDropdown(list,term){
   dd.innerHTML = list.slice(0,60).map((c,idx)=>{
     const name = rx? c.clubName.replace(rx,"<mark>$1</mark>") : c.clubName;
     return `<li role="option" data-idx="${idx}" aria-selected="${idx===active}">
-      <span class="cn">${name}</span><span class="cc">${c.currency||""}</span></li>`;
+      <span class="cn">${name}</span><span class="cl">${c.country||""}</span><span class="cc">${c.currency||""}</span></li>`;
   }).join("");
   dd.hidden=false; q.setAttribute("aria-expanded","true");
 }
@@ -121,7 +128,7 @@ async function selectClub(club, fromUrl){
   document.title=`${club.clubName} — The Price Book`;
   const panel=qs("#panel"); panel.hidden=false;
   qs("#clubname").textContent=club.clubName;
-  qs("#clubsub").innerHTML=`<span class="pin">◆</span> Site #${club.siteId} <span class="sep">/</span> prices in ${club.currency}`;
+  qs("#clubsub").innerHTML=`<span class="pin">◆</span> ${club.country||"—"} <span class="sep">/</span> Site #${club.siteId} <span class="sep">/</span> prices in ${club.currency}`;
   qs("#pricetable").hidden=true; qs("#empty").hidden=true; qs("#foot-note").hidden=true; qs("#addons").hidden=true; qs("#share").hidden=true;
   qs("#durations").innerHTML="";
   const status=qs("#status"); status.hidden=false;
@@ -215,7 +222,7 @@ function renderTable(){
   // capture a model for the shareable image, and reveal the button
   LASTIMG = {
     club: CURRENT.clubName,
-    meta: `Site #${CURRENT.siteId} · ${cur} · ${DUR_LABEL[dur]||dur}`,
+    meta: `${CURRENT.country||""} · Site #${CURRENT.siteId} · ${cur} · ${DUR_LABEL[dur]||dur}`,
     cols: activeTypes.map(t=>({ label:TYPE_LABEL[t], pp:t!=="INDIVIDUAL" })),
     rows: pkgs.map(p=>{ const jf=p.prices[dur].joiningFee||0;
       return { name:prettyPlan(p.packageKey), key:p.packageKey, pop:p.packageKey===MOSTPOP,
