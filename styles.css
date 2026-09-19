@@ -346,23 +346,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--disp);
 #cmp-table .cell .mo{font-size:1.06rem}
 
 /* map (#14) */
-#map-canvas{height:min(68vh,620px);margin-top:16px;border:2px solid var(--ink);box-shadow:var(--shadow);background:var(--paper-2)}
-/* Leaflet ships white, rounded, drop-shadowed chrome. Put it on the palette:
-   warm the greyscale tiles toward paper, square every corner, ink the borders. */
-.leaflet-tile{filter:sepia(.22) saturate(.78) brightness(1.02)}
-.leaflet-container{background:var(--paper-2);font-family:var(--disp)}
-.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:var(--paper);color:var(--ink);
-  border:2px solid var(--ink);border-radius:0;box-shadow:none}
-.leaflet-popup-content{font-size:.86rem;line-height:1.45}
-.leaflet-popup-close-button{color:var(--muted)!important}
-.leaflet-bar,.leaflet-bar a{border-radius:0!important;box-shadow:none}
-.leaflet-bar{border:2px solid var(--ink)}
-.leaflet-bar a{background:var(--paper);color:var(--ink);border-bottom-color:var(--line-soft)}
-.leaflet-bar a:hover{background:var(--paper-2);color:var(--ink)}
-.leaflet-control-attribution{background:rgba(239,236,227,.86);border-top:1px solid var(--line-soft);
-  font-family:var(--mono);font-size:.58rem;color:var(--muted)}
-.leaflet-control-attribution a{color:var(--muted)}
-.map-open{color:var(--accent);font-weight:700;text-decoration:none}
+#map-canvas{height:min(68vh,620px);margin-top:16px;border:2px solid var(--ink);box-shadow:var(--sh);background:var(--paper-2)}
 .leaflet-container{font-family:var(--mono)!important;background:var(--paper-2)}
 .leaflet-popup-content{font-family:var(--disp)}
 .leaflet-popup-content a{color:var(--accent);font-weight:700;text-decoration:none}
