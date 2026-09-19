@@ -370,7 +370,7 @@ ${canon ? `<meta property="og:url" content="${canon}" />\n` : ""}<meta property=
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Space+Mono:wght@400;700&display=swap" />
-<link rel="stylesheet" href="../../styles.css?v=51" />
+<link rel="stylesheet" href="../../styles.css?v=52" />
 </head>
 <body>
 <div class="frame">
@@ -434,8 +434,8 @@ ${canon ? `<meta property="og:url" content="${canon}" />\n` : ""}<meta property=
 <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
 
 <script id="pb-bundle" type="application/json">${clubJSON}</script>
-<script src="../../shared.js?v=51"></script>
-<script src="../../club.js?v=51"></script>
+<script src="../../shared.js?v=52"></script>
+<script src="../../club.js?v=52"></script>
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "5661e49f2a504dd69734b894973090a0"}'></script>
 </body>
 </html>`;

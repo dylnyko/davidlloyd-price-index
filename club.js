@@ -28,14 +28,14 @@ function renderTable(){
   const ft=(snap+(dur==="ANNUAL"?" Prices shown are the annual total.":"")).trim(); foot.hidden=!ft; foot.textContent=ft;
   // model for the shareable image (same order/types the builder used)
   const priceAt=(p,t)=>{ const d=p.prices&&p.prices[dur]; const v=d&&d[PB.TYPE_FIELD[t]]; return v==null?null:v; };
-  LASTIMG={ club:B.name, meta:`${B.country||""} · ${PB.DUR_LABEL[dur]||dur}`,
+  LASTIMG={ club:B.name, brand:"David Lloyd", country:B.country||"", term:PB.DUR_LABEL[dur]||dur,
     cols:R.activeTypes.map(t=>({label:PB.TYPE_LABEL[t],pp:t!=="INDIVIDUAL"})),
     rows:R.pkgs.map(p=>{ const jf=p.prices[dur].joiningFee||0;
       return { name:PB.prettyPlan(p.packageKey), desc:PB.descOf(p), pop:p.packageKey===B.mostPopular,
         cells:R.activeTypes.map(t=>{ const v=priceAt(p,t); if(v==null) return null;
           return { price:PB.fmt(v,cur), unit, join: jf?`+ ${PB.fmt(jf,cur)} joining`:"no joining fee" }; }) }; }),
     url:(location.host+location.pathname).replace(/\/$/,"")+"/",
-    date:B.date?PB.fmtDate(B.date):"", annual:dur==="ANNUAL" };
+    date:B.date?PB.fmtDate(B.date):"" };
 }
 
 /* duration tabs */
@@ -67,15 +67,20 @@ function drawShare(m){
   const S=2, W=960, P=48, ncol=m.cols.length;
   const planW=Math.round((W-2*P)*0.40), priceW=Math.round((W-2*P-planW)/ncol);
   const colR=i=>P+planW+priceW*(i+1)-8; const RH=66;
-  const yWord=P+16,yClub=yWord+52,yMeta=yClub+26,yDiv=yMeta+22,yHead=yDiv+34,yRule=yHead+26,yRows=yRule+12;
+  const yWord=P+16,yBrand=yWord+42,yClub=yBrand+44,yTerm=yClub+24,yDiv=yTerm+22,yHead=yDiv+34,yRule=yHead+26,yRows=yRule+12;
   const yFoot=yRows+m.rows.length*RH+26, H=yFoot+44+P-24;
   const cv=document.createElement("canvas"); cv.width=W*S; cv.height=H*S;
   const ctx=cv.getContext("2d"); ctx.scale(S,S); ctx.textBaseline="alphabetic";
   ctx.fillStyle=PAPER; ctx.fillRect(0,0,W,H); ctx.strokeStyle=INK; ctx.lineWidth=2; ctx.strokeRect(1,1,W-2,H-2);
   ctx.textAlign="left"; ctx.fillStyle=INK; ctx.font=`700 14px ${MONO}`; ctx.fillText("RACK RATE", P, yWord);
   ctx.textAlign="right"; ctx.fillStyle=MUTED; ctx.font=`400 13px ${MONO}`; ctx.fillText(m.date, W-P, yWord);
-  ctx.textAlign="left"; ctx.fillStyle=INK; ctx.font=`700 40px ${DISP}`; ctx.fillText(m.club, P, yClub);
-  ctx.fillStyle=MUTED; ctx.font=`400 13px ${MONO}`; ctx.fillText(m.meta.toUpperCase(), P, yMeta);
+  // Header block mirrors the club page: "David Lloyd" eyebrow, club name, ◆ country.
+  ctx.textAlign="left"; ctx.fillStyle=MUTED; ctx.font=`600 20px ${DISP}`; ctx.fillText(m.brand, P, yBrand);
+  ctx.fillStyle=INK; ctx.font=`700 44px ${DISP}`; ctx.fillText(m.club, P, yClub);
+  if(m.country){ const cx=P+ctx.measureText(m.club).width+18;
+    ctx.font=`400 13px ${MONO}`; ctx.fillStyle=ACCENT; ctx.fillText("◆", cx, yClub-4);
+    ctx.fillStyle=MUTED; ctx.fillText(m.country.toUpperCase(), cx+ctx.measureText("◆ ").width, yClub-4); }
+  if(m.term){ ctx.fillStyle=MUTED; ctx.font=`400 13px ${MONO}`; ctx.fillText(m.term.toUpperCase(), P, yTerm); }
   ctx.strokeStyle=INK; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(P,yDiv); ctx.lineTo(W-P,yDiv); ctx.stroke();
   ctx.textAlign="left"; ctx.fillStyle=ACCENT; ctx.font=`700 12px ${MONO}`; ctx.fillText("PLAN", P, yHead);
   ctx.textAlign="right";
@@ -95,7 +100,7 @@ function drawShare(m){
     ctx.strokeStyle=LINE; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(P,top+RH); ctx.lineTo(W-P,top+RH); ctx.stroke(); });
   ctx.textAlign="left"; ctx.font=`700 13px ${MONO}`; ctx.fillStyle=ACCENT; ctx.fillText(m.url, P, yFoot+16);
   ctx.font=`400 11px ${MONO}`; ctx.fillStyle=MUTED;
-  ctx.fillText(`Standard rates before any promotion${m.annual?" · annual total":""} · unofficial, not affiliated with David Lloyd`, P, yFoot+36);
+  ctx.fillText(`Unofficial · not affiliated with David Lloyd`, P, yFoot+36);
   return cv;
 }
 let _toastT; function toast(msg){ const t=qs("#toast"); if(!t) return; t.textContent=msg; t.hidden=false; clearTimeout(_toastT); _toastT=setTimeout(()=>{t.hidden=true;},2400); }
