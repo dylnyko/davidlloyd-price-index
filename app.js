@@ -331,8 +331,10 @@ async function selectClub(club, fromUrl){
   const panel=qs("#panel"); panel.hidden=false;
   DETAIL=null;
   qs("#clubname").textContent=club.clubName;
-  const distChip = (USERLOC && club._mi!=null) ? ` <span class="sep">/</span> <span class="mi">${fmtMiles(club._mi)} away</span>` : "";
-  qs("#clubsub").innerHTML=`<span class="pin">◆</span> ${esc(club.country||"—")} <span class="sep">/</span> Site #${club.siteId} <span class="sep">/</span> prices in ${esc(club.currency)}${distChip}`;
+  const cc=qs("#clubcountry"); if(cc) cc.textContent=club.country||"";
+  const sub=qs("#clubsub");
+  if(USERLOC && club._mi!=null){ sub.hidden=false; sub.innerHTML=`<span class="pin">◆</span> ${fmtMiles(club._mi)} away`; }
+  else { sub.hidden=true; sub.textContent=""; }
   qs("#pricetable").hidden=true; qs("#empty").hidden=true; qs("#foot-note").hidden=true; qs("#addons").hidden=true; qs("#share").hidden=true;
   const profEl=qs("#profile"); if(profEl) profEl.hidden=true;
   const promoEl=qs("#promos"); if(promoEl) promoEl.hidden=true;
@@ -444,7 +446,7 @@ function renderTable(){
   // capture a model for the shareable image, and reveal the button
   LASTIMG = {
     club: CURRENT.clubName,
-    meta: `${CURRENT.country||""} · Site #${CURRENT.siteId} · ${cur} · ${DUR_LABEL[dur]||dur}`,
+    meta: `${CURRENT.country||""} · ${DUR_LABEL[dur]||dur}`,
     cols: activeTypes.map(t=>({ label:TYPE_LABEL[t], pp:t!=="INDIVIDUAL" })),
     rows: pkgs.map(p=>{ const jf=p.prices[dur].joiningFee||0;
       return { name:prettyPlan(p.packageKey), desc:descOf(p), pop:p.packageKey===MOSTPOP,
@@ -874,7 +876,7 @@ function drawShare(m){
   ctx.fillStyle=PAPER; ctx.fillRect(0,0,W,H);
   ctx.strokeStyle=INK; ctx.lineWidth=2; ctx.strokeRect(1,1,W-2,H-2);
   // wordmark + date
-  ctx.textAlign="left"; ctx.fillStyle=INK; ctx.font=`700 14px ${MONO}`; ctx.fillText("THE PRICE BOOK", P, yWord);
+  ctx.textAlign="left"; ctx.fillStyle=INK; ctx.font=`700 14px ${MONO}`; ctx.fillText("RACK RATE", P, yWord);
   ctx.textAlign="right"; ctx.fillStyle=MUTED; ctx.font=`400 13px ${MONO}`; ctx.fillText(m.date, W-P, yWord);
   // club + meta
   ctx.textAlign="left"; ctx.fillStyle=INK; ctx.font=`700 40px ${DISP}`; ctx.fillText(m.club, P, yClub);

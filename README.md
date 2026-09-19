@@ -1,4 +1,4 @@
-# The Price Book
+# Rack Rate
 
 An independent, unofficial web tool to look up **live David Lloyd membership prices** for any club — every plan, every membership type, every duration.
 

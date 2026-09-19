@@ -3,38 +3,38 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>The Price Book — unofficial David Lloyd price lookup</title>
+<title>Rack Rate — unofficial David Lloyd price lookup</title>
 <meta name="description" content="Live David Lloyd membership prices for every UK club: plan prices, joining fees, facilities and club access. Independent and unofficial." />
 <link rel="canonical" href="https://dylnyko.github.io/davidlloyd-price-index/" />
 <meta name="theme-color" content="#efece3" />
 
 <!-- Open Graph / social share -->
 <meta property="og:type" content="website" />
-<meta property="og:site_name" content="The Price Book" />
-<meta property="og:title" content="The Price Book — David Lloyd membership prices" />
-<meta property="og:description" content="The prices David Lloyd keeps behind an enquiry form — live, for every club. Unofficial." />
+<meta property="og:site_name" content="Rack Rate" />
+<meta property="og:title" content="Rack Rate — David Lloyd membership prices" />
+<meta property="og:description" content="See what each David Lloyd club charges, plan by plan. Independent and unofficial." />
 <meta property="og:url" content="https://dylnyko.github.io/davidlloyd-price-index/" />
-<meta property="og:image" content="https://dylnyko.github.io/davidlloyd-price-index/og-image.png?v=1" />
+<meta property="og:image" content="https://dylnyko.github.io/davidlloyd-price-index/og-image.png?v=2" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
-<meta property="og:image:alt" content="The Price Book — unofficial David Lloyd price lookup" />
+<meta property="og:image:alt" content="Rack Rate — unofficial David Lloyd price lookup" />
 
 <!-- Twitter / X card -->
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="The Price Book — David Lloyd membership prices" />
-<meta name="twitter:description" content="The prices David Lloyd keeps behind an enquiry form — live, for every club. Unofficial." />
-<meta name="twitter:image" content="https://dylnyko.github.io/davidlloyd-price-index/og-image.png?v=1" />
+<meta name="twitter:title" content="Rack Rate — David Lloyd membership prices" />
+<meta name="twitter:description" content="See what each David Lloyd club charges, plan by plan. Independent and unofficial." />
+<meta name="twitter:image" content="https://dylnyko.github.io/davidlloyd-price-index/og-image.png?v=2" />
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Space+Mono:wght@400;700&display=swap" />
-<link rel="stylesheet" href="styles.css?v=47" />
+<link rel="stylesheet" href="styles.css?v=48" />
 </head>
 <body>
 <div class="frame">
 
   <header class="topbar">
-    <span class="mark">THE&nbsp;PRICE&nbsp;BOOK</span>
+    <span class="mark">RACK&nbsp;RATE</span>
     <nav class="nav" aria-label="Views">
       <button type="button" data-view="lookup" aria-selected="true">Club&nbsp;lookup</button>
       <button type="button" data-view="league" aria-selected="false">Price&nbsp;league</button>
@@ -48,8 +48,8 @@
 
   <section class="hero">
     <div class="hero-main">
-      <h1>The membership fees<br>they <span class="mk">hide.</span></h1>
-      <p class="lede">See what any David&nbsp;Lloyd club <strong>actually charges</strong>. No enquiry form, no sales call — just the current prices and what each plan gets you.</p>
+      <h1>How much does<br>David&nbsp;Lloyd <span class="mk">cost?</span></h1>
+      <p class="lede">Search a club to see what each membership costs, joining fee and all.</p>
     </div>
   </section>
 
@@ -79,8 +79,8 @@
   <main id="panel" class="panel" hidden aria-live="polite">
     <div class="panelhead">
       <div class="ph-title">
-        <h2 id="clubname">—</h2>
-        <p id="clubsub" class="clubsub">—</p>
+        <div class="ph-name"><h2 id="clubname">—</h2><span id="clubcountry" class="ph-country"></span></div>
+        <p id="clubsub" class="clubsub" hidden></p>
         <button id="do-compare" class="cmp-open" type="button" hidden>
           <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M4 6h7M4 12h7M4 18h7M20 6h-5M20 12h-5M20 18h-5"/><path d="M8 3v18M16 3v18"/></svg>
           Compare with another club
@@ -167,7 +167,7 @@
   </section>
 
   <footer class="sitefoot">
-    <p><span class="fs-mk">UNOFFICIAL</span> Not affiliated with David&nbsp;Lloyd Leisure · indicative live rates, always confirm with the club · anonymous, cookieless analytics only.</p>
+    <p><span class="fs-mk">UNOFFICIAL</span> Not affiliated with David&nbsp;Lloyd Leisure.</p>
   </footer>
 
 </div>
@@ -205,7 +205,7 @@
 </div>
 
 <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
-<script src="app.js?v=47"></script>
+<script src="app.js?v=48"></script>
 <!-- Cloudflare Web Analytics — cookieless, no personal data. Public site tag. -->
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "5661e49f2a504dd69734b894973090a0"}'></script>
 </body>

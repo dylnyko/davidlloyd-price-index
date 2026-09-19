@@ -77,16 +77,14 @@ test("applies the Edinburgh Shawfair country override (England -> Scotland)", as
   await expect(li.locator(".cl")).toHaveText("Scotland");
   // and it carries through to the club header after selection
   await li.click();
-  await expect(page.locator("#clubsub")).toContainText("Scotland");
+  await expect(page.locator("#clubcountry")).toHaveText("Scotland");
 });
 
 test("renders the price table 1:1 with the fixture", async ({ page }) => {
   await openWestEnd(page);
 
   await expect(page.locator("#clubname")).toHaveText("Glasgow West End");
-  await expect(page.locator("#clubsub")).toContainText("Scotland");
-  await expect(page.locator("#clubsub")).toContainText("Site #75");
-  await expect(page.locator("#clubsub")).toContainText("GBP");
+  await expect(page.locator("#clubcountry")).toHaveText("Scotland");
 
   // headers: Individual, then Couple flagged per-person; no Family column
   await expect(page.locator("#thead-row th").nth(1)).toContainText("Individual");
