@@ -360,16 +360,27 @@ function renderFacilities(){
 
 /* ---- biggest movers (#16) — from committed history.json ---- */
 const FIELD_LABEL={ iS:"Individual · Standard", iA:"Individual · Annual" };
+let MOV_KIND="price", MOV_USER=false;   // price | tier, never mixed; MOV_USER = the visitor chose
+// Tier ladder position: Super tier on top, then Tier 1..N. Lower = higher up.
+const tierRank = t => t==="Super tier" ? 0 : (parseInt(String(t).replace(/\D/g,""),10) || 99);
 async function openMovers(fromUrl){
   setView("movers");
   qs("#mov-status").hidden=false; qs("#mov-table").hidden=true; qs("#mov-empty").hidden=true;
   if(fromUrl) history.replaceState({},"",buildURL({view:"movers"})); else history.pushState({},"",buildURL({view:"movers"}));
   document.title="Biggest movers — Rack Rate";
   await Promise.all([getHistory(), getLatest()]);
+  buildMoverControls();
   renderMovers();
 }
-function renderMovers(){
-  const box=qs("#movers"); if(!box || box.hidden) return;
+function buildMoverControls(){
+  const wrap=qs("#mov-controls"); if(!wrap) return;
+  const opt=(v,l)=>`<option value="${v}"${v===MOV_KIND?" selected":""}>${l}</option>`;
+  wrap.innerHTML=`<label>Show <select id="mov-kind">${opt("price","Price changes")}${opt("tier","Tier changes")}</select></label>`;
+  qs("#mov-kind").onchange=e=>{ MOV_KIND=e.target.value; MOV_USER=true; renderMovers(); };
+}
+// Every recorded change, from the two append-on-change histories the snapshot
+// keeps: series[site][plan][field] for prices, tiers[site] for the club's tier.
+function collectMoves(){
   const by={}; for(const c of (LATEST.clubs||[])) by[c.siteId]=c;
   const moves=[];
   for(const [sid,plans] of Object.entries((HISTORY&&HISTORY.series)||{})){
@@ -379,32 +390,48 @@ function renderMovers(){
         if(!arr || arr.length<2) continue;
         const prev=arr[arr.length-2], last=arr[arr.length-1];
         if(prev[1]===last[1]) continue;
-        moves.push({ siteId:+sid, name:club.name, cur:club.currency, key, field:f,
+        moves.push({ kind:"price", siteId:+sid, name:club.name, cur:club.currency, key, field:f,
           from:prev[1], to:last[1], on:last[0], delta:last[1]-prev[1], up:last[1]>prev[1] });
       }
     }
   }
-  moves.sort((a,b)=>Math.abs(b.delta)-Math.abs(a.delta));
-  qs("#mov-status").hidden=true;
+  for(const [sid,arr] of Object.entries((HISTORY&&HISTORY.tiers)||{})){
+    const club=by[sid]; if(!club || !arr || arr.length<2) continue;
+    const prev=arr[arr.length-2], last=arr[arr.length-1];
+    if(prev[1]===last[1]) continue;
+    const steps=tierRank(prev[1])-tierRank(last[1]);   // +ve = moved up the ladder
+    moves.push({ kind:"tier", siteId:+sid, name:club.name, from:prev[1], to:last[1], on:last[0], steps, up:steps>0 });
+  }
+  return moves;
+}
+function renderMovers(){
+  const box=qs("#movers"); if(!box || box.hidden) return;
+  const all=collectMoves();
+  const nPrice=all.filter(m=>m.kind==="price").length, nTier=all.length-nPrice;
+  // Default to whichever kind has something to show (unless the visitor chose).
+  if(!MOV_USER){ MOV_KIND = (nPrice || !nTier) ? "price" : "tier"; const s=qs("#mov-kind"); if(s) s.value=MOV_KIND; }
+  const moves=all.filter(m=>m.kind===MOV_KIND);
+  moves.sort((a,b)=> MOV_KIND==="tier" ? Math.abs(b.steps)-Math.abs(a.steps) : Math.abs(b.delta)-Math.abs(a.delta));
+  qs("#mov-status").hidden=true; qs("#mov-sub").textContent="";
   const t=qs("#mov-table"), empty=qs("#mov-empty");
   if(!moves.length){
     t.hidden=true; empty.hidden=false;
-    empty.textContent="No price changes recorded yet.";
-    qs("#mov-sub").textContent="";
+    empty.textContent=`No ${MOV_KIND} changes recorded yet.`;
     return;
   }
   empty.hidden=true; t.hidden=false;
-  qs("#mov-sub").textContent=`${moves.length} price change${moves.length>1?"s":""} recorded so far — biggest first.`;
+  // A club moving UP a tier (lower number) is the good direction — green; down is red.
+  const cells = m => m.kind==="tier"
+    ? `<td class="lg-country">Club tier</td><td class="lg-country">Tier</td>`+
+      `<td class="num">${esc(m.from)}</td><td class="num">${esc(m.to)}</td>`+
+      `<td class="num"><span class="trend ${m.up?"good":"bad"}">${m.up?"▲":"▼"} ${m.up?"up":"down"} ${Math.abs(m.steps)} tier${Math.abs(m.steps)>1?"s":""}</span></td>`
+    : `<td class="lg-country">${esc(prettyPlan(m.key))}</td><td class="lg-country">${esc(FIELD_LABEL[m.field]||m.field)}</td>`+
+      `<td class="num">${fmt(m.from,m.cur)}</td><td class="num">${fmt(m.to,m.cur)}</td>`+
+      `<td class="num"><span class="trend ${m.up?"up":"down"}">${m.up?"▲":"▼"} ${fmt(Math.abs(m.delta),m.cur)}</span></td>`;
   t.innerHTML=
     `<thead><tr><th>#</th><th>Club</th><th>Plan</th><th>Metric</th><th class="num">Was</th><th class="num">Now</th><th class="num">Change</th><th>On</th></tr></thead>`+
-    `<tbody>`+moves.map((m,i)=>`<tr data-site="${m.siteId}">`+
-      `<td class="lg-rank">${i+1}</td>`+
-      `<td class="lg-name">${esc(m.name)}</td>`+
-      `<td class="lg-country">${esc(prettyPlan(m.key))}</td>`+
-      `<td class="lg-country">${esc(FIELD_LABEL[m.field]||m.field)}</td>`+
-      `<td class="num">${fmt(m.from,m.cur)}</td>`+
-      `<td class="num">${fmt(m.to,m.cur)}</td>`+
-      `<td class="num"><span class="trend ${m.up?"up":"down"}">${m.up?"▲":"▼"} ${fmt(Math.abs(m.delta),m.cur)}</span></td>`+
+    `<tbody>`+moves.map((m,i)=>`<tr data-site="${m.siteId}" class="mov-${m.kind}">`+
+      `<td class="lg-rank">${i+1}</td><td class="lg-name">${esc(m.name)}</td>${cells(m)}`+
       `<td class="lg-country">${esc(fmtDate(m.on))}</td></tr>`).join("")+
     `</tbody>`;
   t.querySelectorAll("tbody tr").forEach(tr=>tr.onclick=()=>{

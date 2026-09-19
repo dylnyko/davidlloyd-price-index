@@ -174,6 +174,44 @@ test("biggest movers view loads with an empty state before history accrues (#16)
   await expect(page.locator("#mov-empty")).toBeVisible();
 });
 
+// A recorded tier change (two points in history.tiers) renders on Movers like a
+// price change, with its own filter, and flips the Movers tab on via moversCount.
+const TIER_HISTORY = { updated: "2026-09-19T05:00:00Z", series: {},
+  tiers: { "24": [["2026-01-10", "Tier 3"], ["2026-09-19", "Tier 2"]] } };   // 24 = Leeds
+async function mockTierHistory(page) {
+  await page.route(/\/data\/history\.json/, (r) =>
+    r.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(TIER_HISTORY) }));
+}
+test("movers shows tier changes alongside prices, with a filter (#16)", async ({ page }) => {
+  await mockTierHistory(page);
+  await page.goto("/?view=movers");
+  const table = page.locator("#mov-table");
+  await expect(table).toBeVisible();
+  const row = table.locator("tbody tr.mov-tier");
+  await expect(row).toHaveCount(1);
+  await expect(row).toContainText("Leeds");
+  await expect(row).toContainText("Tier 3");
+  await expect(row).toContainText("Tier 2");
+  await expect(row.locator(".trend.good")).toContainText("up 1 tier");   // up a tier = good = green
+  // with only tier history, the view defaults to Tier changes
+  await expect(page.locator("#mov-kind")).toHaveValue("tier");
+  // switch to prices -> nothing recorded
+  await page.selectOption("#mov-kind", "price");
+  await expect(page.locator("#mov-empty")).toBeVisible();
+  await expect(page.locator("#mov-empty")).toContainText("No price changes");
+  await page.selectOption("#mov-kind", "tier");
+  await expect(row).toHaveCount(1);
+});
+
+test("the Movers tab appears once a tier change is counted in moversCount (#16)", async ({ page }) => {
+  await page.route(/\/data\/latest\.json/, async (r) => {
+    const res = await r.fetch(); const j = await res.json(); j.moversCount = 1;   // what the snapshot writes after a tier move
+    await r.fulfill({ response: res, body: JSON.stringify(j), headers: { ...res.headers(), "content-type": "application/json" } });
+  });
+  await page.goto("/");
+  await expect(page.locator('.nav button[data-view="movers"]')).toBeVisible();
+});
+
 test("hides the Movers tab until there are movers (#16)", async ({ page }) => {
   await page.goto("/");
   await expect(page.locator('.nav button[data-view="movers"]')).toBeHidden();

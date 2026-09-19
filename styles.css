@@ -302,6 +302,8 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--disp);
 .trend{margin-top:6px;font-family:var(--mono);font-size:.64rem;font-weight:700;letter-spacing:.03em;
   display:inline-block;padding:2px 6px;border:1px solid var(--line-soft)}
 .trend.up{color:#b23400}.trend.down{color:#116b2e}
+/* direction-agnostic variants for non-price moves (a club moving UP a tier is good news) */
+.trend.good{color:#116b2e}.trend.bad{color:#b23400}
 
 /* club profile card (#3) + facility badges (#4) */
 .profile{margin-top:20px;border:2px solid var(--ink);background:var(--paper);box-shadow:var(--shadow)}
