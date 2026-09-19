@@ -170,9 +170,10 @@ const fmtMiles = m => m<10 ? `${m.toFixed(1)} mi` : `${Math.round(m)} mi`;
 const RACQUET_IDS = [13,14,15,19,22];
 function facilitiesOf(detail){
   const f=[];
-  if(detail.swimmingEmailAddress) f.push({k:"Pool"});
+  // bundle stores pool/spa booleans; live fallback has the raw email fields.
+  if(detail.pool || detail.swimmingEmailAddress) f.push({k:"Pool"});
   if(detail.isBlaze) f.push({k:"Blaze",hot:true});
-  if(detail.spaBookingsEmailAddress) f.push({k:"Spa"});
+  if(detail.spa || detail.spaBookingsEmailAddress) f.push({k:"Spa"});
   const racq=(detail.sportIdsAvailable||[]).filter(id=>RACQUET_IDS.includes(id)).map(id=>SPORTS[id]).filter(Boolean);
   for(const r of racq) f.push({k:r});
   if(detail.isAdultOnly) f.push({k:"Adults only",hot:true});

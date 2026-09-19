@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://dylnyko.github.io/davidlloyd-price-index/sitemap.xml

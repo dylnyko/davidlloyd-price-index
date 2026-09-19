@@ -137,8 +137,9 @@ function trimDetail(club, siteId) {
     telephone: club.telephone || null,
     isBlaze: !!club.isBlaze,
     isAdultOnly: !!club.isAdultOnly,
-    swimmingEmailAddress: club.swimmingEmailAddress || null,
-    spaBookingsEmailAddress: club.spaBookingsEmailAddress || null,
+    // Presence only — don't republish DL's club email addresses.
+    pool: !!club.swimmingEmailAddress,
+    spa: !!club.spaBookingsEmailAddress,
     sportIdsAvailable: club.sportIdsAvailable || [],
     courts: (club.courts || []).map((c) => ({ sportId: c.sportId })),
     clubOpeningTimes: { weeklyOpeningTimes: (club.clubOpeningTimes || {}).weeklyOpeningTimes || null },
