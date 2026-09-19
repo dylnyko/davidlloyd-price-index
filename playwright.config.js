@@ -1,9 +1,10 @@
 // @ts-check
 const { defineConfig, devices } = require("@playwright/test");
 
-/* Serves the static site as-is and runs the E2E suite against it. The David
-   Lloyd API is mocked from tests/fixtures, so tests are hermetic (no live
-   network) and assert app.js exactly as shipped — no refactor of the site. */
+/* Serves the static site as-is (committed data + pre-rendered /clubs pages) and
+   runs the E2E suite against it. Outbound calls are stubbed (live /clubs
+   fallback, fonts/analytics, postcode geocoder), so tests are hermetic and
+   assert the site exactly as shipped. */
 module.exports = defineConfig({
   testDir: "./tests",
   fullyParallel: true,

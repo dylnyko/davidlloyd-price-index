@@ -299,7 +299,7 @@ async function main() {
   for (const x of rows) {
     const b = x.bundle;
     const slug = PB.slugify(b.name);
-    const html = clubPageHTML(b, { sports, nameById, series: history.series[String(b.siteId)] || {}, coords: locations[String(b.siteId)] || null, date: today });
+    const html = clubPageHTML(b, { sports, nameById, series: history.series[String(b.siteId)] || {}, coords: locations[String(b.siteId)] || null, date: today, hasMovers: moversCount > 0 });
     if (!existsSync(`${CLUBDIR2}/${slug}`)) mkdirSync(`${CLUBDIR2}/${slug}`, { recursive: true });
     writeFileSync(`${CLUBDIR2}/${slug}/index.html`, html);
     slugs.push(slug);
@@ -376,11 +376,17 @@ ${canon ? `<meta property="og:url" content="${canon}" />\n` : ""}<meta property=
 <div class="frame">
   <header class="topbar">
     <a class="mark" href="../../">RACK&nbsp;RATE</a>
-    <a class="backbtn" href="../../">← All clubs</a>
+    <nav class="nav" aria-label="Views">
+      <a href="../../">Club&nbsp;lookup</a>
+      <a href="../../?view=league">Price&nbsp;league</a>
+      <a href="../../?view=facilities">Facilities</a>
+      <a href="../../?view=map">Map</a>${ctx.hasMovers ? `\n      <a href="../../?view=movers">Movers</a>` : ""}
+    </nav>
   </header>
   <main id="panel" class="panel">
     <div class="panelhead">
       <div class="ph-title">
+        <a class="backbtn" href="../../">← All clubs</a>
         <p class="ph-brand">David&nbsp;Lloyd</p>
         <div class="ph-name"><h1 id="clubname">${esc(b.name)}</h1><span id="clubcountry" class="ph-country">${esc(b.country || "")}</span></div>
         <p id="clubsub" class="clubsub" hidden></p>
@@ -396,6 +402,9 @@ ${canon ? `<meta property="og:url" content="${canon}" />\n` : ""}<meta property=
     <section id="profile" class="profile">${profile}</section>
     <p id="foot-note" class="foot-note">${foot}</p>
   </main>
+  <footer class="sitefoot">
+    <p><span class="fs-mk">UNOFFICIAL</span> Not affiliated with David&nbsp;Lloyd Leisure.</p>
+  </footer>
 </div>
 
 <div id="sharemodal" class="modal" hidden>

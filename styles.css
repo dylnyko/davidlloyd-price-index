@@ -22,7 +22,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--disp);
 /* topbar */
 .topbar{display:flex;justify-content:space-between;align-items:center;gap:14px;
   padding:12px clamp(16px,3vw,28px);font-family:var(--mono);flex-wrap:wrap}
-.topbar .mark{font-weight:700;letter-spacing:.04em;font-size:.86rem}
+.topbar .mark{font-weight:700;letter-spacing:.04em;font-size:.86rem;color:var(--ink);text-decoration:none}
 .nav{flex-wrap:wrap}
 
 /* staleness banner — shown when the nightly snapshot is over a week old */
@@ -83,8 +83,10 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--disp);
 .panel{padding:clamp(20px,3vw,32px) clamp(16px,3vw,28px)}
 .panelhead{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end;justify-content:space-between;
   padding-bottom:16px;border-bottom:2px solid var(--ink)}
-.ph-title h2{font-family:var(--disp);font-weight:800;font-size:clamp(1.8rem,4vw,2.7rem);
+.ph-title h1,.ph-title h2{font-family:var(--disp);font-weight:800;font-size:clamp(1.8rem,4vw,2.7rem);
   line-height:.98;margin:0;letter-spacing:-.02em}
+.ph-brand{font-family:var(--disp);font-weight:600;font-size:clamp(1rem,2.1vw,1.3rem);
+  color:var(--muted);margin:0 0 6px;letter-spacing:-.01em;line-height:1}
 .ph-name{display:flex;align-items:baseline;gap:8px 14px;flex-wrap:wrap}
 .ph-country{font-family:var(--mono);font-size:.8rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);
   position:relative;padding-left:16px}
@@ -228,11 +230,12 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--disp);
 
 /* topbar nav (#6 view switch) */
 .nav{display:flex;border:2px solid var(--ink)}
-.nav button{font-family:var(--mono);font-size:.66rem;letter-spacing:.06em;text-transform:uppercase;font-weight:700;
-  background:var(--paper);color:var(--ink);border:0;border-left:2px solid var(--ink);padding:7px 12px;cursor:pointer;transition:background .1s}
-.nav button:first-child{border-left:0}
-.nav button:hover{background:var(--paper-2)}
-.nav button[aria-selected="true"]{background:var(--ink);color:var(--paper)}
+.nav button,.nav a{font-family:var(--mono);font-size:.66rem;letter-spacing:.06em;text-transform:uppercase;font-weight:700;
+  background:var(--paper);color:var(--ink);border:0;border-left:2px solid var(--ink);padding:7px 12px;cursor:pointer;transition:background .1s;
+  text-decoration:none;display:inline-flex;align-items:center}
+.nav button:first-child,.nav a:first-child{border-left:0}
+.nav button:hover,.nav a:hover{background:var(--paper-2)}
+.nav button[aria-selected="true"],.nav a[aria-selected="true"]{background:var(--ink);color:var(--paper)}
 
 /* clubs near me (#1) */
 .nearme{margin-top:18px}
@@ -324,7 +327,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--disp);
 /* compare (#13) */
 .backbtn{display:inline-block;margin-bottom:12px;font-family:var(--mono);font-size:.66rem;letter-spacing:.05em;
   text-transform:uppercase;font-weight:700;background:var(--paper);border:2px solid var(--ink);color:var(--ink);
-  padding:6px 11px;cursor:pointer;transition:background .1s,color .1s}
+  text-decoration:none;padding:6px 11px;cursor:pointer;transition:background .1s,color .1s}
 .backbtn:hover{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
 .backbtn:active{transform:translate(1px,1px)}
 .cmp-slots{display:flex;flex-wrap:wrap;gap:10px}
@@ -355,7 +358,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--disp);
      tab its own bordered chip in a full-width wrapping grid. */
   .topbar{gap:10px}
   .nav{width:100%;border:0;display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
-  .nav button{border:2px solid var(--ink)!important;text-align:center;padding:9px 6px;font-size:.62rem}
+  .nav button,.nav a{border:2px solid var(--ink)!important;text-align:center;justify-content:center;padding:9px 6px;font-size:.62rem}
   .panelhead{flex-direction:column;align-items:flex-start}
   .head-actions{width:100%}
   /* Stack the segmented control on mobile: equal columns can't fit the longest
