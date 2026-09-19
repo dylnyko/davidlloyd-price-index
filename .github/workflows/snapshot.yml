@@ -27,14 +27,18 @@ jobs:
       - name: Generate snapshot
         run: node scripts/snapshot.mjs
 
-      - name: Commit data if changed
+      - name: Commit refreshed data + static pages if changed
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/
+          # The snapshot regenerates the committed data AND the pre-rendered
+          # per-club pages, sitemap and robots — commit them all so the static
+          # club pages stay in sync with the leagues/map.
+          git add data/ clubs/ sitemap.xml robots.txt
           if git diff --cached --quiet; then
-            echo "No price changes today — nothing to commit."
+            echo "No changes today — nothing to commit."
           else
             git commit -m "Data: nightly price snapshot ($(date -u +%Y-%m-%d))"
+            git pull --rebase --autostash
             git push
           fi
