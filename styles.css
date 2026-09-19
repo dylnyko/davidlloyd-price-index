@@ -163,14 +163,19 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--disp);
 /* table */
 .tablewrap{margin-top:18px;overflow-x:auto;-webkit-overflow-scrolling:touch;
   /* Scroll-shadow: a soft shadow shows on whichever edge has more table to reach,
-     so it's obvious the table scrolls sideways; it fades out at each end. */
+     so it's obvious the table scrolls sideways; it fades out at each end.
+     The shadow layers are linear, not radial: these tables run thousands of px
+     tall, and a `farthest-side` radial sized `100%` becomes an ellipse as tall
+     as the table, leaving the shadow visible only near its vertical midpoint.
+     Width/colour are vars so mobile can turn them up (see the 560px block). */
+  --sc-w:16px; --sc-ink:rgba(11,11,10,.16);
   background:
-    linear-gradient(to right, var(--paper) 30%, transparent) left center,
-    linear-gradient(to left, var(--paper) 30%, transparent) right center,
-    radial-gradient(farthest-side at 0 50%, rgba(11,11,10,.16), transparent) left center,
-    radial-gradient(farthest-side at 100% 50%, rgba(11,11,10,.16), transparent) right center;
+    linear-gradient(to right, var(--paper) var(--sc-w), transparent) left center,
+    linear-gradient(to left, var(--paper) var(--sc-w), transparent) right center,
+    linear-gradient(to right, var(--sc-ink), transparent) left center,
+    linear-gradient(to left, var(--sc-ink), transparent) right center;
   background-repeat:no-repeat;
-  background-size:44px 100%, 44px 100%, 16px 100%, 16px 100%;
+  background-size:44px 100%, 44px 100%, var(--sc-w) 100%, var(--sc-w) 100%;
   background-attachment:local, local, scroll, scroll;}
 .pricetable{width:100%;border-collapse:collapse;min-width:540px}
 .pricetable thead th{font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;
@@ -375,6 +380,13 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--disp);
   #nm-pc{width:100%}
   .nm-btn{width:100%}
   .league-controls label{flex:1;min-width:140px}
+  /* Every table overflows on a phone (the price table needs 540px, the league
+     tables 520-538), but the desktop scroll-shadow is a hairline you can miss
+     on a small screen — there's no scrollbar to give the game away either.
+     Turn it up so the sideways scroll reads as an affordance. Applies to all
+     five tables (price league, facilities, compare, movers and the club page
+     price table) since they share .tablewrap. */
+  .tablewrap{--sc-w:26px;--sc-ink:rgba(11,11,10,.4)}
 }
 @media (prefers-reduced-motion:reduce){
   .hero-main>*,.spec-row{opacity:1;animation:none;transform:none}.spin{animation:none}
