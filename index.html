@@ -15,12 +15,16 @@
 {"@context":"https://schema.org","@type":"WebSite","name":"Rack Rate","description":"Live, unofficial David Lloyd membership prices for every UK and EU club — plan prices, joining fees, facilities and club access.","inLanguage":"en-GB"}
 </script>
 
-<!-- Open Graph / social share (relative image; scrapers resolve against the page URL) -->
+<!-- Open Graph / social share. og:url and og:image must be absolute — scrapers
+     (Facebook, LinkedIn, Slack, WhatsApp) reject relative image URLs. Kept in
+     step with package.json "homepage", same as the generated club pages. -->
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="Rack Rate" />
 <meta property="og:title" content="Rack Rate — David Lloyd membership prices" />
 <meta property="og:description" content="See what each David Lloyd club charges, plan by plan. Independent and unofficial." />
-<meta property="og:image" content="og-image.png?v=3" />
+<meta property="og:url" content="https://dylnyko.github.io/davidlloyd-price-index/" />
+<meta property="og:image" content="https://dylnyko.github.io/davidlloyd-price-index/og-image.png?v=3" />
+<meta property="og:image:type" content="image/png" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta property="og:image:alt" content="Rack Rate — unofficial David Lloyd price lookup" />
@@ -29,7 +33,8 @@
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Rack Rate — David Lloyd membership prices" />
 <meta name="twitter:description" content="See what each David Lloyd club charges, plan by plan. Independent and unofficial." />
-<meta name="twitter:image" content="og-image.png?v=3" />
+<meta name="twitter:image" content="https://dylnyko.github.io/davidlloyd-price-index/og-image.png?v=3" />
+<meta name="twitter:image:alt" content="Rack Rate — unofficial David Lloyd price lookup" />
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
