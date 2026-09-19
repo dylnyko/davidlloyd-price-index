@@ -1,7 +1,9 @@
 /* Rack Rate — shared display logic (single source of truth).
- * Pure, DOM-free string builders used BOTH in the browser (app.js) and in Node
+ * String builders used BOTH in the browser (app.js) and in Node
  * (scripts/snapshot.mjs, to pre-render static per-club pages). UMD so it works as
- * a browser global (window.PB) and a Node import.                               */
+ * a browser global (window.PB) and a Node import. The builders are pure; the one
+ * DOM helper (initScrollShadows) only touches the document when called, so
+ * importing this in Node stays side-effect-free.                                */
 (function (root, factory) {
   const api = factory();
   if (typeof module !== "undefined" && module.exports) module.exports = api;
@@ -132,7 +134,26 @@
     return `<div class="pf-head"><h3>Club facilities</h3>${badgeHtml}</div><div class="pf-grid">${telHtml}${courtsHtml}${hoursHtml}</div>`;
   }
 
+  /* Flags which edges of each .tablewrap still have table to reach, so the CSS can
+   * show that edge's scroll-shadow ("l"/"r" in data-sx). Called by app.js and
+   * club.js on load; the league tables are built after that and the compare table
+   * is rebuilt on every pick, so a ResizeObserver re-measures rather than the
+   * callers having to remember to. */
+  function initScrollShadows(scope) {
+    const root = scope || document;
+    const update = (el) => {
+      const max = el.scrollWidth - el.clientWidth, x = el.scrollLeft;
+      // 1px slack: sub-pixel widths otherwise leave an edge stuck on at the end.
+      el.dataset.sx = `${x > 1 ? "l" : ""} ${x < max - 1 ? "r" : ""}`.trim();
+    };
+    for (const el of root.querySelectorAll(".tablewrap")) {
+      update(el);
+      el.addEventListener("scroll", () => update(el), { passive: true });
+      if (typeof ResizeObserver === "function") new ResizeObserver(() => update(el)).observe(el);
+    }
+  }
+
   return { TYPES, TYPE_LABEL, TYPE_FIELD, DUR_ORDER, DUR_LABEL, RACQUET_IDS,
     esc, fmt, prettyPlan, benefitsOf, descOf, planRank, slugify, fmtDate, promoText,
-    facilitiesOf, openHoursHtml, priceTableHTML, profileHTML };
+    facilitiesOf, openHoursHtml, priceTableHTML, profileHTML, initScrollShadows };
 });

@@ -616,6 +616,8 @@ function maybeShowStale(){
     // Reveal the Movers tab only once the history actually holds a price change.
     if(LATEST && LATEST.moversCount>0) qs('.nav button[data-view="movers"]')?.removeAttribute("hidden");
     const spec=qs("#spec-clubs"); if(spec) spec.textContent=`${CLUBS.length} clubs`;
+    // Before the deep-link branches below, which each return early.
+    PB.initScrollShadows();
     // Deep links (shareable URLs): ?view=league[&plan&who&term] and friends,
     // plus ?pc=<postcode> which restores "clubs near me" across refresh/shares.
     const params=new URLSearchParams(location.search);

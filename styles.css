@@ -161,23 +161,24 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--disp);
 @keyframes sp{to{transform:rotate(360deg)}}
 
 /* table */
-.tablewrap{margin-top:18px;overflow-x:auto;-webkit-overflow-scrolling:touch;
-  /* Scroll-shadow: a soft shadow shows on whichever edge has more table to reach,
-     so it's obvious the table scrolls sideways; it fades out at each end.
-     The shadow layers are linear, not radial: these tables run thousands of px
-     tall, and a `farthest-side` radial sized `100%` becomes an ellipse as tall
-     as the table, leaving the shadow visible only near its vertical midpoint.
-     Width/colour are vars so mobile can turn them up (see the 560px block). */
-  --sc-w:16px; --sc-ink:rgba(11,11,10,.16);
-  background:
-    linear-gradient(to right, var(--paper) var(--sc-w), transparent) left center,
-    linear-gradient(to left, var(--paper) var(--sc-w), transparent) right center,
-    linear-gradient(to right, var(--sc-ink), transparent) left center,
-    linear-gradient(to left, var(--sc-ink), transparent) right center;
-  background-repeat:no-repeat;
-  background-size:44px 100%, 44px 100%, var(--sc-w) 100%, var(--sc-w) 100%;
-  background-attachment:local, local, scroll, scroll;}
-.pricetable{width:100%;border-collapse:collapse;min-width:540px}
+/* Scroll-shadow: a soft shadow on whichever edge has more table to reach, so
+   it's obvious the table scrolls sideways. The shadows are sticky flex items,
+   not a background on the scroller: a background sits *under* the rows, so the
+   plan buttons and "most popular" badge (both opaque) punched holes straight
+   through it. As sticky children they paint above the rows, which pass under
+   them. PB.initScrollShadows() sets data-sx from the scroll position; with no
+   JS neither edge shows, which is the honest default. */
+.tablewrap{margin-top:18px;overflow-x:auto;-webkit-overflow-scrolling:touch;display:flex;
+  --sc-w:16px; --sc-ink:rgba(11,11,10,.16);}
+.tablewrap::before,.tablewrap::after{content:"";flex:0 0 var(--sc-w);position:sticky;z-index:2;
+  opacity:0;transition:opacity .16s;pointer-events:none}
+.tablewrap::before{left:0;margin-right:calc(-1 * var(--sc-w));
+  background:linear-gradient(to right, var(--sc-ink), transparent)}
+.tablewrap::after{right:0;margin-left:calc(-1 * var(--sc-w));
+  background:linear-gradient(to left, var(--sc-ink), transparent)}
+.tablewrap[data-sx~="l"]::before{opacity:1}
+.tablewrap[data-sx~="r"]::after{opacity:1}
+.pricetable{flex:1 0 auto;width:100%;border-collapse:collapse;min-width:540px}
 .pricetable thead th{font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;
   color:var(--ink);font-weight:700;text-align:right;padding:0 16px 10px;border-bottom:2px solid var(--ink);white-space:nowrap}
 .pricetable thead th:first-child{text-align:left}

@@ -144,3 +144,4 @@ document.addEventListener("keydown",(e)=>{ if(e.key!=="Escape") return; if(!qs("
 
 /* hydrate: re-render the pre-rendered STANDARD table identically + populate state */
 renderTable();
+PB.initScrollShadows();
