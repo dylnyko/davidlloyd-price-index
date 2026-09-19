@@ -359,9 +359,9 @@ function clubPageHTML(b, ctx) {
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(desc)}" />
 ${canon ? `<link rel="canonical" href="${canon}" />\n` : ""}<meta name="theme-color" content="#efece3" />
-<link rel="icon" href="../../favicon.svg?v=58" type="image/svg+xml" />
-<link rel="icon" href="../../favicon.png?v=58" type="image/png" sizes="64x64" />
-<link rel="apple-touch-icon" href="../../apple-touch-icon.png?v=58" />
+<link rel="icon" href="../../favicon.svg?v=59" type="image/svg+xml" />
+<link rel="icon" href="../../favicon.png?v=59" type="image/png" sizes="64x64" />
+<link rel="apple-touch-icon" href="../../apple-touch-icon.png?v=59" />
 ${ld}
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="Rack Rate" />
@@ -373,12 +373,12 @@ ${canon ? `<meta property="og:url" content="${canon}" />\n` : ""}<meta property=
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Space+Mono:wght@400;700&display=swap" />
-<link rel="stylesheet" href="../../styles.css?v=58" />
+<link rel="stylesheet" href="../../styles.css?v=59" />
 </head>
 <body>
 <div class="frame">
   <header class="topbar">
-    <a class="mark" href="../../" aria-label="Rack Rate home"><img src="../../logo.svg?v=58" alt="Rack Rate" width="742" height="86" /></a>
+    <a class="mark" href="../../" aria-label="Rack Rate home"><img src="../../logo.svg?v=59" alt="Rack Rate" width="742" height="86" /></a>
     <nav class="nav" aria-label="Views">
       <a href="../../" aria-selected="true">Club&nbsp;lookup</a>
       <a href="../../?view=league">Price&nbsp;league</a>
@@ -438,8 +438,8 @@ ${canon ? `<meta property="og:url" content="${canon}" />\n` : ""}<meta property=
 <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
 
 <script id="pb-bundle" type="application/json">${clubJSON}</script>
-<script src="../../shared.js?v=58"></script>
-<script src="../../club.js?v=58"></script>
+<script src="../../shared.js?v=59"></script>
+<script src="../../club.js?v=59"></script>
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "5661e49f2a504dd69734b894973090a0"}'></script>
 </body>
 </html>`;

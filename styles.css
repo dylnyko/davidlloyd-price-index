@@ -346,7 +346,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--disp);
 #cmp-table .cell .mo{font-size:1.06rem}
 
 /* map (#14) */
-#map-canvas{height:min(68vh,620px);margin-top:16px;border:2px solid var(--ink);box-shadow:var(--sh);background:var(--paper-2)}
+#map-canvas{height:min(68vh,620px);margin-top:16px;border:2px solid var(--ink);box-shadow:var(--shadow);background:var(--paper-2)}
 .leaflet-container{font-family:var(--mono)!important;background:var(--paper-2)}
 .leaflet-popup-content{font-family:var(--disp)}
 .leaflet-popup-content a{color:var(--accent);font-weight:700;text-decoration:none}
