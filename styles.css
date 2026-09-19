@@ -57,7 +57,9 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--disp);
 .combo{position:relative;z-index:50}
 #q{width:100%;font-family:var(--disp);font-weight:600;font-size:clamp(1.15rem,2.2vw,1.6rem);
   color:var(--ink);background:var(--paper-2);border:2px solid var(--ink);border-radius:0;
-  padding:clamp(13px,1.8vw,17px) 18px;outline:none;transition:box-shadow .12s,transform .12s}
+  /* Right padding clears the club-count badge, so neither the placeholder nor
+     what you type slides under it. */
+  padding:clamp(13px,1.8vw,17px) 60px clamp(13px,1.8vw,17px) 18px;outline:none;transition:box-shadow .12s,transform .12s}
 #q::placeholder{color:rgba(11,11,10,.32);font-family:var(--mono);font-size:.8em;letter-spacing:.06em}
 #q:focus{box-shadow:var(--shadow);transform:translate(-2px,-2px)}
 .clubcount{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-family:var(--mono);

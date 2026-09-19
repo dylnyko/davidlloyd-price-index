@@ -636,6 +636,18 @@ function maybeShowStale(){
     if(params.get("view")==="movers"){ openMovers(true); return; }
     if(document.activeElement===q) renderDropdown(filterClubs(q.value),q.value.trim());
   }catch{
+    q.dataset.phErr="1";
     q.placeholder="Couldn't reach the pricing service — try again later";
   }
+})();
+
+/* The club-count badge sits over the right of the search field, and the full
+   example list runs into it on a phone. Swap in a shorter one there — and leave
+   the error message alone if the boot above failed. */
+(function(){
+  if(!q) return;
+  const long=q.placeholder, short=q.dataset.phSm||long, mq=matchMedia("(max-width:560px)");
+  const apply=()=>{ if(!q.dataset.phErr) q.placeholder=mq.matches?short:long; };
+  apply();
+  mq.addEventListener("change",apply);
 })();
