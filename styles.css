@@ -1,7 +1,7 @@
 :root{
   --paper:#efece3; --paper-2:#f7f5ef; --ink:#0b0b0a;
   --accent:#ff3d00; --accent-ink:#ffffff;
-  --muted:#6b675d; --line-soft:rgba(11,11,10,.13);
+  --muted:#6b675d; --line-soft:rgba(11,11,10,.13); --line-2:rgba(11,11,10,.32);
   --disp:'Bricolage Grotesque',ui-sans-serif,system-ui,sans-serif;
   --mono:'Space Mono',ui-monospace,'SFMono-Regular',monospace;
   --shadow:5px 5px 0 var(--ink);
