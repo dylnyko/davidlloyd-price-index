@@ -376,9 +376,13 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--disp);
   .share{width:100%;justify-content:center}
   .pf-grid{grid-template-columns:1fr}
   .pf-item:nth-child(odd){border-right:0}
-  .nm-form{flex-direction:column;align-items:stretch}
-  #nm-pc{width:100%}
-  .nm-btn{width:100%}
+  /* Postcode row: the field takes a line of its own, then Search and the pin
+     share the next one ~80/20. Stacking all three left the pin as a full-width
+     bar with a 16px icon marooned in the middle. */
+  .nm-form{align-items:stretch}
+  #nm-pc{flex:0 0 100%;width:100%}
+  .nm-btn{flex:1}
+  .nm-btn.icon{flex:0 0 18%;min-width:52px;max-width:76px}
   .league-controls label{flex:1;min-width:140px}
   /* Every table overflows on a phone (the price table needs 540px, the league
      tables 520-538), but the desktop scroll-shadow is a hairline you can miss
