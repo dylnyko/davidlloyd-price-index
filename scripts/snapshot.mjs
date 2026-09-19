@@ -377,7 +377,7 @@ ${canon ? `<meta property="og:url" content="${canon}" />\n` : ""}<meta property=
   <header class="topbar">
     <a class="mark" href="../../">RACK&nbsp;RATE</a>
     <nav class="nav" aria-label="Views">
-      <a href="../../">Club&nbsp;lookup</a>
+      <a href="../../" aria-selected="true">Club&nbsp;lookup</a>
       <a href="../../?view=league">Price&nbsp;league</a>
       <a href="../../?view=facilities">Facilities</a>
       <a href="../../?view=map">Map</a>${ctx.hasMovers ? `\n      <a href="../../?view=movers">Movers</a>` : ""}
@@ -386,7 +386,7 @@ ${canon ? `<meta property="og:url" content="${canon}" />\n` : ""}<meta property=
   <main id="panel" class="panel">
     <div class="panelhead">
       <div class="ph-title">
-        <a class="backbtn" href="../../">← All clubs</a>
+        <a class="backbtn" href="../../">← Back</a>
         <p class="ph-brand">David&nbsp;Lloyd</p>
         <div class="ph-name"><h1 id="clubname">${esc(b.name)}</h1><span id="clubcountry" class="ph-country">${esc(b.country || "")}</span></div>
         <p id="clubsub" class="clubsub" hidden></p>
