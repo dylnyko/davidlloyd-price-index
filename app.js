@@ -485,9 +485,9 @@ function loadLeaflet(){
     js.onload=()=>res(); js.onerror=rej; document.head.appendChild(js);
   });
 }
-const heat = t => { // 0(cheap)=green → 1(dear)=red
-  const h=(1-t)*120; return `hsl(${h} 85% 45%)`;
-};
+// 0(cheap)=pale → 1(dear)=accent. One hue (the brand orange), ramped on
+// saturation+lightness, so the scale reads as "more orange = pricier".
+const heat = t => `hsl(14 ${30+t*70}% ${78-t*34}%)`;
 async function openMap(fromUrl){
   setView("map");
   if(fromUrl) history.replaceState({},"",mapURL()); else history.pushState({},"",mapURL());
@@ -515,8 +515,10 @@ function renderMap(){
   const {plan,dur,cur}=MAP_METRIC;
   if(!MAP){
     MAP=L.map("map-canvas",{scrollWheelZoom:false}).setView([54.5,-3],5);
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-      { maxZoom:18, attribution:"© OpenStreetMap contributors" }).addTo(MAP);
+    // CARTO Positron: greyscale basemap, no key needed. styles.css warms the
+    // tiles to paper and squares off Leaflet's chrome.
+    L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+      { maxZoom:19, subdomains:"abcd", attribution:"© OpenStreetMap contributors © CARTO" }).addTo(MAP);
   }
   if(MAP_LAYER) MAP_LAYER.remove();
   MAP_LAYER=L.layerGroup().addTo(MAP);
@@ -542,7 +544,7 @@ function renderMap(){
     m.addTo(MAP_LAYER); bounds.push([loc.lat,loc.lng]);
   }
   if(bounds.length) MAP.fitBounds(bounds,{padding:[30,30]});
-  note.textContent=`${pts.length} clubs · ${prettyPlan(plan)} individual · coloured by rank, green ${fmt(lo,cur)} (cheapest) → red ${fmt(hi,cur)} (priciest). Free OpenStreetMap tiles.`;
+  note.textContent=`${pts.length} clubs · ${prettyPlan(plan)} individual · coloured by rank, pale ${fmt(lo,cur)} (cheapest) → orange ${fmt(hi,cur)} (priciest). Free OpenStreetMap/CARTO tiles.`;
   setTimeout(()=>MAP.invalidateSize(),100);
 }
 
