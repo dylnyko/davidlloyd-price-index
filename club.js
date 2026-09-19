@@ -60,6 +60,7 @@ qs("#tbody").addEventListener("click",(e)=>{ const b=e.target.closest(".pn-more"
 qs("#planmodal").addEventListener("click",(e)=>{ if(e.target.closest("[data-close]")) closePlanModal(); });
 
 /* shareable image */
+const LOGO=new Image(); LOGO.src="../../logo.svg?v=53";   // outlined SVG wordmark, drawn onto the share canvas
 function ellipsize(ctx,text,maxW){ if(!text) return ""; if(ctx.measureText(text).width<=maxW) return text; let t=text; while(t.length>1&&ctx.measureText(t+"…").width>maxW) t=t.slice(0,-1); return t.replace(/[ ,.;:]+$/,"")+"…"; }
 function drawShare(m){
   const INK="#0b0b0a", PAPER="#efece3", ACCENT="#ff3d00", MUTED="#6b675d", LINE="rgba(11,11,10,0.14)";
@@ -72,7 +73,8 @@ function drawShare(m){
   const cv=document.createElement("canvas"); cv.width=W*S; cv.height=H*S;
   const ctx=cv.getContext("2d"); ctx.scale(S,S); ctx.textBaseline="alphabetic";
   ctx.fillStyle=PAPER; ctx.fillRect(0,0,W,H); ctx.strokeStyle=INK; ctx.lineWidth=2; ctx.strokeRect(1,1,W-2,H-2);
-  ctx.textAlign="left"; ctx.fillStyle=INK; ctx.font=`700 14px ${MONO}`; ctx.fillText("RACK RATE", P, yWord);
+  if(LOGO.complete&&LOGO.naturalWidth){ const lh=26, lw=lh*LOGO.naturalWidth/LOGO.naturalHeight; ctx.drawImage(LOGO,P,yWord-20,lw,lh); }
+  else { ctx.textAlign="left"; ctx.fillStyle=INK; ctx.font=`700 14px ${MONO}`; ctx.fillText("RACK RATE", P, yWord); }
   ctx.textAlign="right"; ctx.fillStyle=MUTED; ctx.font=`400 13px ${MONO}`; ctx.fillText(m.date, W-P, yWord);
   // Header block mirrors the club page: "David Lloyd" eyebrow, club name, ◆ country.
   ctx.textAlign="left"; ctx.fillStyle=MUTED; ctx.font=`600 20px ${DISP}`; ctx.fillText(m.brand, P, yBrand);
@@ -115,6 +117,15 @@ qs("#do-copy").addEventListener("click", copyImg);
 qs("#do-download").addEventListener("click",()=>{ if(CURCANVAS) downloadCanvas(CURCANVAS); });
 qs("#do-link").addEventListener("click", copyLink);
 document.addEventListener("keydown",(e)=>{ if(e.key!=="Escape") return; if(!qs("#sharemodal").hidden) closeShare(); if(!qs("#planmodal").hidden) closePlanModal(); });
+
+/* staleness banner — same rule as the homepage: the page is pre-rendered from the
+   nightly snapshot (B.date), so if that's over a week old, say so. */
+(function(){
+  const el=qs("#stale"); if(!el||!B.date) return;
+  const days=Math.floor((Date.now()-new Date(B.date))/864e5); if(days<=7) return;
+  el.hidden=false;
+  el.innerHTML=`<b>⚠ Heads up —</b> these prices were last refreshed on ${PB.esc(PB.fmtDate(B.date))} (${days} days ago). David&nbsp;Lloyd's data may have changed since, so treat these figures as possibly out of date until the automatic update resumes.`;
+})();
 
 /* carry the postcode into Compare, and show distance from ?pc= */
 (function(){

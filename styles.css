@@ -22,7 +22,9 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--disp);
 /* topbar */
 .topbar{display:flex;justify-content:space-between;align-items:center;gap:14px;
   padding:12px clamp(16px,3vw,28px);font-family:var(--mono);flex-wrap:wrap}
-.topbar .mark{font-weight:700;letter-spacing:.04em;font-size:.86rem;color:var(--ink);text-decoration:none}
+.topbar .mark{font-weight:700;letter-spacing:.04em;font-size:.86rem;color:var(--ink);text-decoration:none;display:inline-flex}
+.topbar .mark img{display:block;height:34px;width:auto}
+@media (max-width:640px){.topbar .mark img{height:26px}}
 .nav{flex-wrap:wrap}
 
 /* staleness banner — shown when the nightly snapshot is over a week old */

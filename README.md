@@ -1,3 +1,5 @@
+<p><img src="logo.svg" alt="Rack Rate" width="520"></p>
+
 # Rack Rate
 
 An independent, unofficial web tool to look up **live David Lloyd membership prices** for any club — every plan, every membership type, every duration.

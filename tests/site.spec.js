@@ -278,6 +278,25 @@ test("club page carries the postcode into the Compare link (?pc=)", async ({ pag
   await expect(page.locator("#clubsub")).toContainText("mi");
 });
 
+test("club page shows the staleness banner when its snapshot is over a week old", async ({ page }) => {
+  // The club page is pre-rendered with its snapshot date embedded; age it to 2020.
+  await page.route(/\/clubs\/glasgow-west-end\/$/, async (route) => {
+    const res = await route.fetch();
+    const html = (await res.text()).replace(/"date":"\d{4}-\d{2}-\d{2}"/, '"date":"2020-01-01"');
+    await route.fulfill({ response: res, body: html, headers: { ...res.headers(), "content-type": "text/html" } });
+  });
+  await page.goto(WE);
+  await expect(page.locator("#stale")).toBeVisible();
+  await expect(page.locator("#stale")).toContainText("out of date");
+});
+
+test("club page has the logo wordmark linking home and a favicon", async ({ page }) => {
+  await page.goto(WE);
+  await expect(page.locator(".topbar .mark img")).toBeVisible();
+  await expect(page.locator(".topbar .mark")).toHaveAttribute("href", "../../");
+  expect(await page.locator('link[rel="icon"][type="image/svg+xml"]').count()).toBe(1);
+});
+
 test("club page does not overflow on mobile", async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 800 });
   await page.goto(WE);
