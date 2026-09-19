@@ -23,9 +23,13 @@ const cacheSet = () => {};
 // live-fallback path too.
 const COUNTRY_FIX = { 156: "Scotland" };
 const fixCountry = c => COUNTRY_FIX[c.siteId] ? {...c, country: COUNTRY_FIX[c.siteId]} : c;
-// DL's /clubs/locations gives Windsor (70) a placeholder 100,100; correct it to
-// the real club location (Dedworth Road, SL4 5UR) so the map + "near me" work.
-const COORD_FIX = { 70: { lat: 51.490084, lng: -0.672438 } };
+// Site IDs to drop even though DL's feed says "active": 70 "Windsor" is a dummy
+// record (placeholder coords 100,100, phone "12131415", no page on DL's site, in
+// no tier list, no access relationships). Mirrors the snapshot's exclusion, for
+// the live-fallback path.
+const EXCLUDE_SITES = { 70: true };
+// Known-bad coordinates to override (none currently — Windsor is excluded instead).
+const COORD_FIX = {};
 
 /* ---- data ---- */
 // Club list comes from the committed snapshot (data/latest.json) so a normal
@@ -39,7 +43,7 @@ async function getClubs(){
   }catch{}
   if(!clubs){
     const r = await fetch(`${API}/clubs`); const j = await r.json();
-    clubs = (j.clubs||[]).filter(c=>c.status==="active")
+    clubs = (j.clubs||[]).filter(c=>c.status==="active" && !EXCLUDE_SITES[c.siteId])
       .map(c=>({ clubName:c.clubName, siteId:c.siteId, country:c.country, currency:c.currency }));
   }
   clubs.sort((a,b)=>a.clubName.localeCompare(b.clubName));

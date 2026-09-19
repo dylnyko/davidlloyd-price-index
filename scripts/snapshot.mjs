@@ -9,7 +9,7 @@
  *
  * No auth, no secrets, no writes to DL. Read-only. Run: `node scripts/snapshot.mjs`.
  */
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync, rmSync } from "node:fs";
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import PB from "../shared.js";
@@ -26,8 +26,13 @@ const DUR = { STANDARD: "S", FLEXIBLE: "F", ANNUAL: "A" };
 const CONCURRENCY = 8;
 // Mirror app.js: DL's /clubs feed mis-tags Edinburgh Shawfair (156) as England.
 const COUNTRY_FIX = { 156: "Scotland" };
-// DL gives Windsor (70) placeholder coords (100,100); correct to the real club.
-const COORD_FIX = { 70: { lat: 51.490084, lng: -0.672438 } };
+// Site IDs to drop even though DL's feed says "active". 70 "Windsor" is a dummy
+// record: placeholder coords (100,100), phone "12131415", no page on DL's site,
+// absent from every DL tier list, and no access relationships in the tier graph
+// — yet it carries a full (fictional) price card. Not a real club; don't publish it.
+const EXCLUDE_SITES = { 70: "Windsor: dummy record in DL's feed" };
+// Known-bad coordinates to override (none currently — Windsor is excluded instead).
+const COORD_FIX = {};
 
 const today = new Date().toISOString().slice(0, 10);
 
@@ -168,7 +173,7 @@ async function main() {
   ]);
 
   const clubs = (clubsResp.clubs || [])
-    .filter((c) => c.status === "active")
+    .filter((c) => c.status === "active" && !EXCLUDE_SITES[c.siteId])
     .sort((a, b) => a.clubName.localeCompare(b.clubName));
 
   const sports = {};
@@ -350,6 +355,11 @@ async function main() {
     writeFileSync(`${CLUBDIR2}/${slug}/index.html`, html);
     slugs.push(slug);
   }
+  // Prune output for clubs no longer in the feed (renamed, closed or excluded),
+  // so a dropped club doesn't linger as a stale page or bundle.
+  for (const dir of readdirSync(CLUBDIR2)) if (!slugs.includes(dir)) rmSync(`${CLUBDIR2}/${dir}`, { recursive: true, force: true });
+  const keepIds = new Set(rows.map((r) => `${r.entry.siteId}.json`));
+  for (const f of readdirSync(CLUBDIR)) if (!keepIds.has(f)) rmSync(`${CLUBDIR}/${f}`, { force: true });
   // sitemap.xml + robots.txt need the absolute origin, so they're only written
   // when package.json "homepage" is set (see SITE). A fork with no homepage still
   // builds fine; it just ships no sitemap and a robots.txt without a Sitemap line.
