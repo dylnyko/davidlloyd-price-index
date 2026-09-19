@@ -290,6 +290,16 @@ test("club page shows the staleness banner when its snapshot is over a week old"
   await expect(page.locator("#stale")).toContainText("out of date");
 });
 
+test("club page shows the club's tier next to the country, with a caveat tooltip", async ({ page }) => {
+  await page.goto(WE);
+  const tier = page.locator("#clubtier");
+  await expect(tier).toBeVisible();
+  await expect(tier).toHaveText(/^(Super tier|Tier \d+)$/);
+  expect(await tier.getAttribute("title")).toMatch(/confirm with David Lloyd/);
+  // it sits in the same meta line as the country
+  await expect(page.locator(".ph-name #clubcountry + #clubtier")).toHaveCount(1);
+});
+
 test("club page has the logo wordmark linking home and a favicon", async ({ page }) => {
   await page.goto(WE);
   await expect(page.locator(".topbar .mark img")).toBeVisible();

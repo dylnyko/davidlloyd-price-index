@@ -26,9 +26,9 @@ const og = `<!doctype html><meta charset="utf-8">${FONTS}<style>
   .top svg{height:44px;width:auto;display:block}
   .tag{font-family:"Space Mono",monospace;font-weight:700;font-size:20px;letter-spacing:.08em;background:var(--accent);color:#fff;padding:8px 14px}
   .rule{height:2px;background:var(--ink);margin:26px 0 0}
-  h1{margin:20px 0 0;font-size:88px;font-weight:800;letter-spacing:-.035em;line-height:.92}
+  h1{margin:20px 0 0;font-size:82px;font-weight:800;letter-spacing:-.035em;line-height:.92}
   h1 span{color:var(--accent)}
-  .lede{margin:22px 0 0;font-size:26px;color:var(--muted);max-width:38ch;line-height:1.3}
+  .lede{margin:20px 0 0;font-size:23px;color:var(--muted);max-width:52ch;line-height:1.3}
   .bot{position:absolute;left:86px;right:86px;bottom:56px;display:flex;justify-content:space-between;align-items:flex-end;border-top:2px solid var(--ink);padding-top:26px}
   .url{font-family:"Space Mono",monospace;font-weight:700;font-size:22px;color:var(--accent)}
   .meta{font-family:"Space Mono",monospace;font-size:17px;color:var(--muted);text-align:right;line-height:1.6}
@@ -37,7 +37,7 @@ const og = `<!doctype html><meta charset="utf-8">${FONTS}<style>
   <div class="top">${logo}<span class="tag">UNOFFICIAL</span></div>
   <div class="rule"></div>
   <h1>How much does<br>David Lloyd <span>cost?</span></h1>
-  <p class="lede">Search a club to see what each membership costs, joining fee and all.</p>
+  <p class="lede">Find what your local David Lloyd charges, compare plans and clubs, and see which tier your club sits in. No sign-up, no details needed.</p>
   <div class="bot"><div class="url">${site}</div><div class="meta">${clubs ? `<b>${clubs}</b> UK &amp; EU clubs<br>` : ""}real prices · no sign-up</div></div>
 </div>`;
 

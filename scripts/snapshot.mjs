@@ -195,16 +195,21 @@ async function main() {
       if (!Object.keys(plans).length) { fail++; return null; }
       const keys = (pkg.packages || []).map((p) => p.packageKey);
       // The other three per-club calls the browser used to make — now server-side.
-      const [settings, access, detail] = await Promise.all([
+      const [settings, access, detail, away] = await Promise.all([
         getJSON(`${API}/clubs/${c.siteId}/membership-settings`).catch(() => ({})),
         postJSON(`${API}/accessible-clubs`, { siteId: String(c.siteId), packageKeys: keys }).catch(() => ({})),
         getJSON(`${API}/clubs/${c.siteId}`).catch(() => ({})),
+        // Club-level access rules (which clubs sit above / at-or-below / exclusive
+        // relative to this one) — the only place DL's tiering is exposed. See tiers below.
+        getJSON(`${API}/clubs/${c.siteId}/away-clubs`).catch(() => null),
       ]);
       const club = detail.club || detail || {};
       const country = COUNTRY_FIX[c.siteId] || c.country;
+      // DL runs Harbour Club as a distinct brand (e.g. Chelsea); label it as such.
+      const brandName = c.brand === "harbour" ? "Harbour Club" : "David Lloyd";
       // Full bundle the club page renders entirely from (no live DL calls needed).
       const bundle = {
-        siteId: c.siteId, name: c.clubName, country, currency: c.currency,
+        siteId: c.siteId, name: c.clubName, country, currency: c.currency, brandName,
         settings: { packageSettings: { standardMostPopularPackage: (settings.packageSettings || {}).standardMostPopularPackage || null } },
         access: accessFromResp(access),
         packages: trimPackages(pkg),
@@ -229,7 +234,7 @@ async function main() {
           mostPopular: bundle.settings.packageSettings.standardMostPopularPackage,
           plans,
         },
-        fac, bundle,
+        fac, bundle, away,
       };
     } catch (e) {
       fail++;
@@ -240,6 +245,47 @@ async function main() {
   console.log(`Wrote ${bundles} per-club bundles to data/clubs/.`);
 
   const rows = out.filter(Boolean);
+
+  // ---- club tiers, derived from DL's own access rules ----
+  // DL's API never names a tier, but /clubs/{id}/away-clubs says which clubs sit
+  // above / at-or-below / in an exclusive tier relative to each club. Clubs in the
+  // same tier are classified identically by everyone else, so "how many clubs rank
+  // me above them" partitions the estate exactly. Labels follow DL's published tier
+  // list (Super tier, then Tier 1..N, top down). Best-effort approximation — the
+  // page says so and tells people to confirm with the club.
+  // Two views of the same rule set: a club's OWN count of clubs above it (primary —
+  // works for brand-new clubs that nobody else's list references yet), and how many
+  // OTHER clubs rank it above them (fallback when a club's own data is missing).
+  // A club with neither gets no badge rather than a wrong one.
+  const above = {}, votes = {}, exclusive = new Set(), brandOf = {};
+  for (const c of clubs) brandOf[c.siteId] = c.brand;
+  for (const r of rows) {
+    const a = r.away; if (!a) continue;
+    const hi = a.clubsInAHigherTier || [], ex = a.clubsInAnExclusiveTier || [];
+    if (hi.length + ex.length > 0) above[r.entry.siteId] = hi.length + ex.length;   // 0/0 = DL placeholder record
+    for (const s of hi) votes[s] = (votes[s] || 0) + 1;
+    for (const s of ex) { votes[s] = (votes[s] || 0) + 1; exclusive.add(s); }
+  }
+  // Tier levels are anchored on UK clubs inside DL's published ladder (not exclusive,
+  // not the separately-branded Harbour Club); other clubs snap to the nearest level.
+  const anchors = rows.filter((r) => r.entry.currency === "GBP" && !exclusive.has(r.entry.siteId) && brandOf[r.entry.siteId] !== "harbour");
+  const lvAbove = [...new Set(anchors.filter((r) => above[r.entry.siteId] != null).map((r) => above[r.entry.siteId]))].sort((a, b) => a - b);  // fewest above = Tier 1
+  const lvVotes = [...new Set(anchors.filter((r) => votes[r.entry.siteId]).map((r) => votes[r.entry.siteId]))].sort((a, b) => b - a);          // most votes = Tier 1
+  const rank = (v, lv, higherIsLower) => { let i = lv.indexOf(v); if (i < 0) i = lv.filter((l) => (higherIsLower ? l > v : l < v)).length; return `Tier ${Math.min(i, lv.length - 1) + 1}`; };
+  const tierOf = (sid) => {
+    if (exclusive.has(sid)) return "Super tier";
+    if (brandOf[sid] === "harbour") return null;            // the brand is the distinction
+    if (above[sid] != null && lvAbove.length) return rank(above[sid], lvAbove, false);
+    if (votes[sid] && lvVotes.length) return rank(votes[sid], lvVotes, true);
+    return null;
+  };
+  for (const r of rows) {
+    const t = tierOf(r.entry.siteId);
+    r.entry.tier = r.bundle.tier = t;
+    writeFileSync(`${CLUBDIR}/${r.entry.siteId}.json`, JSON.stringify(r.bundle));   // re-write with tier
+  }
+  console.log(`tiers: ${lvAbove.length} levels + Super tier (${exclusive.size} exclusive clubs).`);
+
   const clubData = rows.map((x) => x.entry);
   const latest = {
     generatedAt: new Date().toISOString(),
@@ -319,13 +365,14 @@ async function main() {
   console.log(`Wrote ${slugs.length} static club pages${SITE ? " + sitemap + robots" : " (no homepage set: skipped sitemap)"}.`);
 }
 
+const TIER_NOTE = "Best approximation from David Lloyd’s club-access data. Please confirm with David Lloyd.";
 const CMP_SVG = `<svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M4 6h7M4 12h7M4 18h7M20 6h-5M20 12h-5M20 18h-5"/><path d="M8 3v18M16 3v18"/></svg>`;
 const SHARE_SVG = `<svg viewBox="0 0 24 24" aria-hidden="true" width="15" height="15"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7"/><path d="M12 15V3"/><path d="m8 7 4-4 4 4"/></svg>`;
 
 // Build one static club page from its bundle — reuses shared.js (same markup as the app).
 function clubPageHTML(b, ctx) {
   const { sports, nameById, series, coords, date } = ctx;
-  const esc = PB.esc, fmt = PB.fmt, slug = PB.slugify(b.name), cur = b.currency;
+  const esc = PB.esc, fmt = PB.fmt, slug = PB.slugify(b.name), cur = b.currency, brand = b.brandName || "David Lloyd";
   const mostPopular = ((b.settings || {}).packageSettings || {}).standardMostPopularPackage || null;
   const accessNames = {};
   for (const [k, ids] of Object.entries(b.access || {})) {
@@ -338,19 +385,19 @@ function clubPageHTML(b, ctx) {
   const vals = [];
   for (const p of (b.packages || [])) { const s = p.prices && p.prices.STANDARD; if (!s) continue; for (const f of ["individual", "couple"]) if (s[f] != null) vals.push(s[f]); }
   const lo = vals.length ? Math.min(...vals) : null, hi = vals.length ? Math.max(...vals) : null;
-  const title = `David Lloyd ${b.name} membership prices | Rack Rate`;
-  const desc = `${b.name} David Lloyd membership prices${lo != null ? `, from ${fmt(lo, cur)} a month` : ""}, plus joining fees. Standard, flexible and annual rates for every plan. Independent and unofficial.`;
+  const title = `${brand} ${b.name} membership prices | Rack Rate`;
+  const desc = `${b.name} ${brand} membership prices${lo != null ? `, from ${fmt(lo, cur)} a month` : ""}, plus joining fees. Standard, flexible and annual rates for every plan. Independent and unofficial.`;
   // Absolute canonical/OG only when a homepage is configured; otherwise fall back
   // to origin-relative so a fork works on any host (see SITE).
   const canon = SITE ? `${SITE}/clubs/${slug}/` : "";
-  const ogImg = SITE ? `${SITE}/og-image.png?v=3` : `../../og-image.png?v=3`;
+  const ogImg = SITE ? `${SITE}/og-image.png?v=4` : `../../og-image.png?v=4`;
   const ld = lo != null ? `<script type="application/ld+json">${JSON.stringify({
-    "@context": "https://schema.org", "@type": "Product", name: `David Lloyd ${b.name} membership`,
-    brand: { "@type": "Brand", name: "David Lloyd" }, description: desc,
+    "@context": "https://schema.org", "@type": "Product", name: `${brand} ${b.name} membership`,
+    brand: { "@type": "Brand", name: brand }, description: desc,
     offers: { "@type": "AggregateOffer", priceCurrency: cur, lowPrice: lo / 100, highPrice: hi / 100, offerCount: (b.packages || []).length, availability: "https://schema.org/InStock", ...(canon ? { url: canon } : {}) },
   }).replace(/</g, "\\u003c")}</script>` : "";
-  const clubJSON = JSON.stringify({ name: b.name, country: b.country, currency: cur, siteId: b.siteId, slug, mostPopular, packages: b.packages, addOns: b.addOns, accessNames, sports, detail: b.detail, coords, series, date }).replace(/</g, "\\u003c");
-  const foot = esc(`Prices taken from David Lloyd on ${PB.fmtDate(date)}.`);
+  const clubJSON = JSON.stringify({ name: b.name, country: b.country, currency: cur, siteId: b.siteId, slug, mostPopular, brandName: brand, tier: b.tier || null, packages: b.packages, addOns: b.addOns, accessNames, sports, detail: b.detail, coords, series, date }).replace(/</g, "\\u003c");
+  const foot = esc(`From David Lloyd’s snapshot of ${PB.fmtDate(date)}.`);
   return `<!doctype html>
 <html lang="en">
 <head>
@@ -359,13 +406,13 @@ function clubPageHTML(b, ctx) {
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(desc)}" />
 ${canon ? `<link rel="canonical" href="${canon}" />\n` : ""}<meta name="theme-color" content="#efece3" />
-<link rel="icon" href="../../favicon.svg?v=60" type="image/svg+xml" />
-<link rel="icon" href="../../favicon.png?v=60" type="image/png" sizes="64x64" />
-<link rel="apple-touch-icon" href="../../apple-touch-icon.png?v=60" />
+<link rel="icon" href="../../favicon.svg?v=54" type="image/svg+xml" />
+<link rel="icon" href="../../favicon.png?v=54" type="image/png" sizes="64x64" />
+<link rel="apple-touch-icon" href="../../apple-touch-icon.png?v=54" />
 ${ld}
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="Rack Rate" />
-<meta property="og:title" content="${esc(`David Lloyd ${b.name} prices`)}" />
+<meta property="og:title" content="${esc(`${brand} ${b.name} prices`)}" />
 <meta property="og:description" content="${esc(desc)}" />
 ${canon ? `<meta property="og:url" content="${canon}" />\n` : ""}<meta property="og:image" content="${ogImg}" />
 <meta name="twitter:card" content="summary_large_image" />
@@ -373,12 +420,12 @@ ${canon ? `<meta property="og:url" content="${canon}" />\n` : ""}<meta property=
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Space+Mono:wght@400;700&display=swap" />
-<link rel="stylesheet" href="../../styles.css?v=60" />
+<link rel="stylesheet" href="../../styles.css?v=54" />
 </head>
 <body>
 <div class="frame">
   <header class="topbar">
-    <a class="mark" href="../../" aria-label="Rack Rate home"><img src="../../logo.svg?v=60" alt="Rack Rate" width="742" height="86" /></a>
+    <a class="mark" href="../../" aria-label="Rack Rate home"><img src="../../logo.svg?v=54" alt="Rack Rate" width="742" height="86" /></a>
     <nav class="nav" aria-label="Views">
       <a href="../../" aria-selected="true">Club&nbsp;lookup</a>
       <a href="../../?view=league">Price&nbsp;league</a>
@@ -391,8 +438,8 @@ ${canon ? `<meta property="og:url" content="${canon}" />\n` : ""}<meta property=
     <div class="panelhead">
       <div class="ph-title">
         <a class="backbtn" href="../../">← Back</a>
-        <p class="ph-brand">David&nbsp;Lloyd</p>
-        <div class="ph-name"><h1 id="clubname">${esc(b.name)}</h1><span id="clubcountry" class="ph-country">${esc(b.country || "")}</span></div>
+        <p class="ph-brand">${esc(b.brandName || "David Lloyd").replace(" ", "&nbsp;")}</p>
+        <div class="ph-name"><h1 id="clubname">${esc(b.name)}</h1><span id="clubcountry" class="ph-country">${esc(b.country || "")}</span>${b.tier ? `<span id="clubtier" class="ph-tier" title="${TIER_NOTE}" aria-label="${esc(b.tier)}. ${TIER_NOTE}">${esc(b.tier)}</span>` : ""}</div>
         <p id="clubsub" class="clubsub" hidden></p>
         <a id="do-compare" class="cmp-open" href="../../?view=compare&a=${slug}">${CMP_SVG} Compare with another club</a>
       </div>
@@ -438,8 +485,8 @@ ${canon ? `<meta property="og:url" content="${canon}" />\n` : ""}<meta property=
 <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
 
 <script id="pb-bundle" type="application/json">${clubJSON}</script>
-<script src="../../shared.js?v=60"></script>
-<script src="../../club.js?v=60"></script>
+<script src="../../shared.js?v=54"></script>
+<script src="../../club.js?v=54"></script>
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "5661e49f2a504dd69734b894973090a0"}'></script>
 </body>
 </html>`;

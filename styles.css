@@ -96,6 +96,10 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--disp);
   position:relative;padding-left:16px}
 .ph-country:empty{display:none}
 .ph-country::before{content:"◆";position:absolute;left:0;color:var(--accent)}
+/* club tier badge — same meta style as the country; dotted underline = has a tooltip */
+.ph-tier{font-family:var(--mono);font-size:.8rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);
+  position:relative;padding-left:16px;cursor:help;text-decoration:underline dotted;text-underline-offset:3px}
+.ph-tier::before{content:"◆";position:absolute;left:0;color:var(--accent)}
 .clubsub{margin:9px 0 0;font-family:var(--mono);font-size:.74rem;letter-spacing:.04em;text-transform:uppercase;
   color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center}
 .clubsub .pin{color:var(--accent)}

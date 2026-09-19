@@ -28,7 +28,7 @@ function renderTable(){
   const ft=(snap+(dur==="ANNUAL"?" Figures shown are the annual total.":"")).trim(); foot.hidden=!ft; foot.textContent=ft;
   // model for the shareable image (same order/types the builder used)
   const priceAt=(p,t)=>{ const d=p.prices&&p.prices[dur]; const v=d&&d[PB.TYPE_FIELD[t]]; return v==null?null:v; };
-  LASTIMG={ club:B.name, brand:"David Lloyd", country:B.country||"", term:PB.DUR_LABEL[dur]||dur,
+  LASTIMG={ club:B.name, brand:B.brandName||"David Lloyd", country:B.country||"", tier:B.tier||"", term:PB.DUR_LABEL[dur]||dur,
     cols:R.activeTypes.map(t=>({label:PB.TYPE_LABEL[t],pp:t!=="INDIVIDUAL"})),
     rows:R.pkgs.map(p=>{ const jf=p.prices[dur].joiningFee||0;
       return { name:PB.prettyPlan(p.packageKey), desc:PB.descOf(p), pop:p.packageKey===B.mostPopular,
@@ -79,9 +79,11 @@ function drawShare(m){
   // Header block mirrors the club page: "David Lloyd" eyebrow, club name, ◆ country.
   ctx.textAlign="left"; ctx.fillStyle=MUTED; ctx.font=`600 20px ${DISP}`; ctx.fillText(m.brand, P, yBrand);
   ctx.fillStyle=INK; ctx.font=`700 44px ${DISP}`; ctx.fillText(m.club, P, yClub);
-  if(m.country){ const cx=P+ctx.measureText(m.club).width+18;
-    ctx.font=`400 13px ${MONO}`; ctx.fillStyle=ACCENT; ctx.fillText("◆", cx, yClub-4);
-    ctx.fillStyle=MUTED; ctx.fillText(m.country.toUpperCase(), cx+ctx.measureText("◆ ").width, yClub-4); }
+  // ◆ COUNTRY ◆ TIER — mirrors the page header's meta line
+  let cx=P+ctx.measureText(m.club).width+18; ctx.font=`400 13px ${MONO}`;
+  for(const part of [m.country,m.tier].filter(Boolean)){
+    ctx.fillStyle=ACCENT; ctx.fillText("◆", cx, yClub-4); cx+=ctx.measureText("◆ ").width;
+    ctx.fillStyle=MUTED; ctx.fillText(part.toUpperCase(), cx, yClub-4); cx+=ctx.measureText(part.toUpperCase()).width+14; }
   if(m.term){ ctx.fillStyle=MUTED; ctx.font=`400 13px ${MONO}`; ctx.fillText(m.term.toUpperCase(), P, yTerm); }
   ctx.strokeStyle=INK; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(P,yDiv); ctx.lineTo(W-P,yDiv); ctx.stroke();
   ctx.textAlign="left"; ctx.fillStyle=ACCENT; ctx.font=`700 12px ${MONO}`; ctx.fillText("PLAN", P, yHead);
