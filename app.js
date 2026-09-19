@@ -574,10 +574,9 @@ function renderLeague(){
   const showMi = USERLOC && rows.some(r=>r.mi!=null);
   const cheapest = rows.length?rows[0].val:0, dearest=rows.length?rows[rows.length-1].val:0;
   const pp = type!=="i";   // couple rates are per person (as in the club tables)
-  const region = leagueCurrencies().length>1 ? `${CUR_LABEL[cur]||cur} · ` : "";
   qs("#league-sub").textContent = rows.length
-    ? `${region}${rows.length} clubs with ${prettyPlan(plan)} · ${TYPE_SHORT[type]}${pp?" (per person)":""} · ${DUR_SHORT[dur]} — from ${fmt(cheapest,cur)} to ${fmt(dearest,cur)}${unit}`
-    : `${region}no clubs offer ${prettyPlan(plan)} on this term — try another plan.`;
+    ? `${rows.length} clubs · from ${fmt(cheapest,cur)} to ${fmt(dearest,cur)}${unit}${pp?" per person":""}`
+    : `No clubs offer this plan on that term. Try another.`;
   t.innerHTML=
     `<thead><tr><th>#</th><th>Club</th><th>Country</th>${showMi?`<th class="num">Distance</th>`:""}<th class="num">${TYPE_SHORT[type]} ${unit}${pp?`<span class="th-sub">per person</span>`:""}</th></tr></thead>`+
     `<tbody>`+rows.map((r,i)=>`<tr data-site="${r.siteId}">`+
@@ -631,7 +630,7 @@ function renderFacilities(){
   qs("#fac-status").hidden=true; const t=qs("#fac-table"); t.hidden=false;
   const showMi = USERLOC && rows.some(r=>r.mi!=null);
   const label = FAC_METRIC==="total"?"Racquet courts":`${FAC_METRIC} courts`;
-  qs("#fac-sub").textContent = `${rows.length} clubs ranked by ${label.toLowerCase()}. Information comes from David Lloyd’s API and may not be 100% accurate.`;
+  qs("#fac-sub").textContent = `${rows.length} clubs. Information comes from David Lloyd’s API and may not be 100% accurate.`;
   const chips=c=>Object.entries(c.courts||{}).sort((a,b)=>b[1]-a[1]).map(([n,ct])=>`${ct} ${esc(n)}`).join(" · ");
   t.innerHTML=
     `<thead><tr><th>#</th><th>Club</th><th>Country</th>${showMi?`<th class="num">Distance</th>`:""}<th>Courts</th><th class="num">${esc(label)}</th></tr></thead>`+
