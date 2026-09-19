@@ -12,9 +12,15 @@
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import PB from "../shared.js";
 
 const API = "https://mobile-app-back.davidlloyd.co.uk";
 const ROOT = dirname(dirname(fileURLToPath(import.meta.url)));
+// Deploy origin comes from package.json "homepage" so a fork can point this at
+// its own host without editing code. Absolute SEO URLs (per-club canonical/OG,
+// sitemap, robots) are only emitted when it's set; otherwise they're relative or
+// omitted so the site still works when served from an unknown origin.
+const SITE = (() => { try { return (JSON.parse(readFileSync(`${ROOT}/package.json`, "utf8")).homepage || "").replace(/\/+$/, ""); } catch { return ""; } })();
 const DATA = `${ROOT}/data`;
 const DUR = { STANDARD: "S", FLEXIBLE: "F", ANNUAL: "A" };
 const CONCURRENCY = 8;
@@ -223,7 +229,7 @@ async function main() {
           mostPopular: bundle.settings.packageSettings.standardMostPopularPackage,
           plans,
         },
-        fac,
+        fac, bundle,
       };
     } catch (e) {
       fail++;
@@ -284,6 +290,146 @@ async function main() {
   latest.moversCount = moversCount;
   writeFileSync(`${DATA}/latest.json`, JSON.stringify(latest));
   console.log(`latest.json: ${ok} clubs, ${fail} skipped, ${moversCount} movers.`);
+
+  // ---- static per-club pages (SEO) + sitemap ----
+  const CLUBDIR2 = `${ROOT}/clubs`;
+  if (!existsSync(CLUBDIR2)) mkdirSync(CLUBDIR2, { recursive: true });
+  const nameById = {}; for (const c of clubData) nameById[c.siteId] = c.name;
+  const slugs = [];
+  for (const x of rows) {
+    const b = x.bundle;
+    const slug = PB.slugify(b.name);
+    const html = clubPageHTML(b, { sports, nameById, series: history.series[String(b.siteId)] || {}, coords: locations[String(b.siteId)] || null, date: today });
+    if (!existsSync(`${CLUBDIR2}/${slug}`)) mkdirSync(`${CLUBDIR2}/${slug}`, { recursive: true });
+    writeFileSync(`${CLUBDIR2}/${slug}/index.html`, html);
+    slugs.push(slug);
+  }
+  // sitemap.xml + robots.txt need the absolute origin, so they're only written
+  // when package.json "homepage" is set (see SITE). A fork with no homepage still
+  // builds fine; it just ships no sitemap and a robots.txt without a Sitemap line.
+  if (SITE) {
+    const urls = [`${SITE}/`].concat(slugs.sort().map((s) => `${SITE}/clubs/${s}/`));
+    writeFileSync(`${ROOT}/sitemap.xml`,
+      `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
+      urls.map((u) => `  <url><loc>${u}</loc><changefreq>daily</changefreq></url>`).join("\n") +
+      `\n</urlset>\n`);
+  }
+  writeFileSync(`${ROOT}/robots.txt`,
+    `User-agent: *\nAllow: /\n` + (SITE ? `\nSitemap: ${SITE}/sitemap.xml\n` : ``));
+  console.log(`Wrote ${slugs.length} static club pages${SITE ? " + sitemap + robots" : " (no homepage set: skipped sitemap)"}.`);
+}
+
+const CMP_SVG = `<svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M4 6h7M4 12h7M4 18h7M20 6h-5M20 12h-5M20 18h-5"/><path d="M8 3v18M16 3v18"/></svg>`;
+const SHARE_SVG = `<svg viewBox="0 0 24 24" aria-hidden="true" width="15" height="15"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7"/><path d="M12 15V3"/><path d="m8 7 4-4 4 4"/></svg>`;
+
+// Build one static club page from its bundle — reuses shared.js (same markup as the app).
+function clubPageHTML(b, ctx) {
+  const { sports, nameById, series, coords, date } = ctx;
+  const esc = PB.esc, fmt = PB.fmt, slug = PB.slugify(b.name), cur = b.currency;
+  const mostPopular = ((b.settings || {}).packageSettings || {}).standardMostPopularPackage || null;
+  const accessNames = {};
+  for (const [k, ids] of Object.entries(b.access || {})) {
+    if ((ids || []).length > 1) { const names = ids.map((id) => nameById[id]).filter(Boolean).sort((a, z) => a.localeCompare(z)); if (names.length) accessNames[k] = names; }
+  }
+  const durs = PB.DUR_ORDER.filter((d) => (b.packages || []).some((p) => p.prices && p.prices[d]));
+  const R = PB.priceTableHTML({ packages: b.packages, addOns: b.addOns, dur: "STANDARD", currency: cur, mostPopular, accessNames, trend: null });
+  const profile = PB.profileHTML(b.detail, sports);
+  const tabs = durs.map((d) => `<button role="tab" data-dur="${d}" aria-selected="${d === "STANDARD"}">${PB.DUR_LABEL[d]}</button>`).join("");
+  const vals = [];
+  for (const p of (b.packages || [])) { const s = p.prices && p.prices.STANDARD; if (!s) continue; for (const f of ["individual", "couple"]) if (s[f] != null) vals.push(s[f]); }
+  const lo = vals.length ? Math.min(...vals) : null, hi = vals.length ? Math.max(...vals) : null;
+  const title = `David Lloyd ${b.name} membership prices | Rack Rate`;
+  const desc = `${b.name} David Lloyd membership prices${lo != null ? `, from ${fmt(lo, cur)} a month` : ""}, plus joining fees. Standard, flexible and annual rates for every plan. Independent and unofficial.`;
+  // Absolute canonical/OG only when a homepage is configured; otherwise fall back
+  // to origin-relative so a fork works on any host (see SITE).
+  const canon = SITE ? `${SITE}/clubs/${slug}/` : "";
+  const ogImg = SITE ? `${SITE}/og-image.png?v=2` : `../../og-image.png?v=2`;
+  const ld = lo != null ? `<script type="application/ld+json">${JSON.stringify({
+    "@context": "https://schema.org", "@type": "Product", name: `David Lloyd ${b.name} membership`,
+    brand: { "@type": "Brand", name: "David Lloyd" }, description: desc,
+    offers: { "@type": "AggregateOffer", priceCurrency: cur, lowPrice: lo / 100, highPrice: hi / 100, offerCount: (b.packages || []).length, availability: "https://schema.org/InStock", ...(canon ? { url: canon } : {}) },
+  }).replace(/</g, "\\u003c")}</script>` : "";
+  const clubJSON = JSON.stringify({ name: b.name, country: b.country, currency: cur, siteId: b.siteId, slug, mostPopular, packages: b.packages, addOns: b.addOns, accessNames, sports, detail: b.detail, coords, series, date }).replace(/</g, "\\u003c");
+  const foot = esc(`From David Lloyd’s snapshot of ${PB.fmtDate(date)}.`);
+  return `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>${esc(title)}</title>
+<meta name="description" content="${esc(desc)}" />
+${canon ? `<link rel="canonical" href="${canon}" />\n` : ""}<meta name="theme-color" content="#efece3" />
+${ld}
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Rack Rate" />
+<meta property="og:title" content="${esc(`David Lloyd ${b.name} prices`)}" />
+<meta property="og:description" content="${esc(desc)}" />
+${canon ? `<meta property="og:url" content="${canon}" />\n` : ""}<meta property="og:image" content="${ogImg}" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="${ogImg}" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Space+Mono:wght@400;700&display=swap" />
+<link rel="stylesheet" href="../../styles.css?v=51" />
+</head>
+<body>
+<div class="frame">
+  <header class="topbar">
+    <a class="mark" href="../../">RACK&nbsp;RATE</a>
+    <a class="backbtn" href="../../">← All clubs</a>
+  </header>
+  <main id="panel" class="panel">
+    <div class="panelhead">
+      <div class="ph-title">
+        <p class="ph-brand">David&nbsp;Lloyd</p>
+        <div class="ph-name"><h1 id="clubname">${esc(b.name)}</h1><span id="clubcountry" class="ph-country">${esc(b.country || "")}</span></div>
+        <p id="clubsub" class="clubsub" hidden></p>
+        <a id="do-compare" class="cmp-open" href="../../?view=compare&a=${slug}">${CMP_SVG} Compare with another club</a>
+      </div>
+      <div class="head-actions">
+        <div class="durations" id="durations" role="tablist" aria-label="Membership duration">${tabs}</div>
+        <button id="share" class="share" type="button" aria-label="Share these prices as an image">${SHARE_SVG} Share</button>
+      </div>
+    </div>
+    <div class="tablewrap"><table id="pricetable" class="pricetable"><thead><tr id="thead-row">${R.thead}</tr></thead><tbody id="tbody">${R.tbody}</tbody></table></div>
+    <p id="addons" class="addons"${R.addonsHTML ? "" : " hidden"}>${R.addonsHTML}</p>
+    <section id="profile" class="profile">${profile}</section>
+    <p id="foot-note" class="foot-note">${foot}</p>
+  </main>
+</div>
+
+<div id="sharemodal" class="modal" hidden>
+  <div class="modal-backdrop" data-close></div>
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="sharetitle">
+    <div class="modal-head"><h3 id="sharetitle">Share these prices</h3><button class="modal-x" data-close type="button" aria-label="Close">✕</button></div>
+    <p class="modal-sub">A snapshot of the current prices, ready to paste anywhere.</p>
+    <div class="modal-preview"><img id="share-preview" alt="Preview of the price image" /></div>
+    <div class="modal-actions">
+      <button id="do-copy" class="mbtn primary" type="button">Copy image</button>
+      <button id="do-download" class="mbtn" type="button">Download PNG</button>
+      <button id="do-link" class="mbtn" type="button">Copy link</button>
+    </div>
+    <p class="modal-link" id="share-link"></p>
+  </div>
+</div>
+<div id="planmodal" class="modal" hidden>
+  <div class="modal-backdrop" data-close></div>
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="plantitle">
+    <div class="modal-head"><h3 id="plantitle">—</h3><button class="modal-x" data-close type="button" aria-label="Close">✕</button></div>
+    <p id="plandesc" class="modal-sub"></p>
+    <h4 id="planbens-h" class="modal-h" hidden>Facilities &amp; benefits</h4>
+    <div id="planbens" class="benefits"></div>
+    <div id="planaccess"></div>
+  </div>
+</div>
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+<script id="pb-bundle" type="application/json">${clubJSON}</script>
+<script src="../../shared.js?v=51"></script>
+<script src="../../club.js?v=51"></script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "5661e49f2a504dd69734b894973090a0"}'></script>
+</body>
+</html>`;
 }
 
 main().catch((e) => { console.error(e); process.exit(1); });

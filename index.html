@@ -5,19 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>Rack Rate — unofficial David Lloyd price lookup</title>
 <meta name="description" content="Live David Lloyd membership prices for every UK club: plan prices, joining fees, facilities and club access. Independent and unofficial." />
-<link rel="canonical" href="https://dylnyko.github.io/davidlloyd-price-index/" />
+<!-- Origin-relative so this works on any host it's deployed to (no hardcoded URL). -->
+<link rel="canonical" href="./" />
 <meta name="theme-color" content="#efece3" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebSite","name":"Rack Rate","url":"https://dylnyko.github.io/davidlloyd-price-index/","description":"Live, unofficial David Lloyd membership prices for every UK and EU club — plan prices, joining fees, facilities and club access.","inLanguage":"en-GB"}
+{"@context":"https://schema.org","@type":"WebSite","name":"Rack Rate","description":"Live, unofficial David Lloyd membership prices for every UK and EU club — plan prices, joining fees, facilities and club access.","inLanguage":"en-GB"}
 </script>
 
-<!-- Open Graph / social share -->
+<!-- Open Graph / social share (relative image; scrapers resolve against the page URL) -->
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="Rack Rate" />
 <meta property="og:title" content="Rack Rate — David Lloyd membership prices" />
 <meta property="og:description" content="See what each David Lloyd club charges, plan by plan. Independent and unofficial." />
-<meta property="og:url" content="https://dylnyko.github.io/davidlloyd-price-index/" />
-<meta property="og:image" content="https://dylnyko.github.io/davidlloyd-price-index/og-image.png?v=2" />
+<meta property="og:image" content="og-image.png?v=2" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta property="og:image:alt" content="Rack Rate — unofficial David Lloyd price lookup" />
@@ -26,12 +26,12 @@
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Rack Rate — David Lloyd membership prices" />
 <meta name="twitter:description" content="See what each David Lloyd club charges, plan by plan. Independent and unofficial." />
-<meta name="twitter:image" content="https://dylnyko.github.io/davidlloyd-price-index/og-image.png?v=2" />
+<meta name="twitter:image" content="og-image.png?v=2" />
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Space+Mono:wght@400;700&display=swap" />
-<link rel="stylesheet" href="styles.css?v=50" />
+<link rel="stylesheet" href="styles.css?v=51" />
 </head>
 <body>
 <div class="frame">
@@ -78,40 +78,6 @@
       <div id="nm-status" class="nm-status" aria-live="polite"></div>
     </div>
   </section>
-
-  <main id="panel" class="panel" hidden aria-live="polite">
-    <div class="panelhead">
-      <div class="ph-title">
-        <div class="ph-name"><h2 id="clubname">—</h2><span id="clubcountry" class="ph-country"></span></div>
-        <p id="clubsub" class="clubsub" hidden></p>
-        <button id="do-compare" class="cmp-open" type="button" hidden>
-          <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M4 6h7M4 12h7M4 18h7M20 6h-5M20 12h-5M20 18h-5"/><path d="M8 3v18M16 3v18"/></svg>
-          Compare with another club
-        </button>
-      </div>
-      <div class="head-actions">
-        <div class="durations" id="durations" role="tablist" aria-label="Membership duration"></div>
-        <button id="share" class="share" type="button" hidden aria-label="Share these prices as an image">
-          <svg viewBox="0 0 24 24" aria-hidden="true" width="15" height="15"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7"/><path d="M12 15V3"/><path d="m8 7 4-4 4 4"/></svg>
-          Share
-        </button>
-      </div>
-    </div>
-
-    <div id="status" class="status" hidden></div>
-
-    <div class="tablewrap">
-      <table id="pricetable" class="pricetable" hidden>
-        <thead><tr id="thead-row"></tr></thead>
-        <tbody id="tbody"></tbody>
-      </table>
-    </div>
-
-    <p id="empty" class="empty" hidden>Nothing on offer for this club at this duration.</p>
-    <p id="addons" class="addons" hidden></p>
-    <section id="profile" class="profile" hidden></section>
-    <p id="foot-note" class="foot-note" hidden></p>
-  </main>
 
   <section id="league" class="league" hidden aria-label="National price league">
     <div class="lg-head">
@@ -175,40 +141,8 @@
 
 </div>
 
-<div id="sharemodal" class="modal" hidden>
-  <div class="modal-backdrop" data-close></div>
-  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="sharetitle">
-    <div class="modal-head">
-      <h3 id="sharetitle">Share these prices</h3>
-      <button class="modal-x" data-close type="button" aria-label="Close">✕</button>
-    </div>
-    <p class="modal-sub">A snapshot of the current prices, ready to paste anywhere.</p>
-    <div class="modal-preview"><img id="share-preview" alt="Preview of the price image" /></div>
-    <div class="modal-actions">
-      <button id="do-copy" class="mbtn primary" type="button">Copy image</button>
-      <button id="do-download" class="mbtn" type="button">Download PNG</button>
-      <button id="do-link" class="mbtn" type="button">Copy link</button>
-    </div>
-    <p class="modal-link" id="share-link"></p>
-  </div>
-</div>
-
-<div id="planmodal" class="modal" hidden>
-  <div class="modal-backdrop" data-close></div>
-  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="plantitle">
-    <div class="modal-head">
-      <h3 id="plantitle">—</h3>
-      <button class="modal-x" data-close type="button" aria-label="Close">✕</button>
-    </div>
-    <p id="plandesc" class="modal-sub"></p>
-    <h4 id="planbens-h" class="modal-h" hidden>Facilities &amp; benefits</h4>
-    <div id="planbens" class="benefits"></div>
-    <div id="planaccess"></div>
-  </div>
-</div>
-
-<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
-<script src="app.js?v=50"></script>
+<script src="shared.js?v=51"></script>
+<script src="app.js?v=51"></script>
 <!-- Cloudflare Web Analytics — cookieless, no personal data. Public site tag. -->
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "5661e49f2a504dd69734b894973090a0"}'></script>
 </body>
