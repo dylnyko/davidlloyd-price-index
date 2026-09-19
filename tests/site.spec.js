@@ -294,10 +294,21 @@ test("club page shows the club's tier next to the country, with a caveat tooltip
   await page.goto(WE);
   const tier = page.locator("#clubtier");
   await expect(tier).toBeVisible();
-  await expect(tier).toHaveText(/^(Super tier|Tier \d+)$/);
-  expect(await tier.getAttribute("title")).toMatch(/confirm with David Lloyd/);
+  await expect(page.locator("#clubtier").evaluate((el) => el.firstChild.textContent.trim())).resolves.toMatch(/^(Super tier|Tier \d+)$/);
   // it sits in the same meta line as the country
   await expect(page.locator(".ph-name #clubcountry + #clubtier")).toHaveCount(1);
+  // custom tooltip (not a native title): hidden until hover/focus, carries the caveat
+  const tip = page.locator("#clubtier-tip");
+  expect(await tier.getAttribute("title")).toBeNull();
+  await expect(tip).toContainText("confirm with David Lloyd");
+  await expect(tip).toBeHidden();
+  await tier.hover();
+  await expect(tip).toBeVisible();
+  // tap-to-toggle for touch: click pins it open, Escape closes
+  await tier.click();
+  await expect(tier).toHaveClass(/is-open/);
+  await page.keyboard.press("Escape");
+  await expect(tier).not.toHaveClass(/is-open/);
 });
 
 test("club page has the logo wordmark linking home and a favicon", async ({ page }) => {

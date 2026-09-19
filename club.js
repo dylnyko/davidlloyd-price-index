@@ -60,7 +60,7 @@ qs("#tbody").addEventListener("click",(e)=>{ const b=e.target.closest(".pn-more"
 qs("#planmodal").addEventListener("click",(e)=>{ if(e.target.closest("[data-close]")) closePlanModal(); });
 
 /* shareable image */
-const LOGO=new Image(); LOGO.src="../../logo.svg?v=53";   // outlined SVG wordmark, drawn onto the share canvas
+const LOGO=new Image(); LOGO.src="../../logo.svg?v=55";   // outlined SVG wordmark, drawn onto the share canvas
 function ellipsize(ctx,text,maxW){ if(!text) return ""; if(ctx.measureText(text).width<=maxW) return text; let t=text; while(t.length>1&&ctx.measureText(t+"…").width>maxW) t=t.slice(0,-1); return t.replace(/[ ,.;:]+$/,"")+"…"; }
 function drawShare(m){
   const INK="#0b0b0a", PAPER="#efece3", ACCENT="#ff3d00", MUTED="#6b675d", LINE="rgba(11,11,10,0.14)";
@@ -119,6 +119,15 @@ qs("#do-copy").addEventListener("click", copyImg);
 qs("#do-download").addEventListener("click",()=>{ if(CURCANVAS) downloadCanvas(CURCANVAS); });
 qs("#do-link").addEventListener("click", copyLink);
 document.addEventListener("keydown",(e)=>{ if(e.key!=="Escape") return; if(!qs("#sharemodal").hidden) closeShare(); if(!qs("#planmodal").hidden) closePlanModal(); });
+
+/* tooltips (.has-tip): hover/focus are pure CSS; this adds tap-to-toggle for touch,
+   and closes on Escape or a click elsewhere. */
+document.addEventListener("click",(e)=>{
+  const t=e.target.closest(".has-tip");
+  document.querySelectorAll(".has-tip.is-open").forEach((x)=>{ if(x!==t) x.classList.remove("is-open"); });
+  if(t) t.classList.toggle("is-open");
+});
+document.addEventListener("keydown",(e)=>{ if(e.key==="Escape") document.querySelectorAll(".has-tip.is-open").forEach((x)=>x.classList.remove("is-open")); });
 
 /* staleness banner — same rule as the homepage: the page is pre-rendered from the
    nightly snapshot (B.date), so if that's over a week old, say so. */
