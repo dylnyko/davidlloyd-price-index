@@ -139,7 +139,8 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--disp);
 @keyframes modalin{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 .modal-head{display:flex;justify-content:space-between;align-items:center;gap:12px}
 .modal-head h3{font-family:var(--disp);font-weight:800;font-size:1.45rem;margin:0;letter-spacing:-.01em}
-.modal-x{font-family:var(--mono);font-size:.9rem;background:var(--paper);border:2px solid var(--ink);
+/* color is explicit: without it the ✕ takes the UA button colour, which iOS renders blue. */
+.modal-x{font-family:var(--mono);font-size:.9rem;background:var(--paper);color:var(--ink);border:2px solid var(--ink);
   width:32px;height:32px;cursor:pointer;line-height:1;flex:none}
 .modal-x:hover{background:var(--accent);color:var(--accent-ink)}
 .modal-sub{font-family:var(--mono);font-size:.74rem;color:var(--muted);margin:8px 0 16px;line-height:1.5}
