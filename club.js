@@ -24,8 +24,8 @@ function renderTable(){
   if(R.empty) return;
   qs("#thead-row").innerHTML=R.thead; qs("#tbody").innerHTML=R.tbody; PLANINFO=R.planinfo;
   const ad=qs("#addons"); ad.hidden=!R.addonsHTML; ad.innerHTML=R.addonsHTML||"";
-  const foot=qs("#foot-note"); const snap=B.date?`From David Lloyd’s snapshot of ${PB.fmtDate(B.date)}.`:"";
-  const ft=(snap+(dur==="ANNUAL"?" Prices shown are the annual total.":"")).trim(); foot.hidden=!ft; foot.textContent=ft;
+  const foot=qs("#foot-note"); const snap=B.date?`Prices taken from David Lloyd on ${PB.fmtDate(B.date)}.`:"";
+  const ft=(snap+(dur==="ANNUAL"?" Figures shown are the annual total.":"")).trim(); foot.hidden=!ft; foot.textContent=ft;
   // model for the shareable image (same order/types the builder used)
   const priceAt=(p,t)=>{ const d=p.prices&&p.prices[dur]; const v=d&&d[PB.TYPE_FIELD[t]]; return v==null?null:v; };
   LASTIMG={ club:B.name, brand:"David Lloyd", country:B.country||"", term:PB.DUR_LABEL[dur]||dur,

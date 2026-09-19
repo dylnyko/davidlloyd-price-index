@@ -350,7 +350,7 @@ function clubPageHTML(b, ctx) {
     offers: { "@type": "AggregateOffer", priceCurrency: cur, lowPrice: lo / 100, highPrice: hi / 100, offerCount: (b.packages || []).length, availability: "https://schema.org/InStock", ...(canon ? { url: canon } : {}) },
   }).replace(/</g, "\\u003c")}</script>` : "";
   const clubJSON = JSON.stringify({ name: b.name, country: b.country, currency: cur, siteId: b.siteId, slug, mostPopular, packages: b.packages, addOns: b.addOns, accessNames, sports, detail: b.detail, coords, series, date }).replace(/</g, "\\u003c");
-  const foot = esc(`From David Lloyd’s snapshot of ${PB.fmtDate(date)}.`);
+  const foot = esc(`Prices taken from David Lloyd on ${PB.fmtDate(date)}.`);
   return `<!doctype html>
 <html lang="en">
 <head>
