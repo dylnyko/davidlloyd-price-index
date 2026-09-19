@@ -152,7 +152,17 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--disp);
 @keyframes sp{to{transform:rotate(360deg)}}
 
 /* table */
-.tablewrap{margin-top:18px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.tablewrap{margin-top:18px;overflow-x:auto;-webkit-overflow-scrolling:touch;
+  /* Scroll-shadow: a soft shadow shows on whichever edge has more table to reach,
+     so it's obvious the table scrolls sideways; it fades out at each end. */
+  background:
+    linear-gradient(to right, var(--paper) 30%, transparent) left center,
+    linear-gradient(to left, var(--paper) 30%, transparent) right center,
+    radial-gradient(farthest-side at 0 50%, rgba(11,11,10,.16), transparent) left center,
+    radial-gradient(farthest-side at 100% 50%, rgba(11,11,10,.16), transparent) right center;
+  background-repeat:no-repeat;
+  background-size:44px 100%, 44px 100%, 16px 100%, 16px 100%;
+  background-attachment:local, local, scroll, scroll;}
 .pricetable{width:100%;border-collapse:collapse;min-width:540px}
 .pricetable thead th{font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;
   color:var(--ink);font-weight:700;text-align:right;padding:0 16px 10px;border-bottom:2px solid var(--ink);white-space:nowrap}

@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>The Price Book — unofficial David Lloyd price lookup</title>
-<meta name="description" content="Look up live David Lloyd membership prices for any club — standard rates, plan perks, and the clubs each membership lets you into. An independent, unofficial tool." />
+<meta name="description" content="Live David Lloyd membership prices for every UK club: plan prices, joining fees, facilities and club access. Independent and unofficial." />
 <link rel="canonical" href="https://dylnyko.github.io/davidlloyd-price-index/" />
 <meta name="theme-color" content="#efece3" />
 
@@ -12,7 +12,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="The Price Book" />
 <meta property="og:title" content="The Price Book — David Lloyd membership prices" />
-<meta property="og:description" content="Search any David Lloyd club and pull its live standard rates, plan perks, and the other clubs each membership lets you into. Unofficial." />
+<meta property="og:description" content="The prices David Lloyd keeps behind an enquiry form — live, for every club. Unofficial." />
 <meta property="og:url" content="https://dylnyko.github.io/davidlloyd-price-index/" />
 <meta property="og:image" content="https://dylnyko.github.io/davidlloyd-price-index/og-image.png?v=1" />
 <meta property="og:image:width" content="1200" />
@@ -22,13 +22,13 @@
 <!-- Twitter / X card -->
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="The Price Book — David Lloyd membership prices" />
-<meta name="twitter:description" content="Search any David Lloyd club and pull its live standard rates, plan perks, and club access. Unofficial." />
+<meta name="twitter:description" content="The prices David Lloyd keeps behind an enquiry form — live, for every club. Unofficial." />
 <meta name="twitter:image" content="https://dylnyko.github.io/davidlloyd-price-index/og-image.png?v=1" />
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Space+Mono:wght@400;700&display=swap" />
-<link rel="stylesheet" href="styles.css?v=46" />
+<link rel="stylesheet" href="styles.css?v=47" />
 </head>
 <body>
 <div class="frame">
@@ -49,7 +49,7 @@
   <section class="hero">
     <div class="hero-main">
       <h1>The membership fees<br>they <span class="mk">hide.</span></h1>
-      <p class="lede">Search any David&nbsp;Lloyd club — pull its <strong>live standard rates</strong>, plan perks, and the other clubs each membership lets you into.</p>
+      <p class="lede">See what any David&nbsp;Lloyd club <strong>actually charges</strong>. No enquiry form, no sales call — just the current prices and what each plan gets you.</p>
     </div>
   </section>
 
@@ -106,7 +106,6 @@
 
     <p id="empty" class="empty" hidden>Nothing on offer for this club at this duration.</p>
     <p id="addons" class="addons" hidden></p>
-    <div id="promos" class="promos" hidden></div>
     <section id="profile" class="profile" hidden></section>
     <p id="foot-note" class="foot-note" hidden></p>
   </main>
@@ -114,7 +113,7 @@
   <section id="league" class="league" hidden aria-label="National price league">
     <div class="lg-head">
       <h2>National price league</h2>
-      <p class="lg-lede">Every David&nbsp;Lloyd club ranked by the plan you pick — cheapest to priciest.</p>
+      <p class="lg-lede">Which UK club is cheapest for the plan you want? Here's the whole list, cheapest first.</p>
     </div>
     <div id="league-controls" class="league-controls"></div>
     <p id="league-sub" class="league-sub"></p>
@@ -125,7 +124,7 @@
   <section id="facilities" class="league" hidden aria-label="Facilities league">
     <div class="lg-head">
       <h2>Facilities league</h2>
-      <p class="lg-lede">Every David&nbsp;Lloyd club ranked by its racquet courts.</p>
+      <p class="lg-lede">Where are the most courts? Clubs ranked by racquet facilities, biggest first.</p>
     </div>
     <div id="fac-controls" class="league-controls"></div>
     <p id="fac-sub" class="league-sub"></p>
@@ -137,7 +136,7 @@
     <div class="lg-head">
       <button id="cmp-back" class="backbtn" type="button">← Back</button>
       <h2>Compare clubs</h2>
-      <p class="lg-lede">Pick up to three clubs and put their prices side by side.</p>
+      <p class="lg-lede">Put two or three clubs side by side.</p>
     </div>
     <div id="cmp-pickers" class="cmp-pickers"></div>
     <div id="cmp-controls" class="league-controls"></div>
@@ -149,7 +148,7 @@
   <section id="map" class="league" hidden aria-label="Club map">
     <div class="lg-head">
       <h2>Club map</h2>
-      <p class="lg-lede">Every club, pinned and coloured by price — green is cheapest, red priciest. Click a pin for its rates.</p>
+      <p class="lg-lede">Every club on the map, coloured by price. Tap a pin for its rates.</p>
     </div>
     <div id="map-controls" class="league-controls"></div>
     <div id="map-canvas"></div>
@@ -206,7 +205,7 @@
 </div>
 
 <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
-<script src="app.js?v=46"></script>
+<script src="app.js?v=47"></script>
 <!-- Cloudflare Web Analytics — cookieless, no personal data. Public site tag. -->
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "5661e49f2a504dd69734b894973090a0"}'></script>
 </body>

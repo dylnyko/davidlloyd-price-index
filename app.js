@@ -428,7 +428,6 @@ function renderTable(){
            `${descHtml}${offerHtml}${trendHtml}${moreHtml}</td>${cells}</tr>`;
   }).join("");
   table.hidden=false; empty.hidden=true;
-  renderPromos(dur);
 
   // add-ons (optional extras) for the current duration
   const ao=(DATA.addOns||[]).map(a=>{ const d=a.prices&&a.prices[dur]; if(!d||d.price==null) return null;
@@ -436,11 +435,11 @@ function renderTable(){
   addons.hidden = !ao.length;
   if(ao.length) addons.innerHTML = `<span class="ao-k">Add-ons</span> ${ao.join(" · ")}`;
 
-  const ppTypes = activeTypes.filter(t=>t!=="INDIVIDUAL").map(t=>TYPE_LABEL[t]);
-  const ppNote = ppTypes.length ? ` ${ppTypes.join(" & ")} rates are per person.` : "";
-  foot.hidden=false;
-  const snap = (LATEST&&LATEST.date) ? `From David Lloyd, snapshot ${fmtDate(LATEST.date)}. ` : "";
-  foot.textContent=`${snap}${dur==="ANNUAL"?"Prices are the annual total.":"Monthly fees recur; joining fees are one-off."}${ppNote}`;
+  // Just provenance (+ an annual clarification) — the table already shows joining
+  // fees and the per-person label, so don't restate them here.
+  const snap = (LATEST&&LATEST.date) ? `From David Lloyd’s snapshot of ${fmtDate(LATEST.date)}.` : "";
+  const footTxt = (snap + (dur==="ANNUAL" ? " Prices shown are the annual total." : "")).trim();
+  foot.hidden = !footTxt; foot.textContent = footTxt;
 
   // capture a model for the shareable image, and reveal the button
   LASTIMG = {
@@ -469,22 +468,7 @@ function trendFor(key){
   return { delta: cur-prev[1], since: prev[0], up: cur>prev[1] };
 }
 
-/* ---- live promotions (#10) ---- */
-// Offers differ per plan (DL attaches each promotion only to the packages it
-// covers), so they render inline per row; this is just the legend, shown when
-// at least one plan at this duration has a visible offer.
-function renderPromos(dur){
-  const el=qs("#promos"); if(!el) return;
-  let earliestEnd=null;
-  const any=(DATA.packages||[]).some(p=>{ const d=p.prices&&p.prices[dur]; if(!d) return false;
-    return (d.promotions||[]).some(pm=>{ if(pm.inHiddenMenuInClub||!promoText(pm)) return false;
-      if(pm.endDate && (!earliestEnd||pm.endDate<earliestEnd)) earliestEnd=pm.endDate; return true; }); });
-  if(!any){ el.hidden=true; el.innerHTML=""; return; }
-  el.hidden=false;
-  el.innerHTML=`<span class="promo-k">Offers</span>`+
-    `<span class="promo-note">★ current offers are shown on the plans they apply to`+
-    `${earliestEnd?` · ends ${esc(fmtDate(earliestEnd))}`:""}</span>`;
-}
+/* ---- live promotions (#10): rendered inline per plan (the ★ chips) ---- */
 
 /* ---- club profile card + facility badges (#3/#4) ---- */
 function openHoursHtml(detail){
@@ -922,10 +906,8 @@ function drawShare(m){
   });
   // footer: shareable link (accent) + note
   ctx.textAlign="left"; ctx.font=`700 13px ${MONO}`; ctx.fillStyle=ACCENT; ctx.fillText(m.url, P, yFoot+16);
-  const ppCols=m.cols.filter(c=>c.pp).map(c=>c.label.toLowerCase());
-  const ppTxt=ppCols.length?` · ${ppCols.join("/")} per person`:"";
   ctx.font=`400 11px ${MONO}`; ctx.fillStyle=MUTED;
-  ctx.fillText(`Standard rates · pre-promotion${m.annual?" · annual total":""}${ppTxt} · unofficial, not affiliated with David Lloyd`, P, yFoot+36);
+  ctx.fillText(`Standard rates before any promotion${m.annual?" · annual total":""} · unofficial, not affiliated with David Lloyd`, P, yFoot+36);
   return cv;
 }
 let CURCANVAS=null;

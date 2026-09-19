@@ -171,11 +171,7 @@ test("shows a club profile card with facility badges (#3/#4)", async ({ page }) 
 test("surfaces live promotions per plan on a duration that has them (#10)", async ({ page }) => {
   await openWestEnd(page);
   await page.locator('#durations button[data-dur="FLEXIBLE"]').click();
-  // legend appears
-  const promos = page.locator("#promos");
-  await expect(promos).toBeVisible();
-  await expect(promos.locator(".promo-k")).toContainText("Offers");
-  // offers render as chips on the plan rows they apply to — not globally
+  // offers render as ★ chips on the plan rows they apply to — not a global banner
   const offers = page.locator("#tbody .offers .offer");
   expect(await offers.count()).toBeGreaterThan(0);
 });
